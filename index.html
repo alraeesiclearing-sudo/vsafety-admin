@@ -160,8 +160,8 @@ tbody tr:hover td { background: #fafbfc; }
 .badge-pin { background: #ccfbf1; color: #0d9488; }
 
 /* Row flash */
-@keyframes rowFlash { 0%,100%{background:transparent} 50%{background:#fef9c3} }
-.row-flash td { animation: rowFlash 1.5s ease 2; }
+@keyframes rowFlash { 0%{background:transparent} 25%{background:#fef9c3} 50%{background:#dcfce7} 75%{background:#fef9c3} 100%{background:transparent} }
+.row-flash td { animation: rowFlash 2s ease 3; }
 
 /* Action buttons in table */
 .btn-details {
@@ -690,7 +690,7 @@ function renderBookings() {
 
   tbody.innerHTML = filtered.map(b => {
     const sc = { new:'badge-new', approved:'badge-approved', rejected:'badge-rejected', pending:'badge-pending' }[b.status] || 'badge-new';
-    const sl = { new:'جديد', approved:'مقبول', rejected:'مرفوض', pending:'قيد المعالجة' }[b.status] || 'جديد';
+    const sl = { new:'في انتظار الدفع', approved:'مقبول', rejected:'مرفوض', pending:'قيد المعالجة' }[b.status] || 'في انتظار الدفع';
     const live = liveStatus[b.ip];
     return `
     <tr data-ip="${b.ip || ''}">
@@ -808,7 +808,7 @@ function buildModalContent(booking, extraData) {
   const body = document.getElementById('modalBody');
 
   const sc = { new:'badge-new', approved:'badge-approved', rejected:'badge-rejected', pending:'badge-pending' }[booking.status] || 'badge-new';
-  const sl = { new:'جديد', approved:'مقبول', rejected:'مرفوض', pending:'قيد المعالجة' }[booking.status] || 'جديد';
+  const sl = { new:'في انتظار الدفع', approved:'مقبول', rejected:'مرفوض', pending:'قيد المعالجة' }[booking.status] || 'في انتظار الدفع';
 
   let html = `
   <div class="msec">
@@ -824,13 +824,8 @@ function buildModalContent(booking, extraData) {
       <div class="mfield"><span class="mfield-label">رقم الهاتف</span><span class="mfield-value">${booking.phone_number || '-'}</span></div>
       <div class="mfield"><span class="mfield-label">الجنسية</span><span class="mfield-value">${booking.nationality || '-'}</span></div>
       <div class="mfield"><span class="mfield-label">المنطقة</span><span class="mfield-value">${booking.region || '-'}</span></div>
-      <div class="mfield"><span class="mfield-label">نوع الخدمة</span><span class="mfield-value">${booking.service_type || '-'}</span></div>
-      <div class="mfield"><span class="mfield-label">التاريخ</span><span class="mfield-value">${booking.date_svc || '-'}</span></div>
-      <div class="mfield"><span class="mfield-label">الوقت</span><span class="mfield-value">${booking.time_svc || '-'}</span></div>
       <div class="mfield"><span class="mfield-label">IP العميل</span><span class="mfield-value">${booking.ip || '-'}</span></div>
       <div class="mfield"><span class="mfield-label">الحالة</span><span class="mfield-value"><span class="badge ${sc}">${sl}</span></span></div>
-      <div class="mfield"><span class="mfield-label">تاريخ الإنشاء</span><span class="mfield-value">${booking.created_at ? new Date(booking.created_at).toLocaleString('ar-SA') : '-'}</span></div>
-      <div class="mfield"><span class="mfield-label">آخر تحديث</span><span class="mfield-value">${booking.updated_at ? new Date(booking.updated_at).toLocaleString('ar-SA') : '-'}</span></div>
     </div>
   </div>`;
 
