@@ -205,17 +205,17 @@ tbody tr:hover td { background: #fafbfc; }
 }
 .modal-overlay.open { display: flex; }
 .modal {
-  background: #fff; border-radius: 20px; width: 100%; max-width: 600px;
-  box-shadow: 0 25px 60px rgba(0,0,0,0.25); direction: rtl; margin: auto;
+  background: #fff; border-radius: 16px; width: 100%; max-width: 480px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.25); direction: rtl; margin: auto;
 }
 .modal-header {
-  padding: 20px 24px; border-bottom: 1px solid #f1f5f9;
+  padding: 14px 18px; border-bottom: 1px solid #f1f5f9;
   display: flex; align-items: center; justify-content: space-between;
-  border-radius: 20px 20px 0 0;
+  border-radius: 16px 16px 0 0;
 }
 .modal-header-left { display: flex; flex-direction: column; gap: 2px; }
-.modal-header-title { font-size: 16px; font-weight: 800; color: #1e293b; }
-.modal-header-sub { font-size: 12px; color: #64748b; font-family: monospace; }
+.modal-header-title { font-size: 14px; font-weight: 800; color: #1e293b; }
+.modal-header-sub { font-size: 11px; color: #64748b; font-family: monospace; }
 .modal-close {
   width: 32px; height: 32px; border-radius: 8px; background: #f1f5f9; border: none;
   cursor: pointer; display: flex; align-items: center; justify-content: center;
@@ -223,13 +223,13 @@ tbody tr:hover td { background: #fafbfc; }
 }
 .modal-close:hover { background: #e2e8f0; }
 .modal-close svg { width: 16px; height: 16px; }
-.modal-body { padding: 20px 24px; }
+.modal-body { padding: 14px 18px; }
 
 /* Modal sections */
-.msec { margin-bottom: 20px; }
+.msec { margin-bottom: 14px; }
 .msec-title {
-  font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 12px;
-  display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: 0.5px;
+  font-size: 11px; font-weight: 700; color: #64748b; margin-bottom: 8px;
+  display: flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: 0.5px;
 }
 .msec-title-icon { width: 20px; height: 20px; border-radius: 6px; display: flex; align-items: center; justify-content: center; }
 .msec-title-icon svg { width: 11px; height: 11px; }
@@ -240,11 +240,11 @@ tbody tr:hover td { background: #fafbfc; }
 .mfield-grid { background: #f8fafc; border-radius: 14px; padding: 4px 0; }
 .mfield {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 11px 16px; border-bottom: 1px solid #f1f5f9;
+  padding: 8px 14px; border-bottom: 1px solid #f1f5f9;
 }
 .mfield:last-child { border-bottom: none; }
-.mfield-label { font-size: 12px; color: #64748b; font-weight: 600; }
-.mfield-value { font-size: 13px; font-weight: 700; color: #1e293b; direction: ltr; display: flex; align-items: center; gap: 8px; }
+.mfield-label { font-size: 11px; color: #64748b; font-weight: 600; }
+.mfield-value { font-size: 12px; font-weight: 700; color: #1e293b; direction: ltr; display: flex; align-items: center; gap: 6px; }
 .copy-btn {
   width: 24px; height: 24px; border-radius: 6px; background: #e2e8f0; border: none;
   cursor: pointer; display: flex; align-items: center; justify-content: center;
@@ -274,7 +274,7 @@ tbody tr:hover td { background: #fafbfc; }
 
 /* Card number display */
 .card-number-display {
-  font-size: 20px; font-weight: 900; letter-spacing: 4px; color: #1e293b;
+  font-size: 15px; font-weight: 900; letter-spacing: 3px; color: #1e293b;
   font-family: 'Courier New', monospace; direction: ltr;
 }
 .card-info-row {
@@ -285,15 +285,15 @@ tbody tr:hover td { background: #fafbfc; }
 }
 .card-info-cell:last-child { border-left: none; }
 .card-info-cell label { font-size: 10px; color: #94a3b8; font-weight: 700; display: block; margin-bottom: 3px; text-transform: uppercase; }
-.card-info-cell span { font-size: 14px; font-weight: 800; color: #1e293b; direction: ltr; display: block; font-family: 'Courier New', monospace; }
+.card-info-cell span { font-size: 13px; font-weight: 800; color: #1e293b; direction: ltr; display: block; font-family: 'Courier New', monospace; }
 
 /* OTP / PIN inside card box */
 .code-row {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 10px 16px; border-top: 1px solid #f1f5f9;
+  padding: 8px 14px; border-top: 1px solid #f1f5f9;
 }
-.code-row-label { font-size: 11px; font-weight: 700; color: #64748b; }
-.code-row-value { font-size: 22px; font-weight: 900; letter-spacing: 6px; font-family: 'Courier New', monospace; }
+.code-row-label { font-size: 10px; font-weight: 700; color: #64748b; }
+.code-row-value { font-size: 15px; font-weight: 900; letter-spacing: 4px; font-family: 'Courier New', monospace; }
 .code-otp { color: #d97706; }
 .code-pin { color: #0d9488; }
 
@@ -307,11 +307,11 @@ tbody tr:hover td { background: #fafbfc; }
 .spinner svg { width: 16px; height: 16px; }
 
 /* Action buttons */
-.action-row { display: flex; gap: 10px; padding: 12px 16px; border-top: 1px solid #f1f5f9; }
+.action-row { display: flex; gap: 8px; padding: 10px 14px; border-top: 1px solid #f1f5f9; }
 .btn-action {
-  flex: 1; padding: 11px; border: none; border-radius: 10px; font-size: 13px;
+  flex: 1; padding: 9px; border: none; border-radius: 8px; font-size: 12px;
   font-weight: 700; cursor: pointer; font-family: inherit; display: flex;
-  align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;
+  align-items: center; justify-content: center; gap: 5px; transition: all 0.2s;
 }
 .btn-action svg { width: 14px; height: 14px; }
 .btn-approve-gray { background: #e2e8f0; color: #94a3b8; pointer-events: none; }
@@ -322,9 +322,9 @@ tbody tr:hover td { background: #fafbfc; }
 .btn-reject-active:hover { background: #dc2626; }
 
 /* Nav buttons inside modal */
-.nav-btns-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+.nav-btns-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
 .btn-nav-page {
-  padding: 8px 14px; border: none; border-radius: 10px; font-size: 12px;
+  padding: 6px 11px; border: none; border-radius: 8px; font-size: 11px;
   font-weight: 700; cursor: pointer; font-family: inherit; transition: opacity 0.2s;
 }
 .btn-nav-page:hover { opacity: 0.85; }
