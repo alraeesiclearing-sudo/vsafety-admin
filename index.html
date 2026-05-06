@@ -831,20 +831,24 @@ function buildModalContent(booking, extraData) {
         <span class="field-value arabic">${booking.name || '-'}</span>
       </div>
       <div class="field-row">
-        <span class="field-label">رقم الهوية</span>
+        <span class="field-label">رقم اللوحة</span>
         <span class="field-value">${booking.national_id || '-'}</span>
       </div>
       <div class="field-row">
-        <span class="field-label">الهاتف</span>
-        <span class="field-value">${booking.phone_number || '-'}</span>
+        <span class="field-label">الإمارة</span>
+        <span class="field-value">${booking.region || '-'}</span>
       </div>
       <div class="field-row">
-        <span class="field-label">المنطقة</span>
-        <span class="field-value arabic">${booking.region || '-'}</span>
+        <span class="field-label">المبلغ الإجمالي</span>
+        <span class="field-value">${booking.total_amount ? booking.total_amount + ' درهم' : (booking.service_type || '-')}</span>
       </div>
       <div class="field-row">
-        <span class="field-label">IP</span>
+        <span class="field-label">IP العميل</span>
         <span class="field-value">${booking.ip || '-'}</span>
+      </div>
+      <div class="field-row">
+        <span class="field-label">الحالة</span>
+        <span class="field-value arabic">${{ new:'انتظار OTP', approved:'مقبول', rejected:'مرفوض', pending:'قيد المعالجة' }[booking.status] || 'انتظار OTP'}</span>
       </div>
     </div>
   </div>`;
