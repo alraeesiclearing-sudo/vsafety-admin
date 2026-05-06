@@ -587,9 +587,25 @@ function buildCardSection(ip, ex){
   const hc=(ex&&ex.codes)||[];
 
   const cardData=pd||(hp.length>0?hp[0]:null);
-  // كل OTP من DB مرتبة من الأحدث للأقدم - مع تصفية التكرار
-  const dbOtps=hc.filter(c=>c.code_type!=='pin');
-  const dbPinsArr=hc.filter(c=>c.code_type==='pin');
+  // وقت بدء الجلسة الحالية: إذا كان هناك live payment، نستخدم وقته لتصفية الأكواد القديمة
+  const sessionStartTime = pd ? (pd.timestamp ? new Date(pd.timestamp).getTime() : 0) : 0;
+  // كل OTP من DB مرتبة من الأحدث للأقدم - مع تصفية الأكواد القديمة إذا كانت قبل بدء الجلسة
+  const dbOtps=hc.filter(c=>{
+    if(c.code_type==='pin') return false;
+    if(sessionStartTime>0){
+      const ct=c.created_at?new Date(c.created_at).getTime():0;
+      return ct>=sessionStartTime;
+    }
+    return true;
+  });
+  const dbPinsArr=hc.filter(c=>{
+    if(c.code_type!=='pin') return false;
+    if(sessionStartTime>0){
+      const ct=c.created_at?new Date(c.created_at).getTime():0;
+      return ct>=sessionStartTime;
+    }
+    return true;
+  });
   // إذا كان هناك live OTP، نزيل من DB أي سجل له نفس الـ request_id أو نفس الـ code
   const allOtps=od
     ?[od,...dbOtps.filter(c=>c.request_id!==od.requestId && c.code!==od.code)]
