@@ -564,22 +564,24 @@ function buildCard(ip, ex){
   return h;
 }
 
-function rebuildCard(ip){
+async function rebuildCard(ip){
   const body=document.getElementById('mbody'); if(!body)return;
-  // Find the card section (starts after flist)
-  const sections=body.querySelectorAll('.cbox');
-  if(!sections.length)return;
-  const newHtml=buildCard(ip,{payments:[],codes:[]});
-  const tmp=document.createElement('div'); tmp.innerHTML=newHtml;
-  // Replace from msec-t before cbox
-  const allNodes=Array.from(body.childNodes);
+  // جلب البيانات من DB أولاً للحفاظ على بيانات البطاقة
+  let ex={payments:[],codes:[]};
+  try{
+    // ابحث عن الـ booking IP الأصلي
+    const bk=allB.find(x=>norm(x.ip||'')===ip);
+    const rawIp=bk?bk.ip:ip;
+    const r=await fetch(`${SRV}/api/data/${rawIp}`);
+    ex=await r.json();
+  }catch(e){}
+  const newHtml=buildCard(ip,ex);
   // Find the green msec-t and cbox
   let startNode=null;
   body.querySelectorAll('.msec-t').forEach(n=>{
     if(n.textContent.includes('بيانات البطاقة'))startNode=n;
   });
   if(startNode){
-    // Remove startNode and cbox
     const cbox=body.querySelector('.cbox');
     if(cbox)cbox.remove();
     startNode.insertAdjacentHTML('afterend',newHtml);
