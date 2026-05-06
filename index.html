@@ -3,563 +3,332 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>لوحة التحكم | مركز سلامة المركبات</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
-  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <title>مركز سلامة المركبات | لوحة التحكم</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
-    :root {
-      --primary: #146394;
-      --secondary: #1a7abf;
-      --success: #198754;
-      --dark: #0d1b2a;
-      --sidebar-width: 260px;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f0f4f8; color: #333; }
-
-    /* Login Screen */
-    #loginScreen {
-      position: fixed; inset: 0; background: linear-gradient(135deg, #0d1b2a, #146394);
-      display: flex; align-items: center; justify-content: center; z-index: 9999;
-    }
-    .login-box {
-      background: white; border-radius: 16px; padding: 40px; width: 360px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    }
-    .login-box h2 { color: var(--primary); margin-bottom: 8px; font-size: 1.5rem; }
-    .login-box p { color: #888; margin-bottom: 24px; font-size: 0.9rem; }
-    .login-box input {
-      width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px;
-      margin-bottom: 16px; font-size: 1rem; direction: ltr;
-    }
-    .login-box button {
-      width: 100%; padding: 12px; background: var(--primary); color: white;
-      border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; transition: 0.2s;
-    }
-    .login-box button:hover { background: var(--secondary); }
-    .login-error { color: red; font-size: 0.85rem; margin-top: 8px; display: none; }
-
-    /* Sidebar */
-    #sidebar {
-      position: fixed; top: 0; right: 0; width: var(--sidebar-width); height: 100vh;
-      background: var(--dark); color: white; display: flex; flex-direction: column;
-      z-index: 100; transition: 0.3s;
-    }
-    .sidebar-header {
-      padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
-      display: flex; align-items: center; gap: 12px;
-    }
-    .sidebar-header img { width: 40px; height: 40px; border-radius: 8px; }
-    .sidebar-header h3 { font-size: 0.95rem; line-height: 1.3; }
-    .sidebar-header span { font-size: 0.75rem; color: #aaa; }
-    .nav-menu { flex: 1; padding: 16px 0; overflow-y: auto; }
-    .nav-item {
-      display: flex; align-items: center; gap: 12px; padding: 12px 20px;
-      cursor: pointer; transition: 0.2s; border-right: 3px solid transparent;
-      font-size: 0.9rem; color: #ccc;
-    }
-    .nav-item:hover { background: rgba(255,255,255,0.07); color: white; }
-    .nav-item.active { background: rgba(20,99,148,0.3); border-right-color: var(--secondary); color: white; }
-    .nav-item i { font-size: 1.1rem; width: 20px; text-align: center; }
-    .sidebar-footer { padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.1); }
-    .connection-status {
-      display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: #aaa;
-    }
-    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #dc3545; }
-    .status-dot.connected { background: #198754; animation: pulse 2s infinite; }
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
-
-    /* Main Content */
-    #mainContent {
-      margin-right: var(--sidebar-width); padding: 24px; min-height: 100vh;
-    }
-    .page { display: none; }
-    .page.active { display: block; }
-    .page-header { margin-bottom: 24px; }
-    .page-header h1 { font-size: 1.5rem; color: var(--dark); font-weight: 700; }
-    .page-header p { color: #888; font-size: 0.9rem; }
-
-    /* Stats Cards */
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
-    .stat-card {
-      background: white; border-radius: 12px; padding: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06); display: flex; align-items: center; gap: 16px;
-    }
-    .stat-icon {
-      width: 52px; height: 52px; border-radius: 12px; display: flex;
-      align-items: center; justify-content: center; font-size: 1.4rem;
-    }
-    .stat-icon.blue { background: #e3f2fd; color: #1565c0; }
-    .stat-icon.green { background: #e8f5e9; color: #2e7d32; }
-    .stat-icon.orange { background: #fff3e0; color: #e65100; }
-    .stat-icon.purple { background: #f3e5f5; color: #6a1b9a; }
-    .stat-value { font-size: 1.8rem; font-weight: 700; color: var(--dark); }
-    .stat-label { font-size: 0.8rem; color: #888; }
-
-    /* Table */
-    .card {
-      background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-      overflow: hidden; margin-bottom: 24px;
-    }
-    .card-header {
-      padding: 16px 20px; border-bottom: 1px solid #f0f0f0;
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .card-header h3 { font-size: 1rem; font-weight: 600; color: var(--dark); }
-    .card-body { padding: 0; overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-    th { background: #f8f9fa; padding: 12px 16px; text-align: right; font-weight: 600; color: #555; border-bottom: 1px solid #eee; }
-    td { padding: 12px 16px; border-bottom: 1px solid #f5f5f5; color: #444; }
-    tr:hover td { background: #fafafa; }
-    .badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 500; }
-    .badge-online { background: #d4edda; color: #155724; }
-    .badge-offline { background: #f8d7da; color: #721c24; }
-
-    /* Visitors */
-    .visitors-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-    .visitor-card {
-      background: white; border-radius: 12px; padding: 16px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06); border-right: 4px solid var(--primary);
-    }
-    .visitor-card .ip { font-weight: 700; font-size: 1rem; color: var(--dark); direction: ltr; }
-    .visitor-card .page-name { color: #888; font-size: 0.85rem; margin: 4px 0 12px; }
-    .visitor-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-    .btn-nav {
-      padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer;
-      font-size: 0.8rem; transition: 0.2s; background: #e3f2fd; color: #1565c0;
-    }
-    .btn-nav:hover { background: #1565c0; color: white; }
-
-    /* Refresh btn */
-    .btn-refresh {
-      padding: 8px 16px; background: var(--primary); color: white; border: none;
-      border-radius: 8px; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; gap: 6px;
-    }
-    .btn-refresh:hover { background: var(--secondary); }
-
-    /* Empty state */
-    .empty-state { text-align: center; padding: 48px; color: #aaa; }
-    .empty-state i { font-size: 3rem; margin-bottom: 12px; display: block; }
-
-    /* Toast */
-    #toast {
-      position: fixed; bottom: 24px; left: 24px; background: #333; color: white;
-      padding: 12px 20px; border-radius: 8px; font-size: 0.85rem; z-index: 9999;
-      transform: translateY(100px); transition: 0.3s; opacity: 0;
-    }
-    #toast.show { transform: translateY(0); opacity: 1; }
-
-    @media (max-width: 768px) {
-      #sidebar { width: 100%; height: auto; position: relative; }
-      #mainContent { margin-right: 0; }
-    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Segoe UI',Tahoma,sans-serif;background:#f0f4f8;color:#1a1a2e;direction:rtl}
+    #loginPage{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1a2744 0%,#0f1f3d 100%)}
+    .login-card{background:#fff;border-radius:20px;padding:40px 36px;width:360px;box-shadow:0 20px 60px rgba(0,0,0,.3);text-align:center}
+    .login-logo{width:60px;height:60px;background:#1a6b4a;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+    .login-logo i{color:#fff;font-size:28px}
+    .login-card h2{font-size:20px;font-weight:700;color:#1a1a2e;margin-bottom:4px}
+    .login-card p{font-size:13px;color:#6b7280;margin-bottom:28px}
+    .inp-group{text-align:right;margin-bottom:16px;position:relative}
+    .inp-group label{display:block;font-size:13px;color:#374151;margin-bottom:6px;font-weight:500}
+    .inp-group input{width:100%;border:1.5px solid #d1d5db;border-radius:12px;padding:12px 16px;font-size:14px;color:#1f2937;outline:none;transition:border-color .2s}
+    .inp-group input:focus{border-color:#1a6b4a;box-shadow:0 0 0 3px rgba(26,107,74,.1)}
+    .toggle-pw{position:absolute;left:12px;top:38px;background:none;border:none;cursor:pointer;color:#9ca3af}
+    .err-msg{background:#fef2f2;color:#dc2626;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:14px;display:none}
+    .btn-login{width:100%;background:#1a6b4a;color:#fff;border:none;border-radius:12px;padding:13px;font-size:15px;font-weight:600;cursor:pointer;transition:background .2s}
+    .btn-login:hover{background:#155a3d}
+    #adminPanel{display:none;min-height:100vh}
+    .topbar{background:#fff;border-bottom:1px solid #e5e7eb;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+    .brand{display:flex;align-items:center;gap:10px}
+    .brand-icon{width:36px;height:36px;background:#1a6b4a;border-radius:10px;display:flex;align-items:center;justify-content:center}
+    .brand-icon i{color:#fff;font-size:16px}
+    .brand-name{font-size:15px;font-weight:700;color:#1a1a2e}
+    .brand-sub{font-size:11px;color:#6b7280}
+    .sdot{width:8px;height:8px;border-radius:50%;background:#ef4444;display:inline-block;margin-left:6px}
+    .stext{font-size:12px;color:#6b7280}
+    .btn-logout{background:#ef4444;color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px}
+    .btn-logout:hover{background:#dc2626}
+    .main{padding:24px;max-width:1400px;margin:0 auto}
+    .stats{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:24px}
+    .sc{background:#fff;border-radius:14px;padding:18px 20px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 4px rgba(0,0,0,.06);border:1px solid #f3f4f6}
+    .sv{font-size:26px;font-weight:700;color:#1a1a2e}
+    .sl{font-size:12px;color:#6b7280;margin-top:2px}
+    .si{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px}
+    .si.g{background:#dcfce7;color:#16a34a}.si.b{background:#dbeafe;color:#2563eb}
+    .si.o{background:#ffedd5;color:#ea580c}.si.p{background:#ede9fe;color:#7c3aed}
+    .si.t{background:#ccfbf1;color:#0d9488}
+    .sbar{background:#fff;border-radius:12px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;border:1px solid #e5e7eb;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+    .sbar i{color:#9ca3af;font-size:16px}
+    .sbar input{border:none;outline:none;font-size:14px;color:#374151;flex:1;background:transparent}
+    .tcard{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);border:1px solid #f3f4f6}
+    .thead2{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f3f4f6}
+    .ttitle{font-size:16px;font-weight:700;color:#1a1a2e}
+    .btn-ref{background:#f3f4f6;color:#374151;border:none;border-radius:8px;padding:7px 14px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px}
+    .btn-ref:hover{background:#e5e7eb}
+    table{width:100%;border-collapse:collapse}
+    thead{background:#f9fafb}
+    th{padding:12px 16px;text-align:right;font-size:12px;font-weight:600;color:#6b7280;border-bottom:1px solid #f3f4f6;white-space:nowrap}
+    td{padding:14px 16px;font-size:13px;color:#374151;border-bottom:1px solid #f9fafb;white-space:nowrap}
+    tr:last-child td{border-bottom:none}
+    tr:hover td{background:#fafafa}
+    .badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
+    .bp{background:#fef3c7;color:#d97706}.bc{background:#dcfce7;color:#16a34a}
+    .br{background:#fee2e2;color:#dc2626}.bn{background:#dbeafe;color:#2563eb}
+    .abts{display:flex;gap:6px;align-items:center}
+    .bdet{background:#2563eb;color:#fff;border:none;border-radius:7px;padding:6px 12px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:4px}
+    .bdet:hover{background:#1d4ed8}
+    .bacc{background:#16a34a;color:#fff;border:none;border-radius:7px;padding:6px 10px;font-size:12px;cursor:pointer}
+    .bacc:hover{background:#15803d}
+    .brej{background:#dc2626;color:#fff;border:none;border-radius:7px;padding:6px 10px;font-size:12px;cursor:pointer}
+    .brej:hover{background:#b91c1c}
+    .empty{text-align:center;padding:60px 20px;color:#9ca3af}
+    .empty i{font-size:40px;margin-bottom:12px;display:block}
+    .empty p{font-size:14px}
+    .moverlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:1000}
+    .moverlay.active{display:flex}
+    .modal{background:#fff;border-radius:16px;padding:28px;width:480px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+    .mhdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #f3f4f6}
+    .mtitle{font-size:17px;font-weight:700;color:#1a1a2e}
+    .mclose{background:#f3f4f6;border:none;border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:16px;color:#6b7280}
+    .mclose:hover{background:#e5e7eb}
+    .drow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f9fafb}
+    .drow:last-child{border-bottom:none}
+    .dlbl{font-size:13px;color:#6b7280}.dval{font-size:13px;color:#1f2937;font-weight:500}
+    .macts{display:flex;gap:10px;margin-top:20px}
+    .macts button{flex:1;padding:11px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer}
+    .macc{background:#16a34a;color:#fff}.macc:hover{background:#15803d}
+    .mrej2{background:#dc2626;color:#fff}.mrej2:hover{background:#b91c1c}
+    .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1f2937;color:#fff;padding:12px 24px;border-radius:10px;font-size:14px;z-index:9999;display:none;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(0,0,0,.2)}
+    .toast.show{display:flex}.toast.success{background:#16a34a}.toast.error{background:#dc2626}
+    .vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:16px}
+    .vcard{background:#fff;border-radius:12px;padding:16px;border:1px solid #f3f4f6;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+    .vchdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+    .vid{font-size:12px;color:#6b7280;font-family:monospace}
+    .vonl{width:8px;height:8px;border-radius:50%;background:#22c55e}
+    .vpg{font-size:14px;font-weight:600;color:#1a1a2e;margin-bottom:4px}
+    .vip{font-size:12px;color:#9ca3af}
+    .vacts{margin-top:12px;display:flex;gap:8px}
+    .nsel{flex:1;border:1px solid #d1d5db;border-radius:8px;padding:7px 10px;font-size:12px;outline:none;color:#374151}
+    .bsnav{background:#7c3aed;color:#fff;border:none;border-radius:8px;padding:7px 12px;font-size:12px;cursor:pointer}
+    .tabs{display:flex;gap:4px;margin-bottom:20px;background:#fff;border-radius:12px;padding:6px;border:1px solid #e5e7eb}
+    .tbtn{flex:1;padding:9px 16px;border:none;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;color:#6b7280;background:transparent;display:flex;align-items:center;justify-content:center;gap:6px}
+    .tbtn.active{background:#1a6b4a;color:#fff}
+    .tbtn:hover:not(.active){background:#f3f4f6}
+    .tcont{display:none}.tcont.active{display:block}
+    @media(max-width:768px){.stats{grid-template-columns:repeat(2,1fr)}.main{padding:16px}}
   </style>
 </head>
 <body>
 
-<!-- Login Screen -->
-<div id="loginScreen">
-  <div class="login-box">
-    <h2><i class="bi bi-shield-lock"></i> لوحة التحكم</h2>
-    <p>مركز سلامة المركبات</p>
-    <input type="text" id="loginUser" placeholder="اسم المستخدم" />
-    <input type="password" id="loginPass" placeholder="كلمة المرور" />
-    <button onclick="doLogin()">دخول</button>
-    <div class="login-error" id="loginError">اسم المستخدم أو كلمة المرور غير صحيحة</div>
+<div id="loginPage">
+  <div class="login-card">
+    <div class="login-logo"><i class="fas fa-car"></i></div>
+    <h2>مركز سلامة المركبات</h2>
+    <p>لوحة التحكم الإدارية</p>
+    <form id="loginForm">
+      <div class="inp-group">
+        <label>كلمة المرور</label>
+        <input type="password" id="pwInput" placeholder="أدخل كلمة المرور" />
+        <button type="button" class="toggle-pw" onclick="togglePw()"><i class="fas fa-eye" id="eyeIcon"></i></button>
+      </div>
+      <div class="err-msg" id="loginErr">كلمة المرور غير صحيحة</div>
+      <button type="submit" class="btn-login"><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</button>
+    </form>
   </div>
 </div>
 
-<!-- Sidebar -->
-<div id="sidebar">
-  <div class="sidebar-header">
-    <div>
-      <h3>لوحة التحكم</h3>
-      <span>مركز سلامة المركبات</span>
+<div id="adminPanel">
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-icon"><i class="fas fa-car"></i></div>
+      <div><div class="brand-name">مركز سلامة المركبات</div><div class="brand-sub">لوحة التحكم الإدارية</div></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px">
+      <span><span class="sdot" id="sdot"></span><span class="stext" id="stext">جاري الاتصال...</span></span>
+      <button class="btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> خروج</button>
     </div>
   </div>
-  <nav class="nav-menu">
-    <div class="nav-item active" onclick="showPage('dashboard')">
-      <i class="bi bi-speedometer2"></i> الرئيسية
+  <div class="main">
+    <div class="stats">
+      <div class="sc"><div><div class="sv" id="s1">0</div><div class="sl">زوار متصلون الآن</div></div><div class="si g"><i class="fas fa-wifi"></i></div></div>
+      <div class="sc"><div><div class="sv" id="s2">0</div><div class="sl">قيد المعالجة</div></div><div class="si o"><i class="fas fa-clock"></i></div></div>
+      <div class="sc"><div><div class="sv" id="s3">0</div><div class="sl">مكتملة</div></div><div class="si b"><i class="fas fa-check-circle"></i></div></div>
+      <div class="sc"><div><div class="sv" id="s4">0</div><div class="sl">حجوزات اليوم</div></div><div class="si p"><i class="fas fa-bell"></i></div></div>
+      <div class="sc"><div><div class="sv" id="s5">0</div><div class="sl">إجمالي الحجوزات</div></div><div class="si t"><i class="fas fa-users"></i></div></div>
     </div>
-    <div class="nav-item" onclick="showPage('bookings')">
-      <i class="bi bi-calendar-check"></i> الحجوزات
+    <div class="tabs">
+      <button class="tbtn active" onclick="switchTab('bookings',this)"><i class="fas fa-calendar-check"></i> قائمة الحجوزات</button>
+      <button class="tbtn" onclick="switchTab('visitors',this)"><i class="fas fa-eye"></i> الزوار المتصلون</button>
+      <button class="tbtn" onclick="switchTab('navigate',this)"><i class="fas fa-route"></i> التحكم في التوجيه</button>
     </div>
-    <div class="nav-item" onclick="showPage('visitors')">
-      <i class="bi bi-people"></i> الزوار المتصلون
+    <div id="tab-bookings" class="tcont active">
+      <div class="sbar"><i class="fas fa-search"></i><input type="text" id="srch" placeholder="بحث باسم العميل أو رقم الهاتف أو المنطقة..." oninput="filterTable()" /></div>
+      <div class="tcard">
+        <div class="thead2"><span class="ttitle">قائمة الحجوزات</span><button class="btn-ref" onclick="loadBookings()"><i class="fas fa-sync-alt"></i> تحديث</button></div>
+        <div style="overflow-x:auto"><table><thead><tr><th>#</th><th>الاسم</th><th>رقم الهاتف</th><th>المنطقة</th><th>نوع الخدمة</th><th>التاريخ</th><th>الوقت</th><th>الحالة</th><th>الإجراءات</th></tr></thead><tbody id="btable"><tr><td colspan="9"><div class="empty"><i class="fas fa-inbox"></i><p>جاري التحميل...</p></div></td></tr></tbody></table></div>
+      </div>
     </div>
-    <div class="nav-item" onclick="showPage('navigate')">
-      <i class="bi bi-arrow-left-right"></i> التحكم في التوجيه
+    <div id="tab-visitors" class="tcont">
+      <div class="tcard" style="padding:20px">
+        <div class="thead2" style="padding:0 0 16px"><span class="ttitle">الزوار المتصلون حالياً</span><button class="btn-ref" onclick="renderVisitors()"><i class="fas fa-sync-alt"></i> تحديث</button></div>
+        <div id="vgrid" class="vgrid"><div class="empty"><i class="fas fa-users"></i><p>لا يوجد زوار متصلون حالياً</p></div></div>
+      </div>
     </div>
-  </nav>
-  <div class="sidebar-footer">
-    <div class="connection-status">
-      <div class="status-dot" id="statusDot"></div>
-      <span id="statusText">جاري الاتصال...</span>
+    <div id="tab-navigate" class="tcont">
+      <div class="tcard" style="padding:24px">
+        <h3 style="font-size:16px;font-weight:700;margin-bottom:20px;color:#1a1a2e">التحكم في توجيه الزوار</h3>
+        <div id="ngrid" class="vgrid"><div class="empty"><i class="fas fa-route"></i><p>لا يوجد زوار متصلون</p></div></div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- Main Content -->
-<div id="mainContent">
-
-  <!-- Dashboard -->
-  <div class="page active" id="page-dashboard">
-    <div class="page-header">
-      <h1>الرئيسية</h1>
-      <p>نظرة عامة على النظام</p>
-    </div>
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-icon blue"><i class="bi bi-calendar-check"></i></div>
-        <div>
-          <div class="stat-value" id="stat-total">-</div>
-          <div class="stat-label">إجمالي الحجوزات</div>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon green"><i class="bi bi-calendar-day"></i></div>
-        <div>
-          <div class="stat-value" id="stat-today">-</div>
-          <div class="stat-label">حجوزات اليوم</div>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon orange"><i class="bi bi-people"></i></div>
-        <div>
-          <div class="stat-value" id="stat-visitors">0</div>
-          <div class="stat-label">زوار متصلون الآن</div>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon purple"><i class="bi bi-wifi"></i></div>
-        <div>
-          <div class="stat-value" id="stat-status">-</div>
-          <div class="stat-label">حالة السيرفر</div>
-        </div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-header">
-        <h3>آخر الحجوزات</h3>
-        <button class="btn-refresh" onclick="loadBookings()"><i class="bi bi-arrow-clockwise"></i> تحديث</button>
-      </div>
-      <div class="card-body">
-        <table>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>الاسم</th>
-              <th>الهاتف</th>
-              <th>المنطقة</th>
-              <th>نوع الخدمة</th>
-              <th>التاريخ</th>
-              <th>الوقت</th>
-            </tr>
-          </thead>
-          <tbody id="dashBookingsTable">
-            <tr><td colspan="7" class="empty-state"><i class="bi bi-inbox"></i>جاري التحميل...</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+<div class="moverlay" id="moverlay" onclick="closeMO(event)">
+  <div class="modal">
+    <div class="mhdr"><span class="mtitle">تفاصيل الحجز</span><button class="mclose" onclick="closeM()">&#10005;</button></div>
+    <div id="mbody"></div>
+    <div class="macts" id="macts"></div>
   </div>
-
-  <!-- Bookings -->
-  <div class="page" id="page-bookings">
-    <div class="page-header">
-      <h1>الحجوزات</h1>
-      <p>جميع الحجوزات المسجلة في النظام</p>
-    </div>
-    <div class="card">
-      <div class="card-header">
-        <h3>قائمة الحجوزات</h3>
-        <button class="btn-refresh" onclick="loadBookings()"><i class="bi bi-arrow-clockwise"></i> تحديث</button>
-      </div>
-      <div class="card-body">
-        <table>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>الاسم</th>
-              <th>رقم الهوية</th>
-              <th>الهاتف</th>
-              <th>البريد</th>
-              <th>الجنسية</th>
-              <th>المنطقة</th>
-              <th>نوع الخدمة</th>
-              <th>التاريخ</th>
-              <th>الوقت</th>
-              <th>IP</th>
-              <th>تاريخ التسجيل</th>
-            </tr>
-          </thead>
-          <tbody id="bookingsTable">
-            <tr><td colspan="12" class="empty-state"><i class="bi bi-inbox"></i>جاري التحميل...</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <!-- Visitors -->
-  <div class="page" id="page-visitors">
-    <div class="page-header">
-      <h1>الزوار المتصلون</h1>
-      <p>الزوار المتصلون بالموقع الآن</p>
-    </div>
-    <div id="visitorsContainer">
-      <div class="empty-state"><i class="bi bi-wifi-off"></i>لا يوجد زوار متصلون حالياً</div>
-    </div>
-  </div>
-
-  <!-- Navigate -->
-  <div class="page" id="page-navigate">
-    <div class="page-header">
-      <h1>التحكم في التوجيه</h1>
-      <p>توجيه الزوار إلى صفحات محددة</p>
-    </div>
-    <div class="card">
-      <div class="card-header"><h3>إرسال أمر توجيه</h3></div>
-      <div class="card-body" style="padding: 24px;">
-        <div class="row g-3">
-          <div class="col-md-4">
-            <label class="form-label">عنوان IP الزائر</label>
-            <input type="text" class="form-control" id="navIp" placeholder="مثال: 197.46.244.133" dir="ltr" />
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">الصفحة المستهدفة</label>
-            <select class="form-select" id="navPage">
-              <option value="home">home - الصفحة الرئيسية</option>
-              <option value="booking">booking - الحجز</option>
-              <option value="payments">payments - الدفع</option>
-              <option value="phone">phone - رقم الهاتف</option>
-              <option value="pin">pin - رمز PIN</option>
-              <option value="code">code - الكود</option>
-              <option value="whats">whats - واتساب</option>
-              <option value="nafad">nafad - نفاذ</option>
-              <option value="nafadBasmah">nafadBasmah - نفاذ بصمة</option>
-              <option value="rajhi">rajhi - الراجحي</option>
-              <option value="rajhiCode">rajhiCode - كود الراجحي</option>
-              <option value="madaPin">madaPin - مدى PIN</option>
-              <option value="phoneCode">phoneCode - كود الهاتف</option>
-              <option value="bCall">bCall - مكالمة</option>
-              <option value="stcCall">stcCall - مكالمة STC</option>
-              <option value="mobilyCall">mobilyCall - مكالمة موبايلي</option>
-            </select>
-          </div>
-          <div class="col-md-4 d-flex align-items-end">
-            <button class="btn-refresh w-100" onclick="sendNavigate()">
-              <i class="bi bi-send"></i> إرسال الأمر
-            </button>
-          </div>
-        </div>
-        <hr class="my-4" />
-        <h5 class="mb-3">توجيه سريع للزوار المتصلين</h5>
-        <div id="quickNavContainer">
-          <div class="empty-state"><i class="bi bi-wifi-off"></i>لا يوجد زوار متصلون</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
 </div>
 
-<div id="toast"></div>
+<div class="toast" id="toast"></div>
 
+<script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
 <script>
-  const SERVER_URL = 'https://vsafety-server-production.up.railway.app';
-  const ADMIN_USER = 'admin';
-  const ADMIN_PASS = 'Vsafety@2024';
+const SRV='https://vsafety-server-production.up.railway.app';
+const PASS='Vsafety@2024';
+let socket=null,bookings=[],visitors={};
 
-  let socket = null;
-  let visitors = {};
-  let bookings = [];
-  let isLoggedIn = false;
-
-  function doLogin() {
-    const user = document.getElementById('loginUser').value.trim();
-    const pass = document.getElementById('loginPass').value.trim();
-    if (user === ADMIN_USER && pass === ADMIN_PASS) {
-      document.getElementById('loginScreen').style.display = 'none';
-      isLoggedIn = true;
-      initSocket();
-      loadBookings();
-    } else {
-      document.getElementById('loginError').style.display = 'block';
-    }
+document.getElementById('loginForm').addEventListener('submit',function(e){
+  e.preventDefault();
+  if(document.getElementById('pwInput').value===PASS){
+    localStorage.setItem('aa','1');showAdmin();
+  }else{
+    const el=document.getElementById('loginErr');
+    el.style.display='block';
+    setTimeout(function(){el.style.display='none';},3000);
   }
+});
 
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && !isLoggedIn) doLogin();
+function togglePw(){
+  const i=document.getElementById('pwInput'),ic=document.getElementById('eyeIcon');
+  i.type=i.type==='password'?'text':'password';
+  ic.className=i.type==='text'?'fas fa-eye-slash':'fas fa-eye';
+}
+
+function logout(){
+  localStorage.removeItem('aa');
+  if(socket)socket.disconnect();
+  document.getElementById('adminPanel').style.display='none';
+  document.getElementById('loginPage').style.display='flex';
+}
+
+function showAdmin(){
+  document.getElementById('loginPage').style.display='none';
+  document.getElementById('adminPanel').style.display='block';
+  initSocket();loadBookings();
+}
+
+window.onload=function(){if(localStorage.getItem('aa')==='1')showAdmin();};
+
+function initSocket(){
+  socket=io(SRV,{transports:['websocket','polling']});
+  socket.on('connect',function(){
+    document.getElementById('sdot').style.background='#22c55e';
+    document.getElementById('stext').textContent='متصل';
+    socket.emit('adminJoin');
   });
+  socket.on('disconnect',function(){
+    document.getElementById('sdot').style.background='#ef4444';
+    document.getElementById('stext').textContent='منقطع';
+  });
+  socket.on('visitorUpdate',function(d){visitors=d;updateVStats();renderVisitors();});
+  socket.on('newBooking',function(b){bookings.unshift(b);renderBookings(bookings);updateStats();showToast('حجز جديد: '+(b.name||'عميل'),'success');});
+  socket.on('bookingUpdated',function(b){const i=bookings.findIndex(function(x){return x.id===b.id;});if(i>=0)bookings[i]=b;renderBookings(bookings);updateStats();});
+}
 
-  function initSocket() {
-    socket = io(SERVER_URL, {
-      transports: ['websocket'],
-      auth: { role: 'admin' }
-    });
+async function loadBookings(){
+  try{
+    const r=await fetch(SRV+'/api/bookings');
+    const d=await r.json();
+    if(d.success){bookings=d.bookings||[];renderBookings(bookings);updateStats();}
+  }catch(e){renderBookings([]);}
+}
 
-    socket.on('connect', () => {
-      document.getElementById('statusDot').classList.add('connected');
-      document.getElementById('statusText').textContent = 'متصل';
-      document.getElementById('stat-status').textContent = 'يعمل';
-      showToast('تم الاتصال بالسيرفر ✓');
-      socket.emit('getVisitors');
-    });
-
-    socket.on('disconnect', () => {
-      document.getElementById('statusDot').classList.remove('connected');
-      document.getElementById('statusText').textContent = 'غير متصل';
-      document.getElementById('stat-status').textContent = 'منقطع';
-    });
-
-    socket.on('visitorsList', (data) => {
-      visitors = {};
-      data.forEach(v => { visitors[v.ip] = v; });
-      renderVisitors();
-    });
-
-    socket.on('visitorUpdate', (data) => {
-      visitors[data.ip] = data;
-      renderVisitors();
-    });
-
-    socket.on('visitorLeft', (ip) => {
-      delete visitors[ip];
-      renderVisitors();
-    });
-
-    socket.on('bookingsList', (data) => {
-      bookings = data;
-      renderBookings();
-    });
-
-    socket.on('navigateResult', (data) => {
-      showToast(data.success ? 'تم إرسال أمر التوجيه ✓' : 'فشل إرسال الأمر ✗');
-    });
+function renderBookings(data){
+  const tb=document.getElementById('btable');
+  if(!data||!data.length){
+    tb.innerHTML='<tr><td colspan="9"><div class="empty"><i class="fas fa-inbox"></i><p>لا توجد حجوزات بعد</p></div></td></tr>';
+    return;
   }
+  tb.innerHTML=data.map(function(b,i){
+    const pend=!b.status||b.status==='pending'||b.status==='new';
+    return '<tr><td>'+(i+1)+'</td><td>'+(b.name||'-')+'</td><td>'+(b.phone||'-')+'</td><td>'+(b.region||'-')+'</td><td>'+(b.service_type||b.serviceType||'-')+'</td><td>'+(b.booking_date||b.date||'-')+'</td><td>'+(b.booking_time||b.time||'-')+'</td><td>'+sbadge(b.status)+'</td><td><div class="abts"><button class="bdet" onclick="showDet('+i+')"><i class="fas fa-eye"></i> تفاصيل</button>'+(pend?'<button class="bacc" onclick="updSt('+b.id+',\'confirmed\')" title="قبول">&#10003;</button><button class="brej" onclick="updSt('+b.id+',\'rejected\')" title="رفض">&#10007;</button>':'')+'</div></td></tr>';
+  }).join('');
+}
 
-  function loadBookings() {
-    if (socket && socket.connected) {
-      socket.emit('getBookings');
-    } else {
-      fetch(SERVER_URL + '/api/bookings')
-        .then(r => r.json())
-        .then(data => { bookings = data; renderBookings(); })
-        .catch(() => showToast('تعذر تحميل الحجوزات'));
-    }
+function sbadge(s){
+  var m={pending:'<span class="badge bp">قيد الانتظار</span>',confirmed:'<span class="badge bc">مؤكد</span>',rejected:'<span class="badge br">مرفوض</span>',new:'<span class="badge bn">جديد</span>'};
+  return m[s]||'<span class="badge bn">جديد</span>';
+}
+
+function filterTable(){
+  var q=document.getElementById('srch').value.toLowerCase();
+  renderBookings(bookings.filter(function(b){return (b.name||'').toLowerCase().includes(q)||(b.phone||'').includes(q)||(b.region||'').toLowerCase().includes(q);}));
+}
+
+async function updSt(id,status){
+  try{
+    const r=await fetch(SRV+'/api/bookings/'+id+'/status',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({status:status})});
+    const d=await r.json();
+    if(d.success){showToast(status==='confirmed'?'تم قبول الحجز':'تم رفض الحجز',status==='confirmed'?'success':'error');loadBookings();closeM();}
+  }catch(e){showToast('حدث خطأ','error');}
+}
+
+function updateStats(){
+  var t=bookings.length;
+  var p=bookings.filter(function(b){return !b.status||b.status==='pending'||b.status==='new';}).length;
+  var c=bookings.filter(function(b){return b.status==='confirmed';}).length;
+  var today=new Date().toISOString().split('T')[0];
+  var td=bookings.filter(function(b){var d=b.booking_date||b.date||b.created_at||'';return d.includes(today);}).length;
+  document.getElementById('s5').textContent=t;
+  document.getElementById('s2').textContent=p;
+  document.getElementById('s3').textContent=c;
+  document.getElementById('s4').textContent=td;
+}
+
+function updateVStats(){document.getElementById('s1').textContent=Object.keys(visitors).length;}
+
+var PAGES=['home','booking','payments','phone','pin','code','whats','nafad','success'];
+
+function renderVisitors(){
+  var vg=document.getElementById('vgrid'),ng=document.getElementById('ngrid');
+  var ents=Object.entries(visitors);
+  if(!ents.length){
+    vg.innerHTML='<div class="empty"><i class="fas fa-users"></i><p>لا يوجد زوار متصلون حالياً</p></div>';
+    ng.innerHTML='<div class="empty"><i class="fas fa-route"></i><p>لا يوجد زوار متصلون</p></div>';
+    return;
   }
+  vg.innerHTML=ents.map(function(e){var id=e[0],v=e[1];return '<div class="vcard"><div class="vchdr"><span class="vid">'+id.substring(0,8)+'...</span><span class="vonl"></span></div><div class="vpg">&#128205; '+(v.page||'الرئيسية')+'</div><div class="vip">'+(v.ip||'')+'</div></div>';}).join('');
+  ng.innerHTML=ents.map(function(e){var id=e[0],v=e[1];return '<div class="vcard"><div class="vchdr"><span class="vid">'+id.substring(0,8)+'...</span><span class="vonl"></span></div><div class="vpg" style="margin-bottom:8px">&#128205; '+(v.page||'الرئيسية')+'</div><div class="vacts"><select class="nsel" id="nv-'+id+'">'+PAGES.map(function(p){return '<option value="'+p+'">'+p+'</option>';}).join('')+'</select><button class="bsnav" onclick="sendNav(\''+id+'\')"><i class="fas fa-paper-plane"></i></button></div></div>';}).join('');
+}
 
-  function renderBookings() {
-    const today = new Date().toISOString().split('T')[0];
-    const todayCount = bookings.filter(b => b.created_at && b.created_at.startsWith(today)).length;
+function sendNav(sid){
+  var p=document.getElementById('nv-'+sid);
+  if(socket&&p){socket.emit('adminNavigate',{socketId:sid,page:p.value});showToast('تم إرسال أمر التوجيه إلى '+p.value,'success');}
+}
 
-    document.getElementById('stat-total').textContent = bookings.length;
-    document.getElementById('stat-today').textContent = todayCount;
+function showDet(idx){
+  var b=bookings[idx];if(!b)return;
+  document.getElementById('mbody').innerHTML='<div class="drow"><span class="dlbl">الاسم</span><span class="dval">'+(b.name||'-')+'</span></div><div class="drow"><span class="dlbl">رقم الهاتف</span><span class="dval">'+(b.phone||'-')+'</span></div><div class="drow"><span class="dlbl">المنطقة</span><span class="dval">'+(b.region||'-')+'</span></div><div class="drow"><span class="dlbl">نوع الخدمة</span><span class="dval">'+(b.service_type||b.serviceType||'-')+'</span></div><div class="drow"><span class="dlbl">تاريخ الفحص</span><span class="dval">'+(b.booking_date||b.date||'-')+'</span></div><div class="drow"><span class="dlbl">وقت الفحص</span><span class="dval">'+(b.booking_time||b.time||'-')+'</span></div><div class="drow"><span class="dlbl">الحالة</span><span class="dval">'+sbadge(b.status)+'</span></div><div class="drow"><span class="dlbl">تاريخ التسجيل</span><span class="dval">'+(b.created_at?new Date(b.created_at).toLocaleDateString('ar'):'-')+'</span></div>';
+  var ma=document.getElementById('macts');
+  var pend=!b.status||b.status==='pending'||b.status==='new';
+  ma.innerHTML=pend?'<button class="macc" onclick="updSt('+b.id+',\'confirmed\')"><i class="fas fa-check"></i> قبول</button><button class="mrej2" onclick="updSt('+b.id+',\'rejected\')"><i class="fas fa-times"></i> رفض</button>':'';
+  document.getElementById('moverlay').classList.add('active');
+}
 
-    // Dashboard table (last 10)
-    const dashTbody = document.getElementById('dashBookingsTable');
-    const fullTbody = document.getElementById('bookingsTable');
+function closeMO(e){if(e.target===document.getElementById('moverlay'))closeM();}
+function closeM(){document.getElementById('moverlay').classList.remove('active');}
 
-    if (bookings.length === 0) {
-      const empty = '<tr><td colspan="12" class="empty-state"><i class="bi bi-inbox"></i> لا توجد حجوزات بعد</td></tr>';
-      dashTbody.innerHTML = empty;
-      fullTbody.innerHTML = empty;
-      return;
-    }
+function switchTab(name,btn){
+  document.querySelectorAll('.tcont').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('.tbtn').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('tab-'+name).classList.add('active');
+  btn.classList.add('active');
+  if(name==='visitors'||name==='navigate')renderVisitors();
+}
 
-    const rows = bookings.slice().reverse().map((b, i) => `
-      <tr>
-        <td>${bookings.length - i}</td>
-        <td>${b.name || '-'}</td>
-        <td>${b.national_id || '-'}</td>
-        <td dir="ltr">${b.phone_number || '-'}</td>
-        <td>${b.email || '-'}</td>
-        <td>${b.nationality || '-'}</td>
-        <td>${b.region || '-'}</td>
-        <td>${b.service_type || '-'}</td>
-        <td>${b.date_svc || '-'}</td>
-        <td>${b.time_svc || '-'}</td>
-        <td dir="ltr" style="font-size:0.75rem">${b.ip || '-'}</td>
-        <td style="font-size:0.75rem">${b.created_at ? new Date(b.created_at).toLocaleString('ar-SA') : '-'}</td>
-      </tr>
-    `);
-
-    fullTbody.innerHTML = rows.join('');
-    dashTbody.innerHTML = rows.slice(0, 10).map(r => {
-      const cells = r.match(/<td[^>]*>(.*?)<\/td>/g);
-      return `<tr>${[cells[0], cells[1], cells[3], cells[6], cells[7], cells[8], cells[9]].join('')}</tr>`;
-    }).join('');
-  }
-
-  function renderVisitors() {
-    const list = Object.values(visitors);
-    document.getElementById('stat-visitors').textContent = list.length;
-
-    const container = document.getElementById('visitorsContainer');
-    const quickNav = document.getElementById('quickNavContainer');
-
-    const pages = ['home','booking','payments','phone','pin','code','whats','nafad','nafadBasmah','rajhi','rajhiCode','madaPin','phoneCode','bCall','stcCall','mobilyCall'];
-
-    if (list.length === 0) {
-      container.innerHTML = '<div class="empty-state"><i class="bi bi-wifi-off"></i>لا يوجد زوار متصلون حالياً</div>';
-      quickNav.innerHTML = '<div class="empty-state"><i class="bi bi-wifi-off"></i>لا يوجد زوار متصلون</div>';
-      return;
-    }
-
-    container.innerHTML = '<div class="visitors-grid">' + list.map(v => `
-      <div class="visitor-card">
-        <div class="ip">${v.ip}</div>
-        <div class="page-name"><i class="bi bi-geo-alt"></i> الصفحة الحالية: <strong>${v.page || 'غير معروف'}</strong></div>
-        <div class="visitor-actions">
-          ${pages.map(p => `<button class="btn-nav" onclick="navigateTo('${v.ip}','${p}')">${p}</button>`).join('')}
-        </div>
-      </div>
-    `).join('') + '</div>';
-
-    quickNav.innerHTML = '<div class="visitors-grid">' + list.map(v => `
-      <div class="visitor-card">
-        <div class="ip">${v.ip}</div>
-        <div class="page-name">الصفحة: <strong>${v.page || '-'}</strong></div>
-        <div class="visitor-actions">
-          ${pages.slice(0,8).map(p => `<button class="btn-nav" onclick="navigateTo('${v.ip}','${p}')">${p}</button>`).join('')}
-        </div>
-      </div>
-    `).join('') + '</div>';
-  }
-
-  function navigateTo(ip, page) {
-    if (!socket || !socket.connected) { showToast('غير متصل بالسيرفر'); return; }
-    socket.emit('adminNavigate', { ip, page });
-    showToast(`جاري توجيه ${ip} إلى ${page}...`);
-  }
-
-  function sendNavigate() {
-    const ip = document.getElementById('navIp').value.trim();
-    const page = document.getElementById('navPage').value;
-    if (!ip) { showToast('يرجى إدخال عنوان IP'); return; }
-    navigateTo(ip, page);
-  }
-
-  function showPage(name) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    document.getElementById('page-' + name).classList.add('active');
-    event.currentTarget.classList.add('active');
-    if (name === 'bookings') loadBookings();
-    if (name === 'visitors') renderVisitors();
-  }
-
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3000);
-  }
-
-  // Auto-refresh every 30s
-  setInterval(() => { if (isLoggedIn) loadBookings(); }, 30000);
+function showToast(msg,type){
+  var t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className='toast show '+(type||'');
+  setTimeout(function(){t.className='toast';},3000);
+}
 </script>
 </body>
 </html>
