@@ -83,10 +83,9 @@ section.sec-admin-tmp{
 section.sec-admin-tmp::after{content:"";clear:both;display:table;}
 .sec-admin-tmp .sidebar-container{min-height:calc(100vh - 60px);display:flex;}
 
-/* Sidebar */
+/* Sidebar - مخفي */
 .sec-admin-tmp .sidebar-container .sidebar{
-  margin:0;padding:10px;width:230px;min-width:230px;background-color:#f1f1f1;
-  position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;border-left:1px solid #e0e0e0;
+  display:none;
 }
 .sidebar-top{
   padding:6px 4px 8px;font-size:12px;font-weight:700;color:#6b7280;
@@ -209,10 +208,10 @@ section.sec-admin-tmp::after{content:"";clear:both;display:table;}
 
 /* ===== MODAL ===== */
 .moverlay{
-  display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;
   align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto;
 }
-.moverlay.open{display:flex}
+.moverlay.open{display:flex !important}
 .modal{
   background:#fff;border-radius:16px;width:100%;max-width:520px;max-height:90vh;
   overflow-y:auto;box-shadow:0 25px 60px rgba(0,0,0,.25);direction:rtl;margin:auto;
