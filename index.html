@@ -357,6 +357,14 @@ section.sec-admin-tmp::after{content:"";clear:both;display:table;}
       <span class="nav-title">لوحة التحكم</span>
     </div>
     <div class="nav-right">
+      <div class="vctr" title="إجمالي الحجوزات">
+        <i class="fas fa-calendar-check" style="color:#04aa6d"></i>
+        <span id="totalCount">0</span> حجز
+      </div>
+      <div class="vctr" title="قيد المعالجة">
+        <i class="fas fa-clock" style="color:#d97706"></i>
+        <span id="pendCount">0</span> معلق
+      </div>
       <div class="vctr"><div class="vdot"></div><span id="vcnt">0</span> زائر</div>
       <div class="cbadge"><div class="cdot" id="cdot"></div><span id="ctxt">غير متصل</span></div>
       <button class="lout" onclick="doLogout()">
@@ -532,7 +540,13 @@ function lbadge(s){
 
 function updPend(){
   const c=Object.keys(ld).length;
-  document.getElementById('pendCount').textContent=c;
+  const el=document.getElementById('pendCount');
+  if(el) el.textContent=c;
+}
+
+function updTotal(){
+  const el=document.getElementById('totalCount');
+  if(el) el.textContent=allB.length;
 }
 
 async function loadB(){
@@ -542,6 +556,7 @@ async function loadB(){
     const fresh=Array.isArray(d)?d:(d.bookings||[]);
     if(fresh.length>0){allB=fresh;}
     renderB();
+    updTotal();
   }catch(e){console.error('loadB error',e);}
 }
 
