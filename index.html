@@ -14,86 +14,36 @@ body{font-family:'Cairo',sans-serif;background:#f1f1f1;direction:rtl;color:#1118
 
 /* ===== LOGIN ===== */
 .sec-login{
-  height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:auto;
-  background:#fff;
-}
-.sec-login .div-logo img{
-  width:200px;
-  height:60px;
-  object-fit:contain;
-  margin-bottom:16px;
+  height:100vh;display:flex;align-items:center;justify-content:center;overflow:auto;background:#fff;
 }
 .sec-login .div-form{
   box-shadow:0px 0px 0px 0.5px rgba(50,50,93,.1),0px 2px 5px 0px rgba(50,50,93,.1),0px 1px 1.5px 0px rgba(0,0,0,.07);
-  border-radius:7px;
-  padding:24px 20px;
-  width:300px;
-  background:#fff;
-  text-align:center;
+  border-radius:7px;padding:24px 20px;width:300px;background:#fff;text-align:center;
 }
-.sec-login .div-form h5{
-  font-size:16px;
-  font-weight:700;
-  color:#233f48;
-  margin-bottom:4px;
-}
-.sec-login .div-form p{
-  font-size:12px;
-  color:#6b7280;
-  margin-bottom:18px;
-}
-.sec-login .div-form label{
-  display:block;
-  font-size:12px;
-  font-weight:700;
-  color:#374151;
-  margin-bottom:5px;
-  text-align:right;
-}
+.sec-login .div-form img{width:200px;height:60px;object-fit:contain;margin-bottom:16px;}
+.sec-login .div-form h5{font-size:16px;font-weight:700;color:#233f48;margin-bottom:4px;}
+.sec-login .div-form p{font-size:12px;color:#6b7280;margin-bottom:18px;}
+.sec-login .div-form label{display:block;font-size:12px;font-weight:700;color:#374151;margin-bottom:5px;text-align:right;}
 .sec-login .div-form input[type=password]{
-  width:100%;
-  padding:10px 13px;
-  border:1.5px solid #e5e7eb;
-  border-radius:8px;
-  font-size:13px;
-  font-family:inherit;
-  outline:none;
-  direction:ltr;
-  margin-bottom:14px;
-  transition:border-color .2s;
+  width:100%;padding:10px 13px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:13px;
+  font-family:inherit;outline:none;direction:ltr;margin-bottom:14px;transition:border-color .2s;
 }
 .sec-login .div-form input[type=password]:focus{border-color:#04aa6d}
 .lerr{color:#ef4444;font-size:12px;text-align:center;margin-bottom:10px;display:none}
 .lbtn{
-  width:100%;
-  padding:11px;
-  background:#04aa6d;
-  color:#fff;
-  border:none;
-  border-radius:8px;
-  font-size:14px;
-  font-weight:700;
-  cursor:pointer;
-  font-family:inherit;
-  transition:background .2s;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:7px;
+  width:100%;padding:11px;background:#04aa6d;color:#fff;border:none;border-radius:8px;
+  font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s;
+  display:flex;align-items:center;justify-content:center;gap:7px;
 }
 .lbtn:hover{background:#0eb074}
 
 /* ===== ADMIN PAGE ===== */
 #adminPage{display:none;min-height:100vh;background:#f1f1f1;font-family:'Cairo',sans-serif;}
 
-/* Navbar */
+/* Navbar - أبيض */
 .ad-navbar{
-  background:#233f48;
-  color:white !important;
+  background:#fff;
+  color:#233f48;
   padding:0 20px;
   height:60px;
   display:flex;
@@ -102,347 +52,213 @@ body{font-family:'Cairo',sans-serif;background:#f1f1f1;direction:rtl;color:#1118
   position:sticky;
   top:0;
   z-index:200;
+  border-bottom:1px solid #e8e8e7;
+  box-shadow:0 1px 3px rgba(0,0,0,.06);
 }
-.ad-navbar .logo-img{
-  width:150px;
-  height:40px;
-  object-fit:contain;
-}
-.ad-navbar a:not(.dropdown-item){color:white !important;}
-.ad-navbar .nav-right{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
+.ad-navbar .logo-img{width:150px;height:40px;object-fit:contain;}
+.ad-navbar .nav-title{font-size:15px;font-weight:700;color:#233f48;}
+.ad-navbar .nav-right{display:flex;align-items:center;gap:10px;}
 .vctr{
-  display:flex;
-  align-items:center;
-  gap:5px;
-  background:rgba(255,255,255,.15);
-  border-radius:20px;
-  padding:5px 12px;
-  font-size:12px;
-  font-weight:700;
-  color:#fff;
+  display:flex;align-items:center;gap:5px;background:#f1f4f8;border-radius:20px;
+  padding:5px 12px;font-size:12px;font-weight:700;color:#233f48;
 }
 .vdot{width:7px;height:7px;border-radius:50%;background:#22c55e;animation:pulse 2s infinite}
 .cbadge{
-  display:flex;
-  align-items:center;
-  gap:5px;
-  font-size:12px;
-  font-weight:600;
-  padding:5px 10px;
-  border-radius:20px;
-  background:rgba(255,255,255,.1);
-  color:#fff;
+  display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;
+  padding:5px 10px;border-radius:20px;background:#f1f4f8;color:#374151;
 }
 .cdot{width:7px;height:7px;border-radius:50%;background:#9ca3af}
 .cdot.on{background:#22c55e;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 .lout{
-  padding:7px 14px;
-  background:rgba(255,255,255,.15);
-  color:#fff;
-  border:1px solid rgba(255,255,255,.3);
-  border-radius:8px;
-  font-size:12px;
-  font-weight:700;
-  cursor:pointer;
-  font-family:inherit;
-  transition:background .2s;
+  padding:7px 14px;background:#f1f4f8;color:#374151;border:1px solid #e6e6e6;
+  border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s;
 }
-.lout:hover{background:rgba(255,255,255,.25)}
+.lout:hover{background:#e8e8e7}
 
 /* ===== MAIN LAYOUT ===== */
 section.sec-admin-tmp{
-  position:relative;
-  background:#fff;
-  font-family:'Cairo',sans-serif;
-  font-size:14px;
+  position:relative;background:#fff;font-family:'Cairo',sans-serif;font-size:14px;
 }
 section.sec-admin-tmp::after{content:"";clear:both;display:table;}
-
-.sec-admin-tmp .sidebar-container{
-  min-height:calc(100vh - 60px);
-  display:flex;
-}
+.sec-admin-tmp .sidebar-container{min-height:calc(100vh - 60px);display:flex;}
 
 /* Sidebar */
 .sec-admin-tmp .sidebar-container .sidebar{
-  margin:0;
-  padding:10px;
-  width:230px;
-  min-width:230px;
-  background-color:#f1f1f1;
-  position:sticky;
-  top:60px;
-  height:calc(100vh - 60px);
-  overflow-y:auto;
-  border-left:1px solid #e0e0e0;
+  margin:0;padding:10px;width:230px;min-width:230px;background-color:#f1f1f1;
+  position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;border-left:1px solid #e0e0e0;
 }
 .sidebar-top{
-  padding:6px 4px 8px;
-  font-size:12px;
-  font-weight:700;
-  color:#6b7280;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom:6px;
+  padding:6px 4px 8px;font-size:12px;font-weight:700;color:#6b7280;
+  display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;
 }
 .sidebar-search-wrap{
-  display:flex;
-  align-items:center;
-  gap:6px;
-  background:#fff;
-  border:1px solid #e6e6e6;
-  border-radius:7px;
-  padding:6px 10px;
-  margin-bottom:8px;
+  display:flex;align-items:center;gap:6px;background:#fff;border:1px solid #e6e6e6;
+  border-radius:7px;padding:6px 10px;margin-bottom:8px;
 }
 .sidebar-search-wrap svg{width:13px;height:13px;fill:none;stroke:#9ca3af;flex-shrink:0}
-.sidebar-search-wrap input{
-  border:none;
-  background:transparent;
-  font-size:12px;
-  outline:none;
-  width:100%;
-  font-family:inherit;
-}
-
+.sidebar-search-wrap input{border:none;background:transparent;font-size:12px;outline:none;width:100%;font-family:inherit;}
 .sec-admin-tmp .sidebar-container .sidebar .user-div{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:8px 10px;
-  border-radius:7px;
-  cursor:pointer;
-  margin-bottom:3px;
+  display:flex;align-items:center;justify-content:space-between;padding:8px 10px;
+  border-radius:7px;cursor:pointer;margin-bottom:3px;
   transition:background .15s ease,border .15s ease,box-shadow .15s ease,color .15s ease;
   border:1px solid #e6e6e6 !important;
   box-shadow:0px 1px 1px rgba(0,0,0,.03),0px 3px 6px rgba(0,0,0,.02) !important;
   background:#fff;
 }
 .sec-admin-tmp .sidebar-container .sidebar .user-div .info-user{
-  display:flex;
-  align-items:center;
-  justify-content:flex-start;
-  gap:5px;
-  flex:1;
-  min-width:0;
+  display:flex;align-items:center;justify-content:flex-start;gap:5px;flex:1;min-width:0;
 }
 .sec-admin-tmp .sidebar-container .sidebar .user-div .info-user .new-action{
-  display:inline-block;
-  min-width:10px;
-  min-height:10px;
-  background-color:green;
-  border-radius:10px;
-  flex-shrink:0;
+  display:inline-block;min-width:10px;min-height:10px;background-color:green;border-radius:10px;flex-shrink:0;
 }
 .sec-admin-tmp .sidebar-container .sidebar .user-div .info-user .name{
-  width:140px;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-  font-size:13px;
-  font-weight:600;
-  color:#233f48;
+  width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;font-weight:600;color:#233f48;
 }
-.sec-admin-tmp .sidebar-container .sidebar .user-div .status-user{
-  color:#404040;
-  font-size:13px;
-  flex-shrink:0;
-}
-.sec-admin-tmp .sidebar-container .sidebar .user-div .status-user .payment_proven{
-  color:blue;
-}
+.sec-admin-tmp .sidebar-container .sidebar .user-div .status-user{color:#404040;font-size:13px;flex-shrink:0;}
 .sec-admin-tmp .sidebar-container .sidebar .user-div.selected{
-  background-color:#04aa6d !important;
-  color:white;
-  border-color:#04aa6d !important;
+  background-color:#04aa6d !important;color:white;border-color:#04aa6d !important;
 }
-.sec-admin-tmp .sidebar-container .sidebar .user-div.selected .info-user .name{
-  color:#fff;
-}
+.sec-admin-tmp .sidebar-container .sidebar .user-div.selected .info-user .name{color:#fff;}
 .sec-admin-tmp .sidebar-container .sidebar .user-div:hover:not(.selected){
-  background-color:#0eb074 !important;
-  color:white;
-  border-color:#0eb074 !important;
+  background-color:#0eb074 !important;color:white;border-color:#0eb074 !important;
 }
-.sec-admin-tmp .sidebar-container .sidebar .user-div:hover:not(.selected) .info-user .name{
-  color:#fff;
-}
+.sec-admin-tmp .sidebar-container .sidebar .user-div:hover:not(.selected) .info-user .name{color:#fff;}
 
 /* Content area */
 .sec-admin-tmp .sidebar-container div.content{
-  flex:1;
-  min-height:100%;
-  padding:16px;
-  overflow-y:auto;
-  background:#fff;
+  flex:1;min-height:100%;padding:16px;overflow-y:auto;background:#fff;
 }
 
-/* Content header */
-.content-hdr{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom:14px;
-  padding-bottom:12px;
-  border-bottom:1px solid #f1f1f1;
+/* Content top bar */
+.content-topbar{
+  display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;
 }
-.content-hdr-title{
-  font-size:15px;
-  font-weight:800;
-  color:#233f48;
+.content-title{font-size:15px;font-weight:800;color:#233f48;display:flex;align-items:center;gap:7px;}
+.content-title svg{fill:none;stroke:currentColor;width:18px;height:18px}
+.content-actions{display:flex;gap:8px;align-items:center}
+.rbtn{
+  display:flex;align-items:center;gap:5px;padding:7px 13px;background:#f1f1f1;
+  border:1.5px solid #e6e6e6;border-radius:8px;font-size:12px;font-weight:600;
+  cursor:pointer;color:#6b7280;font-family:inherit;transition:background .2s;
 }
+.rbtn:hover{background:#e8e8e7}
+.rbtn svg{fill:none;stroke:currentColor;width:13px;height:13px}
 
-/* Cards inside content */
-.sec-admin-tmp .sidebar-container div.content .bc-color-card_payment{
-  background-color:RGBA(248,249,250,0.5) !important;
+/* Table */
+.bk-table{width:100%;border-collapse:collapse;}
+.bk-table th{
+  background:#f8f9fa;font-size:12px;font-weight:700;color:#6b7280;
+  padding:10px 12px;border-bottom:2px solid #e6e6e6;text-align:right;
 }
-.sec-admin-tmp .sidebar-container div.content .bc-color-card_motsal{
-  background-color:RGBA(248,249,250,1) !important;
+.bk-table td{
+  padding:10px 12px;border-bottom:1px solid #f1f1f1;font-size:13px;
+  color:#233f48;vertical-align:middle;
 }
-.sec-admin-tmp .sidebar-container div.content .bc-color-card_nafath{
-  background-color:#f1f1f1;
-}
-.sec-admin-tmp .sidebar-container div.content .card-header{
-  color:#777;
-  font-weight:600;
-  font-size:14px;
-}
-.sec-admin-tmp .sidebar-container div.content .card-body{
-  font-size:14px !important;
-}
-.sec-admin-tmp .sidebar-container div.content .card-body .card-title{
-  font-size:12px !important;
-  color:black;
-  font-weight:bold !important;
-}
-.sec-admin-tmp .sidebar-container div.content .card-body .div-sub-forms{
-  display:flex;
-  width:100%;
-  overflow:auto;
-  gap:7px;
-  padding-bottom:5px;
-}
-.sec-admin-tmp .sidebar-container div.content .card-body .div-sub-forms .div-sub-form{
-  width:230px;
-  min-width:230px;
-  border-radius:5px;
-  border:1px solid #e6e6e6 !important;
-  box-shadow:0px 1px 1px rgba(0,0,0,.03),0px 3px 6px rgba(0,0,0,.02) !important;
-  padding:5px 5px;
-  word-break:break-all;
-}
-.sec-admin-tmp .sidebar-container div.content .card-body .div-sub-forms .div-sub-form-w-big{
-  width:270px !important;
-  min-width:270px !important;
-}
-.sec-admin-tmp .sidebar-container div.content .card-body .div-item-field{
-  height:auto;
-}
-.sec-admin-tmp .sidebar-container div.content .card-body .div-item-field p{
-  margin:0.2rem !important;
-  font-size:18px;
-  font-weight:bold;
-}
-.sec-admin-tmp .sidebar-container div.content .card-body .div-item-field .label-form{
-  color:#777;
-  font-size:13px;
-  font-weight:400;
-}
-.sec-admin-tmp .sidebar-container div.content .card-body.card-payment .div-item-field p:not(.label-form){
-  transition:background .15s ease,border .15s ease,box-shadow .15s ease,color .15s ease;
-  border:1px solid #e6e6e6 !important;
-  box-shadow:0px 0px 1px rgba(0,0,0,.03),0px 1px 1px rgba(0,0,0,.02) !important;
-  padding:3px;
-  border-radius:5px !important;
-  min-height:33px;
-}
+.bk-table tr:hover td{background:#f9fafb;}
+.bk-table tr.selected-row td{background:#f0fdf4;}
 
-/* ===== CONTENT DETAIL SECTIONS ===== */
+/* Badges */
+.badge{display:inline-flex;align-items:center;gap:3px;padding:2px 10px;border-radius:20px;font-size:10px;font-weight:700}
+.b-new{background:#dbeafe;color:#2563eb}
+.b-ok{background:#dcfce7;color:#16a34a}
+.b-rej{background:#fee2e2;color:#ef4444}
+.b-pend{background:#ffedd5;color:#ea580c}
+.b-card{background:#ede9fe;color:#7c3aed}
+.b-otp{background:#fef3c7;color:#d97706}
+.b-pin{background:#ccfbf1;color:#0d9488}
+
+/* Action buttons in table */
+.bdet{
+  padding:5px 11px;background:#04aa6d;color:#fff;border:none;border-radius:7px;
+  font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;
+  display:inline-flex;align-items:center;gap:4px;transition:background .2s;
+}
+.bdet:hover{background:#0eb074}
+.bdet svg{fill:none;stroke:currentColor;width:12px;height:12px}
+
+/* Nav dropdown */
+.bnav-wrap{position:relative;display:inline-block}
+.bnav{
+  padding:5px 9px;background:#f1f1f1;color:#6b7280;border:1.5px solid #e6e6e6;
+  border-radius:7px;font-size:11px;cursor:pointer;font-family:inherit;
+  display:inline-flex;align-items:center;gap:3px;transition:background .2s;
+}
+.bnav:hover{background:#e8e8e7}
+.bnav svg{fill:none;stroke:currentColor;width:12px;height:12px}
+.ndrop{
+  display:none;position:absolute;top:calc(100% + 4px);left:0;background:#fff;
+  border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.12);z-index:300;
+  min-width:185px;padding:5px;border:1px solid #e6e6e6;
+}
+.ndrop.open{display:block}
+.nitem{
+  display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;
+  font-size:12px;color:#374151;cursor:pointer;transition:background .15s;font-weight:600;
+}
+.nitem:hover{background:#f1f1f1}
+.nitem-ic{
+  width:26px;height:26px;border-radius:6px;display:flex;align-items:center;
+  justify-content:center;flex-shrink:0;
+}
+.nitem-ic svg{width:13px;height:13px;fill:none;stroke:currentColor}
+
+.empty-state{text-align:center;padding:60px 20px;color:#9ca3af;}
+.empty-state svg{width:50px;height:50px;margin:0 auto 12px;display:block;opacity:.3;fill:none;stroke:currentColor;}
+.empty-state p{font-size:13px;font-weight:600}
+
+/* ===== MODAL ===== */
+.moverlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;
+  align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto;
+}
+.moverlay.open{display:flex}
+.modal{
+  background:#fff;border-radius:16px;width:100%;max-width:520px;max-height:90vh;
+  overflow-y:auto;box-shadow:0 25px 60px rgba(0,0,0,.25);direction:rtl;margin:auto;
+}
+.mhdr{
+  padding:16px 20px;border-bottom:1px solid #e6e6e6;display:flex;align-items:center;
+  justify-content:space-between;position:sticky;top:0;background:#233f48;z-index:10;
+  border-radius:16px 16px 0 0;
+}
+.mhdr-t{font-size:15px;font-weight:800;color:#fff}
+.mhdr-s{font-size:11px;color:rgba(255,255,255,.7);font-family:monospace;direction:ltr;font-weight:600}
+.mclose{
+  width:30px;height:30px;border-radius:8px;background:rgba(255,255,255,.15);border:none;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;transition:all .2s;
+}
+.mclose:hover{background:rgba(255,255,255,.3)}
+.mclose svg{width:14px;height:14px;fill:none;stroke:currentColor}
+.mbody{padding:16px 20px 20px}
+
 .msec-hdr{
-  font-size:13px;
-  font-weight:700;
-  color:#374151;
-  margin-bottom:10px;
-  display:flex;
-  align-items:center;
-  gap:6px;
+  font-size:13px;font-weight:700;color:#374151;margin-bottom:10px;
+  display:flex;align-items:center;gap:6px;
 }
 .msec-hdr svg{fill:none;stroke:currentColor}
 
-.flist{
-  background:#f9fafb;
-  border-radius:12px;
-  padding:0 14px;
-  margin-bottom:16px;
-  overflow:hidden;
-  border:1px solid #e6e6e6;
-}
-.frow{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:9px 0;
-  border-bottom:1px solid #f1f1f1;
-}
+.flist{background:#f9fafb;border-radius:12px;padding:0 14px;margin-bottom:16px;overflow:hidden;border:1px solid #e6e6e6;}
+.frow{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #f1f1f1;}
 .frow:last-child{border-bottom:none}
 .flbl{font-size:12px;color:#6b7280;font-weight:500}
 .fval{font-size:12px;font-weight:600;color:#1f2937;direction:ltr;text-align:left;display:flex;align-items:center;gap:6px}
 .fval.ar{direction:rtl;text-align:right}
 
 .card-sec{margin-bottom:16px}
-.card-list{
-  background:#f9fafb;
-  border-radius:12px;
-  padding:0 14px;
-  overflow:hidden;
-  border:1px solid #e6e6e6;
-}
-.card-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:9px 0;
-  border-bottom:1px solid #f1f1f1;
-}
+.card-list{background:#f9fafb;border-radius:12px;padding:0 14px;overflow:hidden;border:1px solid #e6e6e6;}
+.card-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #f1f1f1;}
 .card-row:last-child{border-bottom:none}
 .card-lbl{font-size:12px;color:#6b7280;font-weight:500}
 .card-val{font-size:12px;font-weight:600;color:#1f2937;direction:ltr;text-align:left;display:flex;align-items:center;gap:6px}
 .card-num{font-family:'Courier New',monospace;letter-spacing:1px;font-size:13px;font-weight:700}
 
-.cpbtn{
-  background:none;
-  border:none;
-  cursor:pointer;
-  color:#9ca3af;
-  padding:3px;
-  border-radius:5px;
-  display:flex;
-  align-items:center;
-  transition:color .2s;
-}
+.cpbtn{background:none;border:none;cursor:pointer;color:#9ca3af;padding:3px;border-radius:5px;display:flex;align-items:center;transition:color .2s;}
 .cpbtn:hover{color:#04aa6d}
 .cpbtn svg{width:13px;height:13px;fill:none;stroke:currentColor}
 
-.otp-sec{
-  background:#f9fafb;
-  border-radius:12px;
-  padding:0 14px;
-  margin-bottom:16px;
-  border:1px solid #e6e6e6;
-}
-.otp-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:9px 0;
-  border-bottom:1px solid #f1f1f1;
-}
+.otp-sec{background:#f9fafb;border-radius:12px;padding:0 14px;margin-bottom:16px;border:1px solid #e6e6e6;}
+.otp-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #f1f1f1;}
 .otp-row:last-child{border-bottom:none}
 .otp-lbl{font-size:12px;color:#6b7280;font-weight:500}
 .otp-val{font-size:18px;font-weight:900;font-family:'Courier New',monospace;letter-spacing:4px;color:#d97706;display:flex;align-items:center;gap:6px}
@@ -450,39 +266,17 @@ section.sec-admin-tmp::after{content:"";clear:both;display:table;}
 .otp-wait{font-size:12px;color:#9ca3af;font-style:italic}
 
 .waiting{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  padding:12px 14px;
-  font-size:12px;
-  color:#9ca3af;
-  background:#f9fafb;
-  border-radius:12px;
-  margin-bottom:16px;
-  border:1px solid #e6e6e6;
+  display:flex;align-items:center;gap:8px;padding:12px 14px;font-size:12px;color:#9ca3af;
+  background:#f9fafb;border-radius:12px;margin-bottom:16px;border:1px solid #e6e6e6;
 }
-.spin svg{
-  width:16px;height:16px;fill:none;stroke:#9ca3af;
-  animation:spin 1s linear infinite;
-}
+.spin svg{width:16px;height:16px;fill:none;stroke:#9ca3af;animation:spin 1s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg)}}
 
 .act-sec{margin-bottom:16px}
 .act-btns{display:flex;gap:8px}
 .abtn{
-  flex:1;
-  padding:10px;
-  border:none;
-  border-radius:10px;
-  font-size:13px;
-  font-weight:700;
-  cursor:pointer;
-  font-family:inherit;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:5px;
-  transition:all .2s;
+  flex:1;padding:10px;border:none;border-radius:10px;font-size:13px;font-weight:700;
+  cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:5px;transition:all .2s;
 }
 .abtn svg{width:14px;height:14px;fill:none;stroke:currentColor}
 .abtn-gray{background:#f3f4f6;color:#9ca3af;pointer-events:none}
@@ -494,127 +288,45 @@ section.sec-admin-tmp::after{content:"";clear:both;display:table;}
 .abtn-done:hover{background:#bfdbfe}
 .rej-msg{margin-top:10px}
 .rej-msg label{font-size:12px;font-weight:600;color:#6b7280;margin-bottom:5px;display:block}
-.rej-msg input{
-  width:100%;
-  padding:8px 12px;
-  border:1.5px solid #e6e6e6;
-  border-radius:8px;
-  font-size:12px;
-  font-family:inherit;
-  outline:none;
-}
+.rej-msg input{width:100%;padding:8px 12px;border:1.5px solid #e6e6e6;border-radius:8px;font-size:12px;font-family:inherit;outline:none;}
 .rej-msg input:focus{border-color:#04aa6d}
 
 .nav-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
-.nbp{
-  padding:7px 12px;
-  border:none;
-  border-radius:8px;
-  font-size:12px;
-  font-weight:700;
-  cursor:pointer;
-  font-family:inherit;
-  transition:opacity .2s;
-}
+.nbp{padding:7px 12px;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .2s;}
 .nbp:hover{opacity:.8}
 
-.mfooter{
-  background:#f9fafb;
-  border-radius:12px;
-  padding:0 14px;
-  border:1px solid #e6e6e6;
-  margin-bottom:16px;
-}
-.mfdate{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:8px 0;
-  border-bottom:1px solid #f1f1f1;
-  font-size:11px;
-}
+.mfooter{background:#f9fafb;border-radius:12px;padding:0 14px;border:1px solid #e6e6e6;}
+.mfdate{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f1f1f1;font-size:11px;}
 .mfdate:last-child{border-bottom:none}
 .mfdate-l{color:#6b7280;font-weight:500}
 .mfdate-v{color:#374151;font-weight:600;direction:ltr}
 
-/* Empty / placeholder */
-.empty-content{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  height:60vh;
-  color:#9ca3af;
-  text-align:center;
-}
-.empty-content svg{
-  width:60px;height:60px;
-  fill:none;stroke:currentColor;
-  opacity:.25;
-  margin-bottom:14px;
-}
-.empty-content p{font-size:14px;font-weight:600}
-.empty-content small{font-size:12px;margin-top:4px}
-
 /* Toast */
 #toast{
-  position:fixed;
-  bottom:24px;
-  left:50%;
-  transform:translateX(-50%) translateY(20px);
-  background:#233f48;
-  color:#fff;
-  padding:10px 20px;
-  border-radius:10px;
-  font-size:13px;
-  font-weight:600;
-  opacity:0;
-  transition:all .3s;
-  z-index:9999;
-  pointer-events:none;
-  white-space:nowrap;
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:#233f48;color:#fff;padding:10px 20px;border-radius:10px;font-size:13px;
+  font-weight:600;opacity:0;transition:all .3s;z-index:9999;pointer-events:none;white-space:nowrap;
 }
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
 @keyframes pbx{0%{box-shadow:0 0 0 0 rgba(4,170,109,.4)}70%{box-shadow:0 0 0 8px rgba(4,170,109,0)}100%{box-shadow:0 0 0 0 rgba(4,170,109,0)}}
 .pbx{animation:pbx .8s ease}
+@keyframes rowFlash{0%{background:transparent}30%{background:#fef9c3}60%{background:#dcfce7}100%{background:transparent}}
+.rflash td{animation:rowFlash 1.5s ease}
 
 /* Responsive */
-@media screen and (max-width:900px){
+@media(max-width:900px){
   .sec-admin-tmp .sidebar-container{flex-direction:column}
   .sec-admin-tmp .sidebar-container .sidebar{
-    width:100%;
-    height:auto;
-    position:sticky;
-    top:60px;
-    z-index:10;
-    display:flex;
-    overflow-x:auto;
-    overflow-y:hidden;
-    flex-direction:row;
-    flex-wrap:nowrap;
-    padding:8px;
-    gap:6px;
+    width:100%;height:auto;position:sticky;top:60px;z-index:10;
+    display:flex;overflow-x:auto;overflow-y:hidden;flex-direction:row;flex-wrap:nowrap;padding:8px;gap:6px;
   }
-  .sec-admin-tmp .sidebar-container .sidebar .user-div{
-    min-width:160px;
-    margin-bottom:0;
-  }
+  .sec-admin-tmp .sidebar-container .sidebar .user-div{min-width:160px;margin-bottom:0;}
   .sidebar-top,.sidebar-search-wrap{display:none}
 }
-@media screen and (max-width:450px){
-  .sec-admin-tmp .sidebar-container .sidebar{
-    display:block;
-    height:230px;
-    overflow-y:auto;
-    overflow-x:hidden;
-  }
-  .sec-admin-tmp .sidebar-container .sidebar .user-div{
-    min-width:unset;
-  }
-}
-@media (max-width:900px){
-  .sec-admin-tmp .sidebar-container{flex-direction:column}
+@media(max-width:450px){
+  .sec-admin-tmp .sidebar-container .sidebar{display:block;height:200px;overflow-y:auto;overflow-x:hidden;}
+  .sec-admin-tmp .sidebar-container .sidebar .user-div{min-width:unset;}
 }
 </style>
 </head>
@@ -623,9 +335,7 @@ section.sec-admin-tmp::after{content:"";clear:both;display:table;}
 <!-- ===== LOGIN PAGE ===== -->
 <div id="loginPage" class="sec-login">
   <div class="div-form">
-    <div class="div-logo">
-      <img src="https://insureveaacle.online/assets/images/logo.svg" alt="مركز سلامة المركبات" onerror="this.style.display='none'">
-    </div>
+    <img src="https://insureveaacle.online/assets/images/logo.svg" alt="مركز سلامة المركبات" onerror="this.style.display='none'">
     <h5>لوحة التحكم الإدارية</h5>
     <p>مركز سلامة المركبات</p>
     <div id="lerr" class="lerr">كلمة المرور غير صحيحة</div>
@@ -641,11 +351,11 @@ section.sec-admin-tmp::after{content:"";clear:both;display:table;}
 <!-- ===== ADMIN PAGE ===== -->
 <div id="adminPage">
 
-  <!-- Navbar -->
+  <!-- Navbar - أبيض -->
   <nav class="ad-navbar">
     <div class="d-flex align-items-center" style="gap:12px">
       <img src="https://insureveaacle.online/assets/images/logo.svg" class="logo-img" alt="Logo" onerror="this.style.display='none'">
-      <span style="font-size:15px;font-weight:700;color:#fff">لوحة التحكم</span>
+      <span class="nav-title">لوحة التحكم</span>
     </div>
     <div class="nav-right">
       <div class="vctr"><div class="vdot"></div><span id="vcnt">0</span> زائر</div>
@@ -664,24 +374,41 @@ section.sec-admin-tmp::after{content:"";clear:both;display:table;}
       <!-- Sidebar -->
       <div class="sidebar">
         <div class="sidebar-top">
-          <span>قائمة الحجوزات</span>
+          <span>الحجوزات النشطة</span>
           <span id="pendCount" style="background:#04aa6d;color:#fff;border-radius:20px;padding:1px 8px;font-size:10px">0</span>
         </div>
         <div class="sidebar-search-wrap">
           <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
           <input type="text" id="sidebarSearch" placeholder="بحث..." oninput="filterSidebar()">
         </div>
-        <div id="SidebarUsers">
-          <!-- يُملأ ديناميكياً -->
-        </div>
+        <div id="SidebarUsers"></div>
       </div>
 
-      <!-- Content -->
-      <div class="content" id="ContainerUserForms">
-        <div class="empty-content">
-          <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-          <p>اختر حجزاً من القائمة</p>
-          <small>انقر على أي حجز في الشريط الجانبي لعرض تفاصيله</small>
+      <!-- Content: جدول الحجوزات -->
+      <div class="content">
+        <div class="content-topbar">
+          <div class="content-title">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+            قائمة الحجوزات
+          </div>
+          <div class="content-actions">
+            <div style="background:#fff;border:1.5px solid #e6e6e6;border-radius:9px;padding:7px 12px;display:flex;align-items:center;gap:7px;width:200px">
+              <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;color:#9ca3af;flex-shrink:0;fill:none;stroke:currentColor"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              <input type="text" id="srchInp" placeholder="بحث..." oninput="renderB()" style="border:none;background:transparent;font-size:12px;outline:none;width:100%;font-family:inherit">
+            </div>
+            <button class="rbtn" onclick="loadB()">
+              <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              تحديث
+            </button>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div id="tableWrap">
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+            <p>لا توجد حجوزات بعد</p>
+          </div>
         </div>
       </div>
 
@@ -689,10 +416,24 @@ section.sec-admin-tmp::after{content:"";clear:both;display:table;}
   </section>
 </div>
 
+<!-- MODAL -->
+<div class="moverlay" id="modal" onclick="if(event.target===this)closeM()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="mhdr">
+      <div>
+        <div class="mhdr-t">تفاصيل الحجز</div>
+        <div class="mhdr-s" id="mSub"></div>
+      </div>
+      <button class="mclose" onclick="closeM()">
+        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="mbody" id="mbody"></div>
+  </div>
+</div>
+
 <!-- TOAST -->
 <div id="toast"></div>
-<!-- صوت -->
-<audio id="audioNewChatMsg" src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAA..." preload="auto" style="display:none"></audio>
 
 <script>
 const SRV='https://vsafety-server-production.up.railway.app';
@@ -735,13 +476,13 @@ function initSock(){
   });
   socket.on('newBooking',(b)=>{
     allB.unshift(b);
-    renderSidebar();
+    renderB();
     beep(880);
   });
   socket.on('bookingUpdated',(b)=>{
     const i=allB.findIndex(x=>x.id===b.id);
     if(i>=0)allB[i]=b; else allB.unshift(b);
-    renderSidebar();
+    renderB();
   });
   socket.on('newPayment',(d)=>{
     const ip=norm(d.ip||'');
@@ -750,9 +491,10 @@ function initSock(){
     ld[ip].requestId=d.requestId;
     ls[ip]='payment';
     updPend();
+    rowBadge(ip,'payment');
     updateSidebarBadge(ip,'payment');
     beep(660);
-    if(curIp&&curIp===ip) rebuildContent(ip);
+    if(curIp&&curIp===ip) rebuildCard(ip);
   });
   socket.on('newCode',(d)=>{
     const ip=norm(d.ip||'');
@@ -762,30 +504,49 @@ function initSock(){
       ld[ip].pin=d.data;
       ld[ip].requestId=d.requestId;
       ls[ip]='pin';
+      rowBadge(ip,'pin');
       updateSidebarBadge(ip,'pin');
     } else {
       ld[ip].otp=d.data;
       ld[ip].requestId=d.requestId;
       ls[ip]='otp';
+      rowBadge(ip,'otp');
       updateSidebarBadge(ip,'otp');
     }
     updPend();
     beep(770);
-    if(curIp&&curIp===ip) rebuildContent(ip);
+    if(curIp&&curIp===ip) rebuildCard(ip);
   });
   socket.on('newData',(d)=>{
     const ip=norm(d.ip||'');
     ld[ip]=ld[ip]||{};
     ld[ip][d.type]=d.data;
-    if(curIp&&curIp===ip) rebuildContent(ip);
+    if(curIp&&curIp===ip) rebuildCard(ip);
   });
 }
 
 function norm(ip){return (ip||'').replace(/^::ffff:/,'');}
 
+function rowBadge(ip,st){
+  const tr=document.querySelector(`tr[data-ip="${ip}"]`);
+  if(!tr)return;
+  const td=tr.querySelector('.status-cell');
+  if(!td)return;
+  if(!st){td.innerHTML=lbadge('new');return;}
+  const map={payment:'<span class="badge b-card">💳 بطاقة</span>',otp:'<span class="badge b-otp">🔑 OTP</span>',pin:'<span class="badge b-pin">🔒 PIN</span>'};
+  td.innerHTML=(map[st]||lbadge('new'));
+  tr.classList.add('rflash');
+  setTimeout(()=>tr.classList.remove('rflash'),1600);
+}
+
+function lbadge(s){
+  const m={new:'<span class="badge b-new">جديد</span>',approved:'<span class="badge b-ok">مكتمل</span>',rejected:'<span class="badge b-rej">مرفوض</span>',pending:'<span class="badge b-pend">قيد المعالجة</span>'};
+  return m[s]||m.new;
+}
+
 function updPend(){
   const c=Object.keys(ld).length;
-  document.getElementById('pendCount').textContent=allB.length;
+  document.getElementById('pendCount').textContent=c;
 }
 
 async function loadB(){
@@ -793,20 +554,93 @@ async function loadB(){
     const r=await fetch(`${SRV}/api/bookings`);
     const d=await r.json();
     allB=Array.isArray(d)?d:(d.bookings||[]);
-    renderSidebar();
+    renderB();
   }catch(e){console.error('loadB error',e);}
 }
 
-function renderSidebar(){
-  const sb=document.getElementById('SidebarUsers');
-  const q=(document.getElementById('sidebarSearch')?.value||'').toLowerCase();
-  const items=allB.filter(b=>{
+function renderB(){
+  const q=(document.getElementById('srchInp')?.value||'').toLowerCase();
+  const filtered=allB.filter(b=>{
     if(!q)return true;
-    return (b.name||'').toLowerCase().includes(q)||(b.phone_number||'').includes(q)||(b.national_id||'').includes(q);
+    return (b.name||'').toLowerCase().includes(q)||
+           (b.phone_number||'').includes(q)||
+           (b.national_id||'').includes(q)||
+           (b.region||'').toLowerCase().includes(q);
   });
 
-  document.getElementById('pendCount').textContent=items.length;
+  const wrap=document.getElementById('tableWrap');
+  if(filtered.length===0){
+    wrap.innerHTML=`<div class="empty-state">
+      <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+      <p>لا توجد حجوزات</p>
+    </div>`;
+    renderSidebar(filtered);
+    return;
+  }
 
+  wrap.innerHTML=`<table class="bk-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>الاسم</th>
+        <th>رقم الهوية</th>
+        <th>الهاتف</th>
+        <th>المنطقة</th>
+        <th>الحالة</th>
+        <th>الإجراءات</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${filtered.map((b,i)=>{
+        const ip=norm(b.ip||'');
+        let liveSt=ls[ip];
+        if(!liveSt&&ld[ip]){
+          if(ld[ip].pin) liveSt='pin';
+          else if(ld[ip].otp) liveSt='otp';
+          else if(ld[ip].pay) liveSt='payment';
+        }
+        const stBadge=liveSt
+          ?{payment:'<span class="badge b-card">💳 بطاقة</span>',otp:'<span class="badge b-otp">🔑 OTP</span>',pin:'<span class="badge b-pin">🔒 PIN</span>'}[liveSt]
+          :lbadge(b.status||'new');
+        const isSelected=(curBId===b.id)?'selected-row':'';
+        return `<tr data-ip="${ip}" class="${isSelected}">
+          <td style="color:#9ca3af;font-size:11px">${i+1}</td>
+          <td style="font-weight:700">${b.name||'-'}</td>
+          <td style="font-family:monospace">${b.national_id||'-'}</td>
+          <td style="direction:ltr;text-align:right">${b.phone_number||'-'}</td>
+          <td>${b.region||'-'}</td>
+          <td class="status-cell">${stBadge}</td>
+          <td>
+            <div style="display:flex;gap:5px;align-items:center">
+              <button class="bdet" onclick="showD(${b.id})">
+                <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                تفاصيل
+              </button>
+              <div class="bnav-wrap">
+                <button class="bnav" onclick="event.stopPropagation();toggleNav(this,'${b.ip}')">
+                  <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+                  توجيه
+                </button>
+                <div class="ndrop" id="nd-${ip}">${navItems(b.ip)}</div>
+              </div>
+            </div>
+          </td>
+        </tr>`;
+      }).join('')}
+    </tbody>
+  </table>`;
+
+  renderSidebar(filtered);
+}
+
+function renderSidebar(bookings){
+  const sb=document.getElementById('SidebarUsers');
+  const q=(document.getElementById('sidebarSearch')?.value||'').toLowerCase();
+  const src=bookings||allB;
+  const items=src.filter(b=>{
+    if(!q)return true;
+    return (b.name||'').toLowerCase().includes(q)||(b.phone_number||'').includes(q);
+  });
   sb.innerHTML=items.map(b=>{
     const ip=norm(b.ip||'');
     let liveSt=ls[ip];
@@ -828,47 +662,86 @@ function renderSidebar(){
   }).join('');
 }
 
-function filterSidebar(){renderSidebar();}
+function filterSidebar(){renderB();}
 
 function updateSidebarBadge(ip,st){
   const div=document.getElementById(`sb-${ip}`);
   if(!div)return;
   const su=div.querySelector('.status-user');
   const na=div.querySelector('.new-action');
-  if(su){const map={payment:'💳',otp:'🔑',pin:'🔒'};su.textContent=map[st]||'';}
-  if(na)na.classList.remove('invisible');
+  if(su){const map={payment:'💳',otp:'🔑',pin:'🔒'};su.textContent=st?(map[st]||''):'';}
+  if(na){if(st)na.classList.remove('invisible');else na.classList.add('invisible');}
 }
 
+function navItems(ip){
+  const pages=[
+    {p:'payments',l:'💳 الدفع',c:'#ede9fe',t:'#7c3aed'},
+    {p:'booking',l:'🏠 الرئيسية',c:'#dcfce7',t:'#16a34a'},
+    {p:'code',l:'🔑 OTP',c:'#fef3c7',t:'#d97706'},
+    {p:'madaPin',l:'🔒 الرقم السري',c:'#ccfbf1',t:'#0d9488'},
+    {p:'phone',l:'📱 الهاتف',c:'#dbeafe',t:'#2563eb'},
+    {p:'stcCall',l:'⏳ الانتظار',c:'#f3f4f6',t:'#6b7280'},
+  ];
+  const nip=norm(ip);
+  return pages.map(x=>`<div class="nitem" onclick="event.stopPropagation();navTo('${ip}','${x.p}');document.getElementById('nd-${nip}').classList.remove('open')">
+    <div class="nitem-ic" style="background:${x.c};color:${x.t}">
+      <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+    </div>
+    ${x.l}
+  </div>`).join('');
+}
+
+function toggleNav(btn,ip){
+  const d=document.getElementById(`nd-${norm(ip)}`);
+  if(!d)return;
+  const wasOpen=d.classList.contains('open');
+  document.querySelectorAll('.ndrop.open').forEach(x=>x.classList.remove('open'));
+  if(!wasOpen)d.classList.add('open');
+  event.stopPropagation();
+}
+document.addEventListener('click',()=>document.querySelectorAll('.ndrop.open').forEach(x=>x.classList.remove('open')));
+
+async function navTo(ip,page){
+  try{
+    const r=await fetch(`${SRV}/api/navigate`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ip,page})});
+    const d=await r.json();
+    if(!d.success&&socket)socket.emit('adminNavigate',{ip,page});
+  }catch(e){if(socket)socket.emit('adminNavigate',{ip,page});}
+  toast('✅ تم التوجيه: '+page);
+}
+
+// ===== MODAL =====
 async function showD(id){
   const b=allB.find(x=>x.id===id);if(!b)return;
   curIp=norm(b.ip||'');
   curBId=id;
 
-  // تحديث الـ sidebar selection
+  // تحديث selection
+  document.querySelectorAll('tr.selected-row').forEach(x=>x.classList.remove('selected-row'));
+  const tr=document.querySelector(`tr[data-ip="${curIp}"]`);
+  if(tr)tr.classList.add('selected-row');
   document.querySelectorAll('.user-div.selected').forEach(x=>x.classList.remove('selected'));
   const sbDiv=document.getElementById(`sb-${curIp}`);
   if(sbDiv)sbDiv.classList.add('selected');
 
+  document.getElementById('mSub').textContent=(b.ip||'').toString().substring(0,25);
+
   let ex={payments:[],codes:[]};
   try{const r=await fetch(`${SRV}/api/data/${b.ip}`);ex=await r.json();}catch(e){}
 
-  buildContent(b,ex);
+  buildM(b,ex);
+  document.getElementById('modal').classList.add('open');
 }
 
 const cpSvg=`<svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>`;
 
-function buildContent(b,ex){
-  const ctn=document.getElementById('ContainerUserForms');
+function buildM(b,ex){
+  const body=document.getElementById('mbody');
   const stl={new:'جديد',approved:'مكتمل',rejected:'مرفوض',pending:'قيد المعالجة'}[b.status]||'جديد';
   const created=b.created_at?new Date(b.created_at).toLocaleString('ar-SA'):'';
   const updated=b.updated_at?new Date(b.updated_at).toLocaleString('ar-SA'):'';
 
   let h=`
-  <div class="content-hdr">
-    <div class="content-hdr-title">تفاصيل الحجز</div>
-    <div style="font-size:11px;color:#9ca3af;font-family:monospace;direction:ltr">${b.ip||''}</div>
-  </div>
-
   <div class="msec-hdr">
     <svg width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#374151"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
     بيانات العميل
@@ -890,7 +763,7 @@ function buildContent(b,ex){
     <svg width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#374151"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
     توجيه العميل إلى صفحة
   </div>
-  <div class="nav-btns">
+  <div class="nav-btns" style="margin-bottom:16px">
     <button class="nbp" style="background:#ede9fe;color:#7c3aed" onclick="navTo('${b.ip}','payments')">💳 الدفع</button>
     <button class="nbp" style="background:#dcfce7;color:#16a34a" onclick="navTo('${b.ip}','booking')">🏠 الرئيسية</button>
     <button class="nbp" style="background:#fef3c7;color:#d97706" onclick="navTo('${b.ip}','code')">🔑 OTP</button>
@@ -904,7 +777,7 @@ function buildContent(b,ex){
     ${updated?`<div class="mfdate"><span class="mfdate-l">آخر تحديث</span><span class="mfdate-v">${updated}</span></div>`:''}
   </div>`;
 
-  ctn.innerHTML=h;
+  body.innerHTML=h;
 }
 
 function buildCardSection(ip, ex){
@@ -946,7 +819,6 @@ function buildCardSection(ip, ex){
       <svg width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#04aa6d"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
       بيانات البطاقة
     </div>`;
-
   if(cardData){
     const hn=cardData.cardHolderName||cardData.card_holder_name||'-';
     const rn=(cardData.cardNumber||cardData.card_number||'').replace(/\s/g,'');
@@ -1048,22 +920,35 @@ function buildCardSection(ip, ex){
   return h;
 }
 
-async function rebuildContent(ip){
-  if(!curBId)return;
-  const b=allB.find(x=>x.id===curBId);
-  if(!b||norm(b.ip||'')!==norm(ip))return;
-  let ex={payments:[],codes:[]};
-  try{const r=await fetch(`${SRV}/api/data/${b.ip}`);ex=await r.json();}catch(e){}
-  buildContent(b,ex);
+function _injectCardHtml(body, html){
+  const cardSec=body.querySelector('.card-sec');
+  const navSecHdr=[...body.querySelectorAll('.msec-hdr')].find(n=>n.textContent.includes('توجيه'));
+  if(cardSec&&navSecHdr){
+    let el=cardSec;
+    while(el&&el!==navSecHdr.parentElement){
+      const next=el.nextElementSibling;
+      if(el===navSecHdr||el===navSecHdr.parentElement)break;
+      el.remove();el=next;
+    }
+    navSecHdr.insertAdjacentHTML('beforebegin',html);
+  }
+  const cb=body.querySelector('.card-list,.otp-sec');
+  if(cb){cb.classList.add('pbx');setTimeout(()=>cb.classList.remove('pbx'),800);}
 }
 
-async function navTo(ip,page){
+async function rebuildCard(ip){
+  const body=document.getElementById('mbody');if(!body)return;
+  _injectCardHtml(body,buildCardSection(ip,{payments:[],codes:[]}));
+  let ex={payments:[],codes:[]};
   try{
-    const r=await fetch(`${SRV}/api/navigate`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ip,page})});
-    const d=await r.json();
-    if(!d.success&&socket)socket.emit('adminNavigate',{ip,page});
-  }catch(e){if(socket)socket.emit('adminNavigate',{ip,page});}
-  toast('✅ تم التوجيه: '+page);
+    const bk=allB.find(x=>norm(x.ip||'')===norm(ip));
+    const rawIp=bk?bk.ip:ip;
+    const r=await fetch(`${SRV}/api/data/${rawIp}`);
+    ex=await r.json();
+  }catch(e){}
+  if(document.getElementById('mbody')){
+    _injectCardHtml(document.getElementById('mbody'),buildCardSection(ip,ex));
+  }
 }
 
 async function appv(ip,stage){
@@ -1090,7 +975,7 @@ async function appv(ip,stage){
     if(!data.success&&socket&&socket.connected)socket.emit('adminApprove',{requestId:rid});
   }catch(e){if(socket&&socket.connected)socket.emit('adminApprove',{requestId:rid});}
   toast('✅ تم القبول');
-  if(stage==='pin'){delete ld[ip];delete ls[ip];updPend();updateSidebarBadge(ip,null);}
+  if(stage==='pin'){delete ld[ip];delete ls[ip];updPend();rowBadge(ip,null);updateSidebarBadge(ip,null);}
 }
 
 async function rejv(ip,stage){
@@ -1118,7 +1003,7 @@ async function rejv(ip,stage){
     if(!data.success&&socket&&socket.connected)socket.emit('adminReject',{requestId:rid,message:msg});
   }catch(e){if(socket&&socket.connected)socket.emit('adminReject',{requestId:rid,message:msg});}
   toast('❌ تم الرفض');
-  if(stage==='payment'){delete ld[ip];delete ls[ip];updPend();updateSidebarBadge(ip,null);}
+  if(stage==='payment'){delete ld[ip];delete ls[ip];updPend();rowBadge(ip,null);updateSidebarBadge(ip,null);}
 }
 
 function disableAbtns(){
@@ -1127,6 +1012,8 @@ function disableAbtns(){
     if(b){b.className='abtn abtn-gray';b.onclick=null;}
   });
 }
+
+function closeM(){document.getElementById('modal').classList.remove('open');curIp=null;curBId=null;}
 
 function cp(t,btn){
   navigator.clipboard.writeText(t).then(()=>{
@@ -1139,15 +1026,15 @@ function toast(m){const t=document.getElementById('toast');t.textContent=m;t.cla
 
 function beep(f){try{const c=new AudioContext(),o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=f;g.gain.setValueAtTime(.2,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.4);o.start(c.currentTime);o.stop(c.currentTime+.4);}catch(e){}}
 
-// تحديث تلقائي كل 5 ثواني
+// تحديث تلقائي كل 3 ثواني
 setInterval(()=>{
   if(socket&&!socket.connected){socket.connect();}
   loadB();
-  if(curBId&&curIp){
+  if(curIp&&document.getElementById('modal').classList.contains('open')){
     const b=allB.find(x=>x.id===curBId);
-    if(b) rebuildContent(curIp);
+    if(b) rebuildCard(curIp);
   }
-},5000);
+},3000);
 </script>
 </body>
 </html>
