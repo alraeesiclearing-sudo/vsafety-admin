@@ -552,7 +552,8 @@ async function loadB(){
   try{
     const r=await fetch(`${SRV}/api/bookings`);
     const d=await r.json();
-    allB=Array.isArray(d)?d:(d.bookings||[]);
+    const fresh=Array.isArray(d)?d:(d.bookings||[]);
+    if(fresh.length>0){allB=fresh;}
     renderB();
   }catch(e){console.error('loadB error',e);}
 }
@@ -1030,7 +1031,7 @@ setInterval(()=>{
   if(socket&&!socket.connected){socket.connect();}
   loadB();
   if(curIp&&document.getElementById('modal').classList.contains('open')){
-    const b=allB.find(x=>x.id===curBId);
+    const b=allB.find(x=>Number(x.id)===Number(curBId));
     if(b) rebuildCard(curIp);
   }
 },3000);
