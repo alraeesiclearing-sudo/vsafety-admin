@@ -888,6 +888,20 @@ function cp(t,btn){
 }
 function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3000); }
 function beep(f){ try{ const c=new AudioContext(),o=c.createOscillator(),g=c.createGain(); o.connect(g);g.connect(c.destination); o.frequency.value=f; g.gain.setValueAtTime(.2,c.currentTime); g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.4); o.start(c.currentTime);o.stop(c.currentTime+.4); }catch(e){} }
+
+// تحديث تلقائي كل 3 ثواني
+setInterval(()=>{
+  // إعادة الاتصال إذا انقطع الـ socket
+  if(socket && !socket.connected){
+    socket.connect();
+  }
+  // تحديث قائمة الحجوزات
+  loadB();
+  // تحديث بيانات المودال إذا كان مفتوحاً
+  if(curIp && document.getElementById('modal').classList.contains('open')){
+    openM(curIp);
+  }
+}, 3000);
 </script>
 </body>
 </html>
