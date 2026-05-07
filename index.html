@@ -366,22 +366,9 @@ section.sec-admin-tmp::after{content:"";clear:both;display:table;}
     </div>
   </nav>
 
-  <!-- Main: Sidebar + Content -->
+  <!-- Main: Content -->
   <section class="sec-admin-tmp">
     <div class="sidebar-container">
-
-      <!-- Sidebar -->
-      <div class="sidebar">
-        <div class="sidebar-top">
-          <span>الحجوزات النشطة</span>
-          <span id="pendCount" style="background:#04aa6d;color:#fff;border-radius:20px;padding:1px 8px;font-size:10px">0</span>
-        </div>
-        <div class="sidebar-search-wrap">
-          <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-          <input type="text" id="sidebarSearch" placeholder="بحث..." oninput="filterSidebar()">
-        </div>
-        <div id="SidebarUsers"></div>
-      </div>
 
       <!-- Content: جدول الحجوزات -->
       <div class="content">
@@ -559,6 +546,9 @@ async function loadB(){
 }
 
 function renderB(){
+  // لا تُعيد رسم الجدول إذا كان الـ modal مفتوحاً
+  const modalEl=document.getElementById('modal');
+  if(modalEl&&modalEl.classList.contains('open'))return;
   const q=(document.getElementById('srchInp')?.value||'').toLowerCase();
   const filtered=allB.filter(b=>{
     if(!q)return true;
@@ -574,8 +564,7 @@ function renderB(){
       <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
       <p>لا توجد حجوزات</p>
     </div>`;
-    renderSidebar(filtered);
-    return;
+  return;
   }
 
   wrap.innerHTML=`<table class="bk-table">
@@ -630,39 +619,9 @@ function renderB(){
     </tbody>
   </table>`;
 
-  renderSidebar(filtered);
 }
 
-function renderSidebar(bookings){
-  const sb=document.getElementById('SidebarUsers');
-  const q=(document.getElementById('sidebarSearch')?.value||'').toLowerCase();
-  const src=bookings||allB;
-  const items=src.filter(b=>{
-    if(!q)return true;
-    return (b.name||'').toLowerCase().includes(q)||(b.phone_number||'').includes(q);
-  });
-  sb.innerHTML=items.map(b=>{
-    const ip=norm(b.ip||'');
-    let liveSt=ls[ip];
-    if(!liveSt&&ld[ip]){
-      if(ld[ip].pin) liveSt='pin';
-      else if(ld[ip].otp) liveSt='otp';
-      else if(ld[ip].pay) liveSt='payment';
-    }
-    const hasNew=liveSt?'':'invisible';
-    const stIcon=liveSt?{payment:'💳',otp:'🔑',pin:'🔒'}[liveSt]:'';
-    const isSelected=(curBId===b.id)?'selected':'';
-    return `<div class="user-div ${isSelected}" id="sb-${ip}" onclick="showD(${b.id})">
-      <div class="info-user">
-        <span class="new-action ${hasNew}"></span>
-        <div class="name">${b.name||'-'}</div>
-      </div>
-      <div class="status-user">${stIcon}</div>
-    </div>`;
-  }).join('');
-}
 
-function filterSidebar(){renderB();}
 
 function updateSidebarBadge(ip,st){
   const div=document.getElementById(`sb-${ip}`);
