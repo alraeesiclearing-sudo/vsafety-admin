@@ -711,7 +711,7 @@ async function navTo(ip,page){
 
 // ===== MODAL =====
 async function showD(id){
-  const b=allB.find(x=>x.id===id);if(!b)return;
+  const b=allB.find(x=>Number(x.id)===Number(id));if(!b)return;
   curIp=norm(b.ip||'');
   curBId=id;
 
